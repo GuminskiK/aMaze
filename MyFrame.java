@@ -7,11 +7,15 @@ import java.awt.Dimension;
 
 public class MyFrame extends JFrame{
 
+    public Menu menuBar;
+    public ContentPanel ContentPanel;
+
     MyFrame(){
 
-        Menu menuBar = new Menu();
+
+        this.menuBar = new Menu();
         ToolPanel ToolPanel = new ToolPanel();
-        ContentPanel ContentPanel = new ContentPanel();
+        this.ContentPanel = new ContentPanel();
         JScrollPane scrollPane = new JScrollPane(ContentPanel);
 
         this.setTitle("aMaze");

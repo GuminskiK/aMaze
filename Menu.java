@@ -18,8 +18,12 @@ public class Menu extends JMenuBar implements ActionListener {
     JMenuItem loadItem;
     JMenuItem helpItem;
 
+    public File file;
+    public int done;
+
 
     Menu(){
+        done = 0;
 
         fileMenu = new JMenu("File");
         helpMenu = new JMenu("Help");
@@ -29,8 +33,6 @@ public class Menu extends JMenuBar implements ActionListener {
 
         loadItem.addActionListener(this);
         helpItem.addActionListener(this);
-
-
 
         fileMenu.setMnemonic(KeyEvent.VK_F); // alt + F
         helpMenu.setMnemonic(KeyEvent.VK_H); // alt + H
@@ -54,7 +56,7 @@ public class Menu extends JMenuBar implements ActionListener {
             FileNameExtensionFilter filtertxt = new FileNameExtensionFilter("Text files", "txt");
             FileNameExtensionFilter filterbin = new FileNameExtensionFilter("Binary files", "bin");
 
-            fileChooser.setCurrentDirectory(new File("."));
+            fileChooser.setCurrentDirectory(new File("./Files"));
             fileChooser.setAcceptAllFileFilterUsed(false);
             fileChooser.addChoosableFileFilter(filtertxt);
             fileChooser.addChoosableFileFilter(filterbin);
@@ -63,7 +65,8 @@ public class Menu extends JMenuBar implements ActionListener {
 
             if (response == JFileChooser.APPROVE_OPTION){
                 File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                System.out.println(file);
+                this.file = file;
+                this.done = 1;
             }
 
         }
