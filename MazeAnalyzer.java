@@ -127,6 +127,7 @@ public class MazeAnalyzer {
                         this.Start = currentID;
                     } else if (x[2][i] == 'K'){
                         h++;
+                        D++;
                         this.End = currentID;
                     } else {
                         D++;
@@ -141,6 +142,7 @@ public class MazeAnalyzer {
                         this.Start = currentID;
                     } else if (x[1][i+1] == 'K'){
                         h++;
+                        P++;
                         this.End = currentID;
                     } else {
                         P++;
@@ -149,8 +151,8 @@ public class MazeAnalyzer {
                 }
 
                 //System.out.printf("Char: %c, H:%d, G:%d, P:%d, D:%d, L:%d \n", x[1][i], h, G, P, D, L);
-                //System.out.printf("G:%c, P:%c, D:%c, L:%c \n", x[0][i], x[1][i-1], x[2][i], x[1][i+1]);
-                //System.out.println("");
+                System.out.printf("G:%c, P:%c, D:%c, L:%c \n", x[0][i], x[1][i-1], x[2][i], x[1][i+1]);
+                System.out.println("");
 
                 //jeśli node (skręt, zaułek, rozdroże w labiryncie) 3 razy to samo popraw!!!
                 if ( h == 1){ //zaulek
@@ -186,7 +188,7 @@ public class MazeAnalyzer {
             }
         }
         //System.out.println(x[1]);
-        /* 
+        
         for (int i = 1; i < columns - 1; i++){
             System.out.print(ID[i] + " ");
             System.out.print(Numbers[i] + " ");
@@ -194,7 +196,7 @@ public class MazeAnalyzer {
 
         }
         System.out.println("------------------------------------");
-        */
+        
     }
 
     private boolean path( char x){
@@ -207,7 +209,7 @@ public class MazeAnalyzer {
     }
 
     private Integer[] directions(){
-        Integer[] x = {0,0,0,0,0,0,0,0};
+        Integer[] x = {-1,-1,-1,-1,-1,-1,-1,-1};
         return x;
     }
 

@@ -5,6 +5,8 @@ import java.io.File;
 public class Main {
 
     static MyFrame ramka;
+    static MazeAnalyzer mazeAnalyzer;
+
     public static void main (String[] args){
 
         ActionListener listener = new ActionListener() {
@@ -32,11 +34,18 @@ public class Main {
         MazeCreator mazeCreator = new MazeCreator();
         int wait = mazeCreator.CreateMaze(ramka.ContentPanel.MazePanel, x, fileReader.columns, fileReader.rows);
 
-        MazeAnalyzer mazeAnalyzer = new MazeAnalyzer();
+        mazeAnalyzer = new MazeAnalyzer();
         wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
         ramka.ToolPanel.EnableButton(true);
 
+        //Solve();
+    }
 
+    private static void Solve(){
+
+        MazeSolver mazeSolver = new MazeSolver();
+        int wait = mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End);
+        System.out.println("DONE");
     }
         
 }
