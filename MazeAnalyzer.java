@@ -5,10 +5,12 @@ import java.util.Scanner;
 
 public class MazeAnalyzer {
 
-    int currentID;
-    ArrayList<Integer[]> nodes;
+    public int currentID;
+    public int Start;
+    public int End;
+    public ArrayList<Integer[]> nodes;
 
-    public void analyzeMaze (File file, int columns, int rows){
+    public int analyzeMaze (File file, int columns, int rows){
        
         char[][] x = new char[3][columns]; 
         this.nodes = new ArrayList<>();
@@ -19,8 +21,8 @@ public class MazeAnalyzer {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println(this.currentID);
-        
+        //System.out.println(this.currentID);
+
         for (int i = 0; i < this.currentID; i++){
             System.out.print(i + "  ");
             for(int y = 0; y < 8; y++){
@@ -28,8 +30,8 @@ public class MazeAnalyzer {
             }
             System.out.println("");
         }
-        
-
+        System.out.println(Start + " " + End);
+        return 0;
     }
 
     private void readTXT (File file, int columns, int rows, char[][] x, Scanner scaneer){
@@ -90,8 +92,12 @@ public class MazeAnalyzer {
                 //góra
                 if( path(x[0][i])){
 
-                    if (x[0][i] == 'P' || x[0][i] == 'K'){
+                    if (x[0][i] == 'P'){
                         h++;
+                        this.Start = currentID;
+                    } else if (x[0][i] == 'K'){
+                        h++;
+                        this.End = currentID;
                     } else {
                         G++;
                         h++;
@@ -101,8 +107,12 @@ public class MazeAnalyzer {
                 //lewo
                 if( path(x[1][i-1])){
 
-                    if (x[1][i-1] == 'P' || x[1][i-1] == 'K'){
+                    if (x[1][i-1] == 'P'){
                         h++;
+                        this.Start = currentID;
+                    } else if (x[1][i-1] == 'K'){
+                        h++;
+                        this.End = currentID;
                     } else {
                         L++;
                         h++;
@@ -112,8 +122,12 @@ public class MazeAnalyzer {
                 //dół
                 if( path(x[2][i])){
                     
-                    if (x[2][i] == 'P' || x[2][i] == 'K'){
+                    if (x[2][i] == 'P'){
                         h++;
+                        this.Start = currentID;
+                    } else if (x[2][i] == 'K'){
+                        h++;
+                        this.End = currentID;
                     } else {
                         D++;
                         h++;
@@ -122,8 +136,12 @@ public class MazeAnalyzer {
                 //prawo
                 if( path(x[1][i+1])){
 
-                    if (x[1][i+1] == 'P' || x[1][i+1] == 'K'){
+                    if (x[1][i+1] == 'P'){
                         h++;
+                        this.Start = currentID;
+                    } else if (x[1][i+1] == 'K'){
+                        h++;
+                        this.End = currentID;
                     } else {
                         P++;
                         h++;
@@ -167,7 +185,8 @@ public class MazeAnalyzer {
                 Numbers[i] = -1;
             }
         }
-        System.out.println(x[1]);
+        //System.out.println(x[1]);
+        /* 
         for (int i = 1; i < columns - 1; i++){
             System.out.print(ID[i] + " ");
             System.out.print(Numbers[i] + " ");
@@ -175,11 +194,12 @@ public class MazeAnalyzer {
 
         }
         System.out.println("------------------------------------");
+        */
     }
 
     private boolean path( char x){
 
-        if(x == ' ' || x == 'Z' || x == 'S' || x == 'R'){
+        if(x == ' ' || x == 'Z' || x == 'S' || x == 'R'|| x == 'P' ||  x == 'K'){
             return true;
         }else {
             return false;
@@ -215,8 +235,6 @@ public class MazeAnalyzer {
 
             nodes.get(this.currentID)[7] = Numbers[i-1] + 1;
             nodes.get(this.currentID)[6] = ID[i-1];
-
-            System.out.println(i + " " + ID[i] + " " + ID [i-1] + " " + ID[1]);
 
             nodes.get(ID[i-1])[3] = Numbers[i-1] + 1;
             nodes.get(ID[i-1])[2] = this.currentID;
