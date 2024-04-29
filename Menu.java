@@ -15,15 +15,19 @@ public class Menu extends JMenuBar implements ActionListener {
     JMenu fileMenu;
     JMenu helpMenu;
 
-    JMenuItem loadItem;
+    public JMenuItem loadItem;
     JMenuItem helpItem;
 
     public File file;
-    public int done;
+    public Integer done;
+
+    ActionListener listener;
 
 
-    Menu(){
+    Menu(ActionListener listener){
+
         done = 0;
+        this.listener = listener;
 
         fileMenu = new JMenu("File");
         helpMenu = new JMenu("Help");
@@ -67,6 +71,7 @@ public class Menu extends JMenuBar implements ActionListener {
                 File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
                 this.file = file;
                 this.done = 1;
+                this.listener.actionPerformed(e);
             }
 
         }

@@ -4,16 +4,17 @@ import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 
 public class MyFrame extends JFrame{
 
     public Menu menuBar;
     public ContentPanel ContentPanel;
 
-    MyFrame(){
+    MyFrame(ActionListener listener){
 
 
-        this.menuBar = new Menu();
+        this.menuBar = new Menu(listener);
         ToolPanel ToolPanel = new ToolPanel();
         this.ContentPanel = new ContentPanel();
         JScrollPane scrollPane = new JScrollPane(ContentPanel);

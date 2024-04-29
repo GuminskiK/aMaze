@@ -1,21 +1,29 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+
+import javax.swing.JMenuItem;
 
 public class Main {
 
+    static MyFrame ramka;
     public static void main (String[] args){
 
-        MyFrame ramka = new MyFrame();
-
-        File file;
-        do{
-            try{
-                Thread.sleep(1000);
-            } catch (InterruptedException e){
-                e.printStackTrace();
+        ActionListener listener = new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+                Skryt();
             }
-            file = ramka.menuBar.file;
-        } while ( ramka.menuBar.done == 0);
 
+        };
+
+        ramka = new MyFrame(listener);
+        
+    }
+
+    private static void Skryt(){
+        
+        File file = ramka.menuBar.file;
         FileReader fileReader = new FileReader();
         fileReader.CountRowsColumns(file); 
         char[][] x = fileReader.ReadFileTXT(file);
@@ -24,13 +32,6 @@ public class Main {
 
         MazeCreator mazeCreator = new MazeCreator();
         int wait = mazeCreator.CreateMaze(ramka.ContentPanel.MazePanel, x, fileReader.columns, fileReader.rows);
-        //ramka.ContentPanel.MazePanel.repaint();
-
-
-
-
-
-
 
     }
         
