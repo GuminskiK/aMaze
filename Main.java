@@ -2,8 +2,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.JMenuItem;
-
 public class Main {
 
     static MyFrame ramka;
@@ -32,6 +30,9 @@ public class Main {
 
         MazeCreator mazeCreator = new MazeCreator();
         int wait = mazeCreator.CreateMaze(ramka.ContentPanel.MazePanel, x, fileReader.columns, fileReader.rows);
+
+        MazeAnalyzer mazeAnalyzer = new MazeAnalyzer();
+        mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
 
     }
         
