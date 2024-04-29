@@ -34,11 +34,11 @@ public class MazeAnalyzer {
 
     private void readTXT (File file, int columns, int rows, char[][] x, Scanner scaneer){
 
-        int[] ID = new int[columns - 1];
-        int[] Numbers = new int [columns - 1];
+        int[] ID = new int[columns];
+        int[] Numbers = new int [columns];
         this.currentID = 0;
 
-        for(int i = 0; i < columns - 1; i++){
+        for(int i = 0; i < columns; i++){
 
             ID[i] = -1;
             Numbers[i] = -1;
@@ -89,25 +89,47 @@ public class MazeAnalyzer {
 
                 //góra
                 if( path(x[0][i])){
-                    G++;
-                    h++;
+
+                    if (x[0][i] == 'P' || x[0][i] == 'K'){
+                        h++;
+                    } else {
+                        G++;
+                        h++;
+                    }
+
                 }
                 //lewo
                 if( path(x[1][i-1])){
-                    L++;
-                    h++;
+
+                    if (x[1][i-1] == 'P' || x[1][i-1] == 'K'){
+                        h++;
+                    } else {
+                        L++;
+                        h++;
+                    }
+
                 }
                 //dół
                 if( path(x[2][i])){
-                    D++;
-                    h++;
+                    
+                    if (x[2][i] == 'P' || x[2][i] == 'K'){
+                        h++;
+                    } else {
+                        D++;
+                        h++;
+                    }
                 }
                 //prawo
                 if( path(x[1][i+1])){
-                    P++;
-                    h++;
+
+                    if (x[1][i+1] == 'P' || x[1][i+1] == 'K'){
+                        h++;
+                    } else {
+                        P++;
+                        h++;
+                    }
                 }
-                
+
                 //System.out.printf("Char: %c, H:%d, G:%d, P:%d, D:%d, L:%d \n", x[1][i], h, G, P, D, L);
                 //System.out.printf("G:%c, P:%c, D:%c, L:%c \n", x[0][i], x[1][i-1], x[2][i], x[1][i+1]);
                 //System.out.println("");
@@ -157,7 +179,7 @@ public class MazeAnalyzer {
 
     private boolean path( char x){
 
-        if(x == ' ' || x == 'K' || x == 'P' || x == 'Z' || x == 'S' || x == 'R'){
+        if(x == ' ' || x == 'Z' || x == 'S' || x == 'R'){
             return true;
         }else {
             return false;
@@ -186,7 +208,7 @@ public class MazeAnalyzer {
 
         }
         
-        if( L == 1 && this.currentID != 0){
+        if( L == 1 ){
 
             ID[i] = this.currentID;
             Numbers[i] = 0; 
@@ -194,16 +216,16 @@ public class MazeAnalyzer {
             nodes.get(this.currentID)[7] = Numbers[i-1] + 1;
             nodes.get(this.currentID)[6] = ID[i-1];
 
+            System.out.println(i + " " + ID[i] + " " + ID [i-1] + " " + ID[1]);
 
             nodes.get(ID[i-1])[3] = Numbers[i-1] + 1;
             nodes.get(ID[i-1])[2] = this.currentID;
             
         }
         
-        if ( (G != 1 && L != 1 && this.currentID != 0) || this.currentID == 0 ){
+        if ( G != 1 && L != 1 ){
             ID[i] = this.currentID;
             Numbers[i] = 0;
-            //System.out.println("LECIM" + i);
         } 
 
         this.currentID++;
