@@ -11,6 +11,8 @@ public class MazeSolver {
     int p = 0;
     ArrayList<Node> nodeMap;
 
+    public boolean[] save;
+
     public int solveMaze(ArrayList<Integer[]> nodes, int Start, int End){
 
         this.Start = Start;
@@ -79,13 +81,15 @@ public class MazeSolver {
                 if( length_min == 0 || length_now > length_min){
 
                     length_min = length_now;
+                    saveSolution();
 
                 } 
             }
              
             length_now -= nodes.get(ID_now)[((int) nodeMap.get(ID_now).directionFrom) * 2 + 1];
             ID_next = nodes.get(ID_now)[(int) nodeMap.get(ID_now).directionFrom * 2];
-            nodeMap.get(ID_next).directionToMin = searchForDirection(nodes, ID_next);
+            nodeMap.get(ID_next).directionToMin = searchForDirection(nodes, ID_next) +1;
+            nodeMap.get(ID_now).visited = false;
 
         } else {
 
@@ -103,6 +107,15 @@ public class MazeSolver {
         }
 
         return i/2;
+    }
+
+    public void saveSolution(){
+
+        this.save = new boolean[nodeMap.size()];
+        System.out.println("Save");
+        for( int i = 0; i < nodeMap.size(); i++){
+            this.save [i] = nodeMap.get(i).visited; 
+        } 
     }
 
 

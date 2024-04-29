@@ -38,14 +38,14 @@ public class Main {
         wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
         ramka.ToolPanel.EnableButton(true);
 
-        //Solve();
+        Solve();
     }
 
     private static void Solve(){
 
         MazeSolver mazeSolver = new MazeSolver();
         int wait = mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End);
-        System.out.println("DONE");
+        System.out.println("DONE"); 
     }
         
 }
