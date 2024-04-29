@@ -18,12 +18,14 @@ public class MazeSolver {
         this.Start = Start;
         this.End = End;
         nodeMap = new ArrayList<>();
-
+        
         for (int i = 0; i < nodes.size(); i++){
 
             nodeMap.add(new Node(i));
             
         }
+
+        this.save = new boolean[nodeMap.size()];
 
         solve(nodes);
         
@@ -111,7 +113,6 @@ public class MazeSolver {
 
     public void saveSolution(){
 
-        this.save = new boolean[nodeMap.size()];
         System.out.println("Save");
         for( int i = 0; i < nodeMap.size(); i++){
             this.save [i] = nodeMap.get(i).visited; 

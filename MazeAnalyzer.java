@@ -10,6 +10,8 @@ public class MazeAnalyzer {
     public int End;
     public ArrayList<Integer[]> nodes;
 
+    int currentRows;
+
     public int analyzeMaze (File file, int columns, int rows){
        
         char[][] x = new char[3][columns]; 
@@ -30,7 +32,8 @@ public class MazeAnalyzer {
             }
             System.out.println("");
         }
-        System.out.println(Start + " " + End);
+        //System.out.println(Start + " " + End);
+        //System.out.println("ROWS-1:" + currentRows);
         return 0;
     }
 
@@ -39,6 +42,7 @@ public class MazeAnalyzer {
         int[] ID = new int[columns];
         int[] Numbers = new int [columns];
         this.currentID = 0;
+        this.currentRows = 0;
 
         for(int i = 0; i < columns; i++){
 
@@ -55,10 +59,12 @@ public class MazeAnalyzer {
                 System.arraycopy(line.toCharArray(), 0, x[i], 0, line.length());
     
             }
+            currentRows = 2;
             ifNode(x, columns, rows, ID, Numbers);
 
             for (int i = 0; i < rows - 3; i++){
 
+                currentRows++;
                 //Przepisanie na wyższe wiersze w x
                 System.arraycopy(x[1], 0, x[0], 0, columns);
                 System.arraycopy(x[2], 0, x[1], 0, columns);
@@ -150,17 +156,23 @@ public class MazeAnalyzer {
                     }
                 }
 
-                //System.out.printf("Char: %c, H:%d, G:%d, P:%d, D:%d, L:%d \n", x[1][i], h, G, P, D, L);
-                System.out.printf("G:%c, P:%c, D:%c, L:%c \n", x[0][i], x[1][i-1], x[2][i], x[1][i+1]);
-                System.out.println("");
+                
 
+                //System.out.printf("Char: %c, H:%d, G:%d, P:%d, D:%d, L:%d \n", x[1][i], h, G, P, D, L);
+                //System.out.printf("G:%c, P:%c, D:%c, L:%c \n", x[0][i], x[1][i-1], x[2][i], x[1][i+1]);
+                //System.out.println("");
+
+                if (Start == currentID || End == currentID){
+                    x[1][i] = 'Z';
+                    Link(Numbers, ID, i, G, L);
+                }
                 //jeśli node (skręt, zaułek, rozdroże w labiryncie) 3 razy to samo popraw!!!
-                if ( h == 1){ //zaulek
+                else if ( h == 1){ //zaulek
                     x[1][i] = 'Z';
                     
-                    Link( Numbers, ID, i, G, L );
+                    Link( Numbers, ID, i, G, L);
         
-                } else if (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))){ // skret
+                } else if (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1)) ){ // skret
                     x[1][i] = 'S';
 
                     Link( Numbers, ID, i, G, L );
@@ -187,7 +199,7 @@ public class MazeAnalyzer {
                 Numbers[i] = -1;
             }
         }
-        //System.out.println(x[1]);
+        System.out.println(x[1]);
         
         for (int i = 1; i < columns - 1; i++){
             System.out.print(ID[i] + " ");
@@ -195,6 +207,7 @@ public class MazeAnalyzer {
             System.out.println("");
 
         }
+        
         System.out.println("------------------------------------");
         
     }
@@ -209,7 +222,7 @@ public class MazeAnalyzer {
     }
 
     private Integer[] directions(){
-        Integer[] x = {-1,-1,-1,-1,-1,-1,-1,-1};
+        Integer[] x = {-1,-1,-1,-1,-1,-1,-1,-1, 0, 0};
         return x;
     }
 
@@ -248,6 +261,9 @@ public class MazeAnalyzer {
             Numbers[i] = 0;
         } 
 
+        nodes.get(currentID)[8] = i + 1;//x
+        nodes.get(currentID)[9] = currentRows - 1;//y
+        //System.out.println( currentID + ":" + i + " " + (currentRows - 1));
         this.currentID++;
 
     }
