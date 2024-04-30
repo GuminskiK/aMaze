@@ -1,6 +1,9 @@
+import java.awt.Color;
 import java.util.ArrayList;
 
-public class MazeSolver {
+import javax.swing.JLabel;
+
+public class SolutionWriterWhole {
 
     int Start;
     int End;
@@ -14,12 +17,14 @@ public class MazeSolver {
     public boolean[] save;
     int mode;
 
-    public int solveMaze(ArrayList<Integer[]> nodes, int Start, int End, int mode){
+    public int solveMaze(ArrayList<Integer[]> nodes, int Start, int End, int mode, ArrayList<JLabel> panels, int columns, int StartPos, int EndPos){
 
         this.mode = mode;
         this.Start = Start;
         this.End = End;
         nodeMap = new ArrayList<>();
+        drawStartEnd(nodes, panels, columns, StartPos, 0);
+        drawStartEnd(nodes, panels, columns, EndPos, 1);
         
         for (int i = 0; i < nodes.size(); i++){
 
@@ -29,21 +34,22 @@ public class MazeSolver {
 
         this.save = new boolean[nodeMap.size()];
 
-        solve(nodes);
+        solve(nodes, panels, columns);
         
         return 0;
     }
 
-    private void solve(ArrayList<Integer[]> nodes){
+    private void solve(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns){
 
         ID_next = Start;
 
         while (p != 1){
             
             ID_now = ID_next;
+            panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9]) * columns - 1).setBackground(Color.red);
             nodeMap.get(ID_now).visited = true;
 
-            ID_next = whichNext(nodes);
+            ID_next = whichNext(nodes, panels, columns);
             if ( ID_next == -1){
                 endDeadEnd(nodes);
             }
@@ -52,7 +58,7 @@ public class MazeSolver {
         
     }
 
-    private int whichNext(ArrayList<Integer[]> nodes){
+    private int whichNext(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns){
         
         int y = nodeMap.get(ID_now).directionToMin * 2;
         int ID_n = 0;
@@ -74,6 +80,9 @@ public class MazeSolver {
             length_now += nodes.get(ID_now)[y+1];
             nodeMap.get(ID_n).directionFrom = searchForDirection(nodes, ID_n); 
         }
+
+        drawingSolution(nodes, panels, columns, y);
+
         return ID_n;
 
     }
@@ -124,6 +133,44 @@ public class MazeSolver {
         } 
     }
 
+    private void drawingSolution(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int y){
+        //ID_now
+        int length = nodes.get(ID_now)[y+1];
+        int direction = y/2;
 
+        switch (direction) {
+            case 0:
+                for (int i = 0; i < length; i++){
+                    panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] - i) * columns - 1).setBackground(Color.red);
+                }
+                break;
+            case 1:
+                for (int i = 0; i < length; i++){
+                    panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 + i).setBackground(Color.red);
+                }
+                break;
+            case 2:
+                for (int i = 0; i < length; i++){
+                    panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] + i)* columns - 1).setBackground(Color.red);
+                }
+                break;
+            case 3:
+                for (int i = 0; i < length; i++){
+                    panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 - i).setBackground(Color.red);
+                }
+                break;
+            default:
+                break;
+        }
 
+    }
+
+    private void drawStartEnd(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int Pos, int x){
+
+        if (x == 0){
+            panels.get(Pos).setBackground(Color.GREEN);
+        } else {
+            panels.get(Pos).setBackground(Color.PINK);
+        }
+    }
 }

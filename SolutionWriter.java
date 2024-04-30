@@ -25,26 +25,6 @@ public class SolutionWriter {
 
     }
 
-    private int solve(ArrayList<Integer[]> nodes, boolean[] solution, ArrayList<JLabel> panels, int columns){
-
-        ID_next = Start;
-        length_now = 2; // dodajemy krok wejscia do i wyjscia z labiryntu
-
-        while (p != 1){
-            
-            ID_now = ID_next;
-            if( ID_now == End){
-                break;
-            }
-            solution[ID_now] = false;
-            ID_next = whichNext(nodes, solution, panels, columns);
-
-        }
-        panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 ).setBackground(Color.RED);
-
-        return 0;
-        
-    }
     private void drawStartEnd(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int Pos, int x){
 
         if (x == 0){
@@ -84,6 +64,27 @@ public class SolutionWriter {
         }
 
     }
+    //mode shortest
+    private int solve(ArrayList<Integer[]> nodes, boolean[] solution, ArrayList<JLabel> panels, int columns){
+
+        ID_next = Start;
+        length_now = 2; // dodajemy krok wejscia do i wyjscia z labiryntu
+
+        while (p != 1){
+            
+            ID_now = ID_next;
+            if( ID_now == End){
+                break;
+            }
+            solution[ID_now] = false;
+            ID_next = whichNext(nodes, solution, panels, columns);
+
+        }
+        panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 ).setBackground(Color.RED);
+
+        return 0;
+        
+    }
 
     private int whichNext(ArrayList<Integer[]> nodes, boolean[] solution, ArrayList<JLabel> panels, int columns){
         
@@ -108,4 +109,5 @@ public class SolutionWriter {
         return ID_n;
 
     }
+
 }

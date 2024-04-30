@@ -41,7 +41,7 @@ public class Main {
         ActionListener wholeListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Whole");
+                Whole();
             }
 
         };
@@ -106,7 +106,7 @@ public class Main {
     private static void Shortest(){
 
         MazeSolver mazeSolver = new MazeSolver();
-        int wait = mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End);
+        int wait = mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 0);
 
         SolutionWriter solutionWriter = new SolutionWriter();
         solutionWriter.WriteSolution(mazeSolver.save, mazeCreator.maze, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
@@ -115,7 +115,23 @@ public class Main {
 
     private static void Whole(){
 
-        //zamaluj wszystko
+        //tylko dla wersji podstawowej XD
+        /*
+        for (int i = 0; i < columns * fileReader.rows ; i++ ){
+            if(mazeCreator.path[i] == 1){
+                mazeCreator.maze.get(i).setBackground(Color.RED);
+            }
+        }
+        panels.get(mazeAnalyzer.StartPos).setBackground(Color.GREEN);
+        panels.get(mazeAnalyzer.EndPos).setBackground(Color.PINK);
+        */
+        SolutionWriterWhole solutionWriterWhole = new SolutionWriterWhole();
+        solutionWriterWhole.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 1, mazeCreator.maze, columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
+
+        ramka.menuBar.setloadEnabled(true);
+
+        ramka.ToolPanel.ToolEnable(false, 3);
+        ramka.ToolPanel.ToolEnable(false, 4);
     }
 
     private static void CheckIfCustomStart(){
