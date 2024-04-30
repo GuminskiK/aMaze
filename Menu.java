@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileFilter;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -22,12 +23,14 @@ public class Menu extends JMenuBar implements ActionListener {
     public Integer done;
 
     ActionListener listener;
+    ActionListener helpListener;
 
 
-    Menu(ActionListener listener){
+    Menu(ActionListener listener, ActionListener helpListener){
 
         done = 0;
         this.listener = listener;
+        this.helpListener = helpListener;
 
         fileMenu = new JMenu("File");
         helpMenu = new JMenu("Help");
@@ -76,7 +79,8 @@ public class Menu extends JMenuBar implements ActionListener {
         }
 
         if(e.getSource() == helpItem){
-            System.out.println("Help");
+            
+            helpListener.actionPerformed(e);
         }
     }
 

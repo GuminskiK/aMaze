@@ -25,8 +25,9 @@ public class MazeAnalyzer {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        //System.out.println(this.currentID);
 
+        /* 
+        //System.out.println(this.currentID);
         for (int i = 0; i < this.currentID; i++){
             System.out.print(i + "  ");
             for(int y = 0; y < 8; y++){
@@ -36,6 +37,7 @@ public class MazeAnalyzer {
         }
         //System.out.println(Start + " " + End);
         //System.out.println("ROWS-1:" + currentRows);
+        */
         return 0;
     }
 

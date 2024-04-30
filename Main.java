@@ -19,8 +19,19 @@ public class Main {
 
         };
 
-        ramka = new MyFrame(listener);
+        ActionListener helpListener = new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+                help();
+            }
+        };
+
+        ramka = new MyFrame(listener, helpListener);
         
+    }
+
+    private static void help(){
+        ramka.ContentPanel.help();
     }
 
     private static void Skryt(){
