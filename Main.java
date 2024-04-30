@@ -13,6 +13,9 @@ public class Main {
     static int columns;
     static Color lastStartColor = new Color (0,0,0);
     static Color lastEndColor = new Color (0,0,0);
+    static int[] oldCustomStart = new int[2];
+    static int[] oldCustomEnd = new int[2];
+    
 
     public static void main (String[] args){
 
@@ -98,6 +101,11 @@ public class Main {
         mazeAnalyzer = new MazeAnalyzer();
         int wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
 
+        oldCustomStart[0] = mazeAnalyzer.StartPos/columns;
+        oldCustomStart[1] = mazeAnalyzer.StartPos%columns;
+        oldCustomEnd[0] = mazeAnalyzer.EndPos/columns;
+        oldCustomEnd[1] = mazeAnalyzer.EndPos%columns;
+
         ramka.ToolPanel.ToolEnable(false, 0);
         ramka.ToolPanel.ToolEnable(true, 1);
         ramka.ToolPanel.ToolEnable(true, 2);
@@ -138,6 +146,16 @@ public class Main {
 
     private static void CheckIfCustomStart(){
         
+        if (mazeCreator.path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] == 1){
+            //System.out.println("path");
+            oldCustomStart[0] = ramka.ContentPanel.customStart[0];
+            oldCustomStart[0] = ramka.ContentPanel.customStart[1]; 
+
+        } else {
+            ramka.ContentPanel.customStart[0] = oldCustomStart[0];
+            ramka.ContentPanel.customStart[1] = oldCustomStart[0]; 
+        }
+
         mazeCreator.maze.get( mazeAnalyzer.StartPos).setBackground(lastStartColor);
         lastStartColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).getBackground();
        
@@ -148,6 +166,15 @@ public class Main {
 
     private static void CheckIfCustomEnd(){
         
+        if (mazeCreator.path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] == 1){
+            //System.out.println("path");
+            oldCustomEnd[0] = ramka.ContentPanel.customEnd[0];
+            oldCustomEnd[1] = ramka.ContentPanel.customEnd[1]; 
+        } else {
+            ramka.ContentPanel.customEnd[0] = oldCustomEnd[0];
+            ramka.ContentPanel.customEnd[1] = oldCustomEnd[1]; 
+        }
+
         mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(lastEndColor);
         lastEndColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).getBackground();
 
