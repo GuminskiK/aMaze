@@ -7,7 +7,9 @@ public class MazeAnalyzer {
 
     public int currentID;
     public int Start;
+    public int StartDirection;
     public int End;
+    public int EndDirection;
     public ArrayList<Integer[]> nodes;
 
     int currentRows;
@@ -101,9 +103,11 @@ public class MazeAnalyzer {
                     if (x[0][i] == 'P'){
                         h++;
                         this.Start = currentID;
+                        this.StartDirection = 0;
                     } else if (x[0][i] == 'K'){
                         h++;
                         this.End = currentID;
+                        this.EndDirection = 0;
                     } else {
                         G++;
                         h++;
@@ -116,9 +120,11 @@ public class MazeAnalyzer {
                     if (x[1][i-1] == 'P'){
                         h++;
                         this.Start = currentID;
+                        this.StartDirection = 1;
                     } else if (x[1][i-1] == 'K'){
                         h++;
                         this.End = currentID;
+                        this.EndDirection = 1;
                     } else {
                         L++;
                         h++;
@@ -130,11 +136,14 @@ public class MazeAnalyzer {
                     
                     if (x[2][i] == 'P'){
                         h++;
+                        D++;
                         this.Start = currentID;
+                        this.StartDirection = 2;
                     } else if (x[2][i] == 'K'){
                         h++;
                         D++;
                         this.End = currentID;
+                        this.EndDirection = 3;
                     } else {
                         D++;
                         h++;
@@ -145,11 +154,14 @@ public class MazeAnalyzer {
 
                     if (x[1][i+1] == 'P'){
                         h++;
+                        P++;
                         this.Start = currentID;
+                        this.StartDirection = 3;
                     } else if (x[1][i+1] == 'K'){
                         h++;
                         P++;
                         this.End = currentID;
+                        this.EndDirection = 3;
                     } else {
                         P++;
                         h++;

@@ -12,10 +12,14 @@ public class SolutionWriter {
     int p = 0;
     int length_now;
 
-    public void WriteSolution(boolean[] solution, ArrayList<JLabel> panels, int Start, int End, ArrayList<Integer[]> nodes, int columns){
+    public void WriteSolution(boolean[] solution, ArrayList<JLabel> panels, int Start, int End, ArrayList<Integer[]> nodes, int columns, int StartDirection, int EndDirection){
 
         this.Start = Start;
         this.End = End;
+
+        drawStartEnd(nodes, panels, columns, Start, StartDirection);
+        drawStartEnd(nodes, panels, columns, End, EndDirection);
+
         int x = solve(nodes, solution, panels, columns);
         System.out.println(length_now);
 
@@ -41,7 +45,25 @@ public class SolutionWriter {
         return 0;
         
     }
+    private void drawStartEnd(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int object, int direction){
 
+        switch (direction) {
+            case 2:
+                panels.get(nodes.get(object)[8] + (nodes.get(object)[9] - 1) * columns - 1).setBackground(Color.red);
+                break;
+            case 3:
+                panels.get(nodes.get(object)[8] + nodes.get(object)[9] * columns).setBackground(Color.red);
+                break;
+            case 0:
+                panels.get(nodes.get(object)[8] + (nodes.get(object)[9] + 1) * columns - 1).setBackground(Color.red);
+                break;
+            case 1:
+                panels.get(nodes.get(object)[8] + nodes.get(object)[9] * columns - 2).setBackground(Color.red);
+                break;
+            default:
+                break;
+        }
+    }
     private void drawingSolution(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int y){
         //ID_now
         int length = nodes.get(ID_now)[y+1];

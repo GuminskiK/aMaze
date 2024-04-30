@@ -50,7 +50,7 @@ public class Main {
         System.out.println("DONE"); 
 
         SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.save, mazeCreator.maze, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns);
+        solutionWriter.WriteSolution(mazeSolver.save, mazeCreator.maze, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartDirection, mazeAnalyzer.EndDirection);
     }
         
 }
