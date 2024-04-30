@@ -1,11 +1,12 @@
 import java.awt.Color;
 import java.awt.Dimension;
-
 import java.awt.Font;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
 
 public class ToolPanel extends JPanel{
 
@@ -15,7 +16,7 @@ public class ToolPanel extends JPanel{
 
     Font font = new Font( "Dialog", Font.BOLD, 10);
 
-    ToolPanel(){
+    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener){
 
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(100,50));
@@ -25,21 +26,43 @@ public class ToolPanel extends JPanel{
         CreateToolButton( end, "End", font);
         CreateToolButton( shortest, "Shortest", font);
 
+        ActionListener Start = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                start.setEnabled(true);
+            }
+
+        };
+
+        ActionListener End = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                end.setEnabled(true);
+            }
+
+        };
+
         start.addActionListener(
 
-            (e) -> System.out.println("Start")
+            (e) -> {    start.setEnabled(false);
+                        contentPanel.start(Start, 'S'); }
 
         );
 
         end.addActionListener(
 
-            (e) -> System.out.println("End")
+            (e) -> {    end.setEnabled(false);
+                        contentPanel.start(End, 'E'); }
 
         );
     
         shortest.addActionListener(
     
-            (e) -> System.out.println("Shortest")
+            (e) -> analyzeListener.actionPerformed(e)
 
         );
 
@@ -62,6 +85,10 @@ public class ToolPanel extends JPanel{
 
         start.setEnabled(x);
         end.setEnabled(x);
+        shortest.setEnabled(x);
+    }
+
+    public void ShortestEnable(boolean x){
         shortest.setEnabled(x);
     }
 

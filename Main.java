@@ -8,26 +8,46 @@ public class Main {
     static MazeAnalyzer mazeAnalyzer;
     static MazeCreator mazeCreator;
     static FileReader fileReader;
+    static File file;
 
     public static void main (String[] args){
 
-        ActionListener listener = new ActionListener() {
+        ActionListener readListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                Skryt();
+                Read();
             }
 
         };
 
-        ramka = new MyFrame(listener);
+        ActionListener analyzeListener = new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+                Analyze();
+            }
+
+        };
+
+        ActionListener helpListener = new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+                help();
+            }
+        };
+
+        ramka = new MyFrame(readListener, analyzeListener, helpListener);
         
     }
 
-    private static void Skryt(){
+    private static void help(){
+        ramka.ContentPanel.setHelpEnabled();
+    }
+
+    private static void Read(){
         
         ramka.menuBar.setloadEnabled(false);
         ramka.ToolPanel.EnableButton(false);
-        File file = ramka.menuBar.file;
+        file = ramka.menuBar.file;
         fileReader = new FileReader();
         fileReader.CountRowsColumns(file); 
         char[][] x = fileReader.ReadFileTXT(file);
@@ -37,8 +57,12 @@ public class Main {
         mazeCreator = new MazeCreator();
         int wait = mazeCreator.CreateMaze(ramka.ContentPanel.MazePanel, x, fileReader.columns, fileReader.rows);
 
+        ramka.ToolPanel.ShortestEnable(true);
+    }
+    private static void Analyze(){
+
         mazeAnalyzer = new MazeAnalyzer();
-        wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
+        int wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
         ramka.ToolPanel.EnableButton(true);
 
         Solve();
