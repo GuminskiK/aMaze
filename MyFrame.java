@@ -12,12 +12,12 @@ public class MyFrame extends JFrame{
     public ContentPanel ContentPanel;
     public ToolPanel ToolPanel;
 
-    MyFrame(ActionListener listener, ActionListener helpListener){
+    MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener helpListener){
 
 
-        this.menuBar = new Menu(listener, helpListener);
-        this.ToolPanel = new ToolPanel();
+        this.menuBar = new Menu(readListener, helpListener);
         this.ContentPanel = new ContentPanel();
+        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener);
         JScrollPane scrollPane = new JScrollPane(ContentPanel);
 
         this.setTitle("aMaze");
