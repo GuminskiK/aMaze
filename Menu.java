@@ -54,7 +54,6 @@ public class Menu extends JMenuBar implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         
         if(e.getSource() == loadItem){
-            System.out.println("Load");
             
             JFileChooser fileChooser = new JFileChooser();
             FileNameExtensionFilter filtertxt = new FileNameExtensionFilter("Text files", "txt");
@@ -79,6 +78,10 @@ public class Menu extends JMenuBar implements ActionListener {
         if(e.getSource() == helpItem){
             System.out.println("Help");
         }
+    }
+
+    public void setloadEnabled(boolean x){
+        loadItem.setEnabled(x);
     }
     
     

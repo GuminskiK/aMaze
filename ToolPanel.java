@@ -55,7 +55,14 @@ public class ToolPanel extends JPanel{
         button.setFont(font);
         button.setFocusable(false);
         button.setPreferredSize(new Dimension(80, 30));
+        button.setEnabled(false);
+    }
 
+    public void EnableButton(boolean x){
+
+        start.setEnabled(x);
+        end.setEnabled(x);
+        shortest.setEnabled(x);
     }
 
 }

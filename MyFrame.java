@@ -10,12 +10,13 @@ public class MyFrame extends JFrame{
 
     public Menu menuBar;
     public ContentPanel ContentPanel;
+    public ToolPanel ToolPanel;
 
     MyFrame(ActionListener listener){
 
 
         this.menuBar = new Menu(listener);
-        ToolPanel ToolPanel = new ToolPanel();
+        this.ToolPanel = new ToolPanel();
         this.ContentPanel = new ContentPanel();
         JScrollPane scrollPane = new JScrollPane(ContentPanel);
 
