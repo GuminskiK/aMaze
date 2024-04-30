@@ -29,20 +29,52 @@ public class SolutionWriter {
         while (p != 1){
             
             ID_now = ID_next;
-            panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 ).setBackground(Color.RED);
             if( ID_now == End){
                 break;
             }
             solution[ID_now] = false;
-            ID_next = whichNext(nodes, solution);
+            ID_next = whichNext(nodes, solution, panels, columns);
 
         }
+        panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 ).setBackground(Color.RED);
 
         return 0;
         
     }
 
-    private int whichNext(ArrayList<Integer[]> nodes, boolean[] solution){
+    private void drawingSolution(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int y){
+        //ID_now
+        int length = nodes.get(ID_now)[y+1];
+        int direction = y/2;
+
+        switch (direction) {
+            case 0:
+                for (int i = 0; i < length; i++){
+                    panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] - i) * columns - 1).setBackground(Color.red);
+                }
+                break;
+            case 1:
+                for (int i = 0; i < length; i++){
+                    panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 + i).setBackground(Color.red);
+                }
+                break;
+            case 2:
+                for (int i = 0; i < length; i++){
+                    panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] + i)* columns - 1).setBackground(Color.red);
+                }
+                break;
+            case 3:
+                for (int i = 0; i < length; i++){
+                    panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 - i).setBackground(Color.red);
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    private int whichNext(ArrayList<Integer[]> nodes, boolean[] solution, ArrayList<JLabel> panels, int columns){
         
         int y = 0;
         int ID_n = 0;
@@ -59,6 +91,8 @@ public class SolutionWriter {
         }
 
         length_now += nodes.get(ID_now)[y+1];
+
+        drawingSolution(nodes, panels, columns, y);
 
         return ID_n;
 
