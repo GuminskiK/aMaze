@@ -12,13 +12,13 @@ public class SolutionWriter {
     int p = 0;
     int length_now;
 
-    public void WriteSolution(boolean[] solution, ArrayList<JLabel> panels, int Start, int End, ArrayList<Integer[]> nodes, int columns, int StartDirection, int EndDirection){
+    public void WriteSolution(boolean[] solution, ArrayList<JLabel> panels, int Start, int End, ArrayList<Integer[]> nodes, int columns, int StartPos, int EndPos){
 
         this.Start = Start;
         this.End = End;
 
-        drawStartEnd(nodes, panels, columns, Start, StartDirection);
-        drawStartEnd(nodes, panels, columns, End, EndDirection);
+        drawStartEnd(nodes, panels, columns, StartPos, 0);
+        drawStartEnd(nodes, panels, columns, EndPos, 1);
 
         int x = solve(nodes, solution, panels, columns);
         System.out.println(length_now);
@@ -45,23 +45,12 @@ public class SolutionWriter {
         return 0;
         
     }
-    private void drawStartEnd(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int object, int direction){
+    private void drawStartEnd(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int Pos, int x){
 
-        switch (direction) {
-            case 2:
-                panels.get(nodes.get(object)[8] + (nodes.get(object)[9] - 1) * columns - 1).setBackground(Color.red);
-                break;
-            case 3:
-                panels.get(nodes.get(object)[8] + nodes.get(object)[9] * columns).setBackground(Color.red);
-                break;
-            case 0:
-                panels.get(nodes.get(object)[8] + (nodes.get(object)[9] + 1) * columns - 1).setBackground(Color.red);
-                break;
-            case 1:
-                panels.get(nodes.get(object)[8] + nodes.get(object)[9] * columns - 2).setBackground(Color.red);
-                break;
-            default:
-                break;
+        if (x == 0){
+            panels.get(Pos).setBackground(Color.GREEN);
+        } else {
+            panels.get(Pos).setBackground(Color.PINK);
         }
     }
     private void drawingSolution(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int y){

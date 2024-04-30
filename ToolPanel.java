@@ -10,13 +10,17 @@ import javax.swing.JPanel;
 
 public class ToolPanel extends JPanel{
 
-    JButton start = new JButton();;
-    JButton end = new JButton();;
-    JButton shortest = new JButton();;
+    JButton analyze = new JButton();
+
+    JButton start = new JButton();
+    JButton end = new JButton();
+
+    JButton shortest = new JButton();
+
 
     Font font = new Font( "Dialog", Font.BOLD, 10);
 
-    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener){
+    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener, ActionListener customStartListener, ActionListener customEndListener){
 
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(100,50));
@@ -25,6 +29,7 @@ public class ToolPanel extends JPanel{
         CreateToolButton( start, "Start", font);
         CreateToolButton( end, "End", font);
         CreateToolButton( shortest, "Shortest", font);
+        CreateToolButton( analyze, "Analyze", font);
 
         ActionListener Start = new ActionListener() {
 
@@ -46,26 +51,34 @@ public class ToolPanel extends JPanel{
 
         };
 
+        analyze.addActionListener(
+
+            (e) -> {    analyze.setEnabled(false);
+                        analyzeListener.actionPerformed(e);}
+
+        );
+
         start.addActionListener(
 
             (e) -> {    start.setEnabled(false);
-                        contentPanel.start(Start, 'S'); }
+                        contentPanel.start(Start, 'S', contentPanel, customStartListener); }
 
         );
 
         end.addActionListener(
 
             (e) -> {    end.setEnabled(false);
-                        contentPanel.start(End, 'E'); }
+                        contentPanel.start(End, 'E', contentPanel, customEndListener); }
 
         );
     
         shortest.addActionListener(
     
-            (e) -> analyzeListener.actionPerformed(e)
+            (e) -> shortestListener.actionPerformed(e)
 
         );
-
+        
+        this.add(analyze);
         this.add(start);
         this.add(end);
         this.add(shortest);
@@ -81,15 +94,25 @@ public class ToolPanel extends JPanel{
         button.setEnabled(false);
     }
 
-    public void EnableButton(boolean x){
+    public void ToolEnable(boolean x, int y){
+        
+        switch(y){
 
-        start.setEnabled(x);
-        end.setEnabled(x);
-        shortest.setEnabled(x);
-    }
-
-    public void ShortestEnable(boolean x){
-        shortest.setEnabled(x);
+            case 0:
+                analyze.setEnabled(x);
+                break;
+            case 1:
+                start.setEnabled(x);
+                break;
+            case 2:
+                end.setEnabled(x);
+                break;
+            case 3:
+                shortest.setEnabled(x);
+                break;
+            default:
+                break;
+        }
     }
 
 }

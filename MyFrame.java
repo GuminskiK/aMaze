@@ -1,7 +1,7 @@
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -12,12 +12,13 @@ public class MyFrame extends JFrame{
     public ContentPanel ContentPanel;
     public ToolPanel ToolPanel;
 
-    MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener helpListener){
+
+    MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener){
 
 
         this.menuBar = new Menu(readListener, helpListener);
         this.ContentPanel = new ContentPanel();
-        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener);
+        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, customEndListener);
         JScrollPane scrollPane = new JScrollPane(ContentPanel);
 
         this.setTitle("aMaze");
@@ -27,6 +28,9 @@ public class MyFrame extends JFrame{
         this.setMinimumSize(new Dimension(320, 220));
         this.setVisible(true);
         this.setLayout(new BorderLayout());
+
+        ImageIcon logo = new ImageIcon("Files/logo.jpeg");
+        this.setIconImage(logo.getImage());
 
         this.setJMenuBar(menuBar);
         this.add(ToolPanel, BorderLayout.WEST);

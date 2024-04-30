@@ -7,9 +7,9 @@ public class MazeAnalyzer {
 
     public int currentID;
     public int Start;
-    public int StartDirection;
+    public int StartPos;
     public int End;
-    public int EndDirection;
+    public int EndPos;
     public ArrayList<Integer[]> nodes;
 
     int currentRows;
@@ -64,7 +64,7 @@ public class MazeAnalyzer {
     
             }
             currentRows = 2;
-            ifNode(x, columns, rows, ID, Numbers);
+            ifNode(x, columns, rows, ID, Numbers, currentRows);
 
             for (int i = 0; i < rows - 3; i++){
 
@@ -75,7 +75,7 @@ public class MazeAnalyzer {
 
                 String line = scanner.nextLine();
                 System.arraycopy(line.toCharArray(), 0, x[2], 0, line.length());
-                ifNode(x, columns, rows, ID, Numbers);
+                ifNode(x, columns, rows, ID, Numbers, currentRows);
 
             }
 
@@ -87,7 +87,7 @@ public class MazeAnalyzer {
 
     }
 
-    private void ifNode(char[][] x, int columns, int rows, int[] ID, int[] Numbers){
+    private void ifNode(char[][] x, int columns, int rows, int[] ID, int[] Numbers, int currentRows){
 
         for(int i = 1; i < columns - 1 ; i++ ){
             
@@ -105,11 +105,11 @@ public class MazeAnalyzer {
                     if (x[0][i] == 'P'){
                         h++;
                         this.Start = currentID;
-                        this.StartDirection = 0;
+                        this.StartPos = columns * (currentRows - 2) + i;
                     } else if (x[0][i] == 'K'){
                         h++;
                         this.End = currentID;
-                        this.EndDirection = 0;
+                        this.EndPos = columns * (currentRows - 2)+ i;
                     } else {
                         G++;
                         h++;
@@ -122,11 +122,11 @@ public class MazeAnalyzer {
                     if (x[1][i-1] == 'P'){
                         h++;
                         this.Start = currentID;
-                        this.StartDirection = 1;
+                        this.StartPos = columns * (currentRows -1) + i -1;
                     } else if (x[1][i-1] == 'K'){
                         h++;
                         this.End = currentID;
-                        this.EndDirection = 1;
+                        this.EndPos = columns * (currentRows - 1) + i -1;
                     } else {
                         L++;
                         h++;
@@ -140,12 +140,12 @@ public class MazeAnalyzer {
                         h++;
                         D++;
                         this.Start = currentID;
-                        this.StartDirection = 2;
+                        this.StartPos = columns * currentRows + i;
                     } else if (x[2][i] == 'K'){
                         h++;
                         D++;
                         this.End = currentID;
-                        this.EndDirection = 3;
+                        this.EndPos = columns * currentRows + i ;
                     } else {
                         D++;
                         h++;
@@ -158,12 +158,12 @@ public class MazeAnalyzer {
                         h++;
                         P++;
                         this.Start = currentID;
-                        this.StartDirection = 3;
+                        this.StartPos = columns * (currentRows - 1) + i + 1;
                     } else if (x[1][i+1] == 'K'){
                         h++;
                         P++;
                         this.End = currentID;
-                        this.EndDirection = 3;
+                        this.EndPos = columns * (currentRows - 1) + i + 1;
                     } else {
                         P++;
                         h++;

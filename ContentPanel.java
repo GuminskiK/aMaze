@@ -40,8 +40,12 @@ public class ContentPanel extends JPanel {
         this.add(MazePanel);
         on = false;
 
-        this.customStart = new int[]{-1,-1};
-        this.customEnd = new int[]{-1,-1};
+        this.customStart = new int[2];
+        this.customStart[0] = -1;
+        this.customStart[1] = -1;
+        this.customEnd = new int[2];
+        this.customEnd[0] = -1;
+        this.customEnd[1] = -1;
 
     }
 
@@ -90,26 +94,41 @@ public class ContentPanel extends JPanel {
         this.HelpPanel.setVisible(true);
     }
 
-    public void start(ActionListener listener, char x){
+    public void start(ActionListener listener, char c, ContentPanel contentPanel, ActionListener customListener){
 
-       
         MazePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX();
                 int y = e.getY();
-                if ( x == 'S'){
-                    customStart[0] = (x-5)/10;
-                    customStart[1] = (y-5)/10;
+                if ( c == 'S'){
+                    contentPanel.customStart[0] = (x-5)/10;
+                    contentPanel.customStart[1] = (y-5)/10;
+                    saveCustom(customStart, 'S');
                 } else {
-                    customEnd[0] = (x-5)/10;
-                    customEnd[1] = (y-5)/10;
+                    contentPanel.customEnd[0] = (x-5)/10;
+                    contentPanel.customEnd[1] = (y-5)/10;
+                    saveCustom(customEnd, 'E');
                 }
                 MazePanel.removeMouseListener(MazePanel.getMouseListeners()[0]);
                 listener.actionPerformed(null);
+                customListener.actionPerformed(null);
             }
         });
         
+    }
+
+    public void saveCustom (int[] s, char c){
+
+        if (c == 'S'){
+            this.customStart[0] = s[0];
+            this.customStart[1] = s[1];
+        } else {
+            this.customEnd[0] = s[0];
+            this.customEnd[1] = s[1];
+        }
+        //System.out.println(this.customStart[0] + " " + this.customStart[1]);
+        //System.out.println(this.customEnd[0] + " " + this.customEnd[1]);
     }
 
 }
