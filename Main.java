@@ -11,6 +11,8 @@ public class Main {
     static FileReader fileReader;
     static File file;
     static int columns;
+    static Color lastStartColor = new Color (0,0,0);
+    static Color lastEndColor = new Color (0,0,0);
 
     public static void main (String[] args){
 
@@ -135,17 +137,21 @@ public class Main {
     }
 
     private static void CheckIfCustomStart(){
-    
+        
+        mazeCreator.maze.get( mazeAnalyzer.StartPos).setBackground(lastStartColor);
+        lastStartColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).getBackground();
+       
         mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).setBackground(Color.GREEN);
-        mazeCreator.maze.get( mazeAnalyzer.StartPos).setBackground(Color.BLACK);
         mazeAnalyzer.StartPos = columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0];
 
     }
 
     private static void CheckIfCustomEnd(){
+        
+        mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(lastEndColor);
+        lastEndColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).getBackground();
 
         mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).setBackground(Color.PINK);
-        mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(Color.BLACK);
         mazeAnalyzer.EndPos = columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0];
     }
 }
