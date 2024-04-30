@@ -38,6 +38,14 @@ public class Main {
 
         };
 
+        ActionListener wholeListener = new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Whole");
+            }
+
+        };
+
         ActionListener helpListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
@@ -59,7 +67,7 @@ public class Main {
             }
         };
 
-        ramka = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener);
+        ramka = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener, wholeListener);
         
     }
 
@@ -92,6 +100,7 @@ public class Main {
         ramka.ToolPanel.ToolEnable(true, 1);
         ramka.ToolPanel.ToolEnable(true, 2);
         ramka.ToolPanel.ToolEnable(true, 3);
+        ramka.ToolPanel.ToolEnable(true, 4);
     }
 
     private static void Shortest(){
@@ -102,6 +111,11 @@ public class Main {
         SolutionWriter solutionWriter = new SolutionWriter();
         solutionWriter.WriteSolution(mazeSolver.save, mazeCreator.maze, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
         ramka.menuBar.setloadEnabled(true);
+    }
+
+    private static void Whole(){
+
+        //zamaluj wszystko
     }
 
     private static void CheckIfCustomStart(){

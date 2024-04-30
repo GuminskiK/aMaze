@@ -16,20 +16,23 @@ public class ToolPanel extends JPanel{
     JButton end = new JButton();
 
     JButton shortest = new JButton();
+    JButton whole = new JButton();
 
 
     Font font = new Font( "Dialog", Font.BOLD, 10);
 
-    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener, ActionListener customStartListener, ActionListener customEndListener){
+    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener){
 
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(100,50));
         //this.setLayout();
-
+        
+        CreateToolButton( analyze, "Analyze", font);
         CreateToolButton( start, "Start", font);
         CreateToolButton( end, "End", font);
         CreateToolButton( shortest, "Shortest", font);
-        CreateToolButton( analyze, "Analyze", font);
+        CreateToolButton( whole, "Whole", font);
+
 
         ActionListener Start = new ActionListener() {
 
@@ -77,11 +80,18 @@ public class ToolPanel extends JPanel{
             (e) -> shortestListener.actionPerformed(e)
 
         );
+
+        whole.addActionListener(
+    
+            (e) -> wholeListener.actionPerformed(e)
+
+        );
         
         this.add(analyze);
         this.add(start);
         this.add(end);
         this.add(shortest);
+        this.add(whole);
 
     }
 
@@ -110,6 +120,8 @@ public class ToolPanel extends JPanel{
             case 3:
                 shortest.setEnabled(x);
                 break;
+            case 4:
+                whole.setEnabled(x);
             default:
                 break;
         }

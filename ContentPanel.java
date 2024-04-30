@@ -1,12 +1,16 @@
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.Border;
+import javax.swing.plaf.FontUIResource;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -74,8 +78,19 @@ public class ContentPanel extends JPanel {
 
         JLabel help = new JLabel();
         JButton backButton = new JButton("Back");
+        JTextArea area = new JTextArea();
 
-        help.setText("Tutaj znajdzie się help do tego programu");
+        this.HelpPanel.setPreferredSize(new Dimension(420, 500));
+        help.setText("Help");
+        help.setFont( new FontUIResource("Arial", Font.BOLD, 32));
+        area.setPreferredSize(new Dimension(400,400));
+        area.setLineWrap(true);
+        area.setWrapStyleWord(true);
+        area.setText("Witamy w pomocy dotyczącej korzystanie za aplikacji aMaze, która pomoże Ci rozwiązać Twój labirynt. \n\n" + 
+        "Program obsługuje labirynty zapisane w postaci pliku binarnego lub tekstowego, takiego że: \n - Ścieżka -> \" \" \n - Ściana -> X \n - Wejście -> P \n - Wyjście -> K \n" + 
+        "\n Aby skorzystać z programu należy wybrac w pasku menu File -> load -> wybrać plik z labiryntem, po załadowaniu -> Analyze (z panelu bocznego). Następnie" + 
+        " możemy albo ustawić nowy Start lub End za pomocą wybrania takiej opcji z panelu, a następnie kliknięcia na labirynt w odpoiednio wybranym miejscu (musi być to na ścieżce). " + 
+        "Po wybraniu lub nie przechodzimy do Shortest, jeśli chcemy znależć najkrótszą drogę lub Whole by przejść cały labirynt.");
 
         backButton.addActionListener(
 
@@ -85,6 +100,7 @@ public class ContentPanel extends JPanel {
         );
         
         this.HelpPanel.add(help);
+        this.HelpPanel.add(area);
         this.HelpPanel.add(backButton);
     }
 
