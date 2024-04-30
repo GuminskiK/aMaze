@@ -18,7 +18,6 @@ public class FileReader {
             Scanner myReader = new Scanner(file);
             while (myReader.hasNextLine()) {
                 dane = myReader.nextLine();
-                //System.out.println(dane);
                 rows ++;
             }
             columns = dane.length();
@@ -51,10 +50,6 @@ public class FileReader {
             e.printStackTrace();
         }
         
-        for (int i = 0; i < this.rows; i++){
-
-            System.out.println(x[i]);
-        }
         return x;
     }
 

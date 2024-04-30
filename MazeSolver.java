@@ -113,7 +113,6 @@ public class MazeSolver {
 
     public void saveSolution(){
 
-        System.out.println("Save");
         for( int i = 0; i < nodeMap.size(); i++){
             this.save [i] = nodeMap.get(i).visited; 
         } 

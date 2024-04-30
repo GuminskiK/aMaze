@@ -25,6 +25,7 @@ public class Main {
 
     private static void Skryt(){
         
+        ramka.menuBar.setloadEnabled(false);
         ramka.ToolPanel.EnableButton(false);
         File file = ramka.menuBar.file;
         fileReader = new FileReader();
@@ -47,10 +48,10 @@ public class Main {
 
         MazeSolver mazeSolver = new MazeSolver();
         int wait = mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End);
-        System.out.println("DONE"); 
 
         SolutionWriter solutionWriter = new SolutionWriter();
         solutionWriter.WriteSolution(mazeSolver.save, mazeCreator.maze, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartDirection, mazeAnalyzer.EndDirection);
+        ramka.menuBar.setloadEnabled(true);
     }
         
 }

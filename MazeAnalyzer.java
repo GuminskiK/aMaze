@@ -211,8 +211,8 @@ public class MazeAnalyzer {
                 Numbers[i] = -1;
             }
         }
-        System.out.println(x[1]);
-        
+
+        /*
         for (int i = 1; i < columns - 1; i++){
             System.out.print(ID[i] + " ");
             System.out.print(Numbers[i] + " ");
@@ -221,6 +221,7 @@ public class MazeAnalyzer {
         }
         
         System.out.println("------------------------------------");
+        */
         
     }
 
@@ -275,7 +276,6 @@ public class MazeAnalyzer {
 
         nodes.get(currentID)[8] = i + 1;//x
         nodes.get(currentID)[9] = currentRows - 1;//y
-        //System.out.println( currentID + ":" + i + " " + (currentRows - 1));
         this.currentID++;
 
     }
