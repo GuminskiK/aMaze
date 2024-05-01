@@ -1,6 +1,7 @@
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -13,12 +14,12 @@ public class MyFrame extends JFrame{
     public ToolPanel ToolPanel;
 
 
-    MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener){
+    MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener){
 
 
         this.menuBar = new Menu(readListener, helpListener);
         this.ContentPanel = new ContentPanel();
-        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, customEndListener, wholeListener);
+        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, customEndListener, wholeListener, customListener);
         JScrollPane scrollPane = new JScrollPane(ContentPanel);
 
         this.setTitle("aMaze");
@@ -38,6 +39,10 @@ public class MyFrame extends JFrame{
         this.add(scrollPane);
         this.setVisible(true);
            
+    }
+
+    public void customError(){
+        JOptionPane.showMessageDialog(this, "Można wybrać tylko miejsce na ścieżce! Spróbuj ponownie!", "customError", JOptionPane.ERROR_MESSAGE);
     }
 
 }

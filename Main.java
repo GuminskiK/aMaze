@@ -15,6 +15,7 @@ public class Main {
     static Color lastEndColor = new Color (0,0,0);
     static int[] oldCustomStart = new int[2];
     static int[] oldCustomEnd = new int[2];
+    static int StartEndSwitch = 0;
     
 
     public static void main (String[] args){
@@ -72,7 +73,14 @@ public class Main {
             }
         };
 
-        ramka = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener, wholeListener);
+        ActionListener customListener = new ActionListener() {
+            
+            public void actionPerformed(ActionEvent e) {
+                InOutWall();
+            }
+        };
+
+        ramka = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener, wholeListener, customListener);
         
     }
 
@@ -92,12 +100,17 @@ public class Main {
 
         mazeCreator = new MazeCreator();
         int wait = mazeCreator.CreateMaze(ramka.ContentPanel.MazePanel, x, fileReader.columns, fileReader.rows);
-        ramka.ToolPanel.ToolEnable(true, 0);
+
+        ramka.ToolPanel.ToolEnable(true, 0); //Analyze
+
+        StartEndSwitch = 0;
 
     }
 
     private static void Analyze(){
         
+        ramka.ToolPanel.ToolEnable(false, 0);
+
         mazeAnalyzer = new MazeAnalyzer();
         int wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
 
@@ -106,14 +119,18 @@ public class Main {
         oldCustomEnd[0] = mazeAnalyzer.EndPos/columns;
         oldCustomEnd[1] = mazeAnalyzer.EndPos%columns;
 
-        ramka.ToolPanel.ToolEnable(false, 0);
         ramka.ToolPanel.ToolEnable(true, 1);
-        ramka.ToolPanel.ToolEnable(true, 2);
-        ramka.ToolPanel.ToolEnable(true, 3);
         ramka.ToolPanel.ToolEnable(true, 4);
+        ramka.ToolPanel.ToolEnable(true, 5);
     }
 
     private static void Shortest(){
+
+        ramka.ToolPanel.ToolEnable(false, 1);
+        ramka.ToolPanel.ToolEnable(false, 2);
+        ramka.ToolPanel.ToolEnable(false, 3);
+        ramka.ToolPanel.ToolEnable(false, 4);
+        ramka.ToolPanel.ToolEnable(false, 5);
 
         MazeSolver mazeSolver = new MazeSolver();
         int wait = mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 0);
@@ -124,6 +141,12 @@ public class Main {
     }
 
     private static void Whole(){
+
+        ramka.ToolPanel.ToolEnable(false, 1);
+        ramka.ToolPanel.ToolEnable(false, 2);
+        ramka.ToolPanel.ToolEnable(false, 3);
+        ramka.ToolPanel.ToolEnable(false, 4);
+        ramka.ToolPanel.ToolEnable(false, 5);
 
         //tylko dla wersji podstawowej XD
         /*
@@ -140,8 +163,6 @@ public class Main {
 
         ramka.menuBar.setloadEnabled(true);
 
-        ramka.ToolPanel.ToolEnable(false, 3);
-        ramka.ToolPanel.ToolEnable(false, 4);
     }
 
     private static void CheckIfCustomStart(){
@@ -163,12 +184,24 @@ public class Main {
             mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).setBackground(Color.GREEN);
             mazeAnalyzer.StartPos = columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0];
 
+            StartEndSwitch++;
+    
             ramka.ToolPanel.ToolEnable(true, 3);
             ramka.ToolPanel.ToolEnable(true, 4);
+            ramka.ToolPanel.ToolEnable(true, 5);
+
+            if (StartEndSwitch == 2){
+                ramka.ToolPanel.ToolEnable(false, 2);
+                ramka.ToolPanel.ToolEnable(false, 3);
+            } else {
+                ramka.ToolPanel.ToolEnable(false, 2);
+                ramka.ToolPanel.ToolEnable(true, 3);
+            }
 
         } else {
             ramka.ContentPanel.customStart[0] = oldCustomStart[0];
-            ramka.ContentPanel.customStart[1] = oldCustomStart[0]; 
+            ramka.ContentPanel.customStart[1] = oldCustomStart[1]; 
+            ramka.customError();
         }
 
     }
@@ -193,11 +226,44 @@ public class Main {
 
             ramka.ToolPanel.ToolEnable(true, 3);
             ramka.ToolPanel.ToolEnable(true, 4);
+            ramka.ToolPanel.ToolEnable(true, 5);
+
+            StartEndSwitch++;
+
+            if (StartEndSwitch == 2){
+                ramka.ToolPanel.ToolEnable(false, 2);
+                ramka.ToolPanel.ToolEnable(false, 3);
+            } else {
+                ramka.ToolPanel.ToolEnable(false, 2);
+                ramka.ToolPanel.ToolEnable(true, 3);
+            }
 
         } else {
             ramka.ContentPanel.customEnd[0] = oldCustomEnd[0];
-            ramka.ContentPanel.customEnd[1] = oldCustomEnd[1]; 
+            ramka.ContentPanel.customEnd[1] = oldCustomEnd[1];
+            ramka.customError(); 
         }
+
+    }
+
+    static void InOutWall(){
+
+        mazeCreator.maze.get(mazeAnalyzer.StartPos).setBackground(Color.BLACK);
+        mazeCreator.maze.get(mazeAnalyzer.EndPos).setBackground(Color.BLACK);
+
+        System.out.println(mazeAnalyzer.Start);
+        System.out.println(mazeAnalyzer.End);
+
+        mazeCreator.path[mazeAnalyzer.StartPos] = 0;
+        mazeCreator.path[mazeAnalyzer.EndPos] = 0;
+
+        if( StartEndSwitch == 0){
+            ramka.ToolPanel.ToolEnable(true, 2);
+            ramka.ToolPanel.ToolEnable(true, 3);
+        }
+
+        ramka.ToolPanel.ToolEnable(false, 1);
+        
 
     }
 }
