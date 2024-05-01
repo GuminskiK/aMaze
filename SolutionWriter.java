@@ -17,10 +17,9 @@ public class SolutionWriter {
         this.Start = Start;
         this.End = End;
 
+        int x = solve(nodes, solution, panels, columns);
         drawStartEnd(nodes, panels, columns, StartPos, 0);
         drawStartEnd(nodes, panels, columns, EndPos, 1);
-
-        int x = solve(nodes, solution, panels, columns);
         System.out.println(length_now);
 
     }
@@ -68,7 +67,7 @@ public class SolutionWriter {
     private int solve(ArrayList<Integer[]> nodes, boolean[] solution, ArrayList<JLabel> panels, int columns){
 
         ID_next = Start;
-        length_now = 2; // dodajemy krok wejscia do i wyjscia z labiryntu
+        length_now = 0;
 
         while (p != 1){
             

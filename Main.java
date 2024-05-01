@@ -148,19 +148,28 @@ public class Main {
         
         if (mazeCreator.path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] == 1){
             //System.out.println("path");
+            ramka.ToolPanel.ToolEnable(false, 3);
+            ramka.ToolPanel.ToolEnable(false, 4);
+
             oldCustomStart[0] = ramka.ContentPanel.customStart[0];
-            oldCustomStart[0] = ramka.ContentPanel.customStart[1]; 
+            oldCustomStart[1] = ramka.ContentPanel.customStart[1]; 
+
+            //do testu
+            mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customStart , columns, 'S');
+
+            mazeCreator.maze.get( mazeAnalyzer.StartPos).setBackground(lastStartColor);
+            lastStartColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).getBackground();
+       
+            mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).setBackground(Color.GREEN);
+            mazeAnalyzer.StartPos = columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0];
+
+            ramka.ToolPanel.ToolEnable(true, 3);
+            ramka.ToolPanel.ToolEnable(true, 4);
 
         } else {
             ramka.ContentPanel.customStart[0] = oldCustomStart[0];
             ramka.ContentPanel.customStart[1] = oldCustomStart[0]; 
         }
-
-        mazeCreator.maze.get( mazeAnalyzer.StartPos).setBackground(lastStartColor);
-        lastStartColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).getBackground();
-       
-        mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).setBackground(Color.GREEN);
-        mazeAnalyzer.StartPos = columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0];
 
     }
 
@@ -168,17 +177,27 @@ public class Main {
         
         if (mazeCreator.path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] == 1){
             //System.out.println("path");
+            ramka.ToolPanel.ToolEnable(false, 3);
+            ramka.ToolPanel.ToolEnable(false, 4);
+
             oldCustomEnd[0] = ramka.ContentPanel.customEnd[0];
             oldCustomEnd[1] = ramka.ContentPanel.customEnd[1]; 
+
+            mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customStart , columns, 'E');
+
+            mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(lastEndColor);
+            lastEndColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).getBackground();
+
+            mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).setBackground(Color.PINK);
+            mazeAnalyzer.EndPos = columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0];
+
+            ramka.ToolPanel.ToolEnable(true, 3);
+            ramka.ToolPanel.ToolEnable(true, 4);
+
         } else {
             ramka.ContentPanel.customEnd[0] = oldCustomEnd[0];
             ramka.ContentPanel.customEnd[1] = oldCustomEnd[1]; 
         }
 
-        mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(lastEndColor);
-        lastEndColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).getBackground();
-
-        mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).setBackground(Color.PINK);
-        mazeAnalyzer.EndPos = columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0];
     }
 }

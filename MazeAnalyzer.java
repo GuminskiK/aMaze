@@ -11,6 +11,8 @@ public class MazeAnalyzer {
     public int End;
     public int EndPos;
     public ArrayList<Integer[]> nodes;
+    public int maxID;
+
 
     int currentRows;
 
@@ -18,6 +20,8 @@ public class MazeAnalyzer {
        
         char[][] x = new char[3][columns]; 
         this.nodes = new ArrayList<>();
+        this.Start = -2;
+        this.End = -2;
 
         try {
             Scanner scanner = new Scanner(file);
@@ -26,6 +30,7 @@ public class MazeAnalyzer {
             e.printStackTrace();
         }
 
+        this.maxID = currentID; 
         /* 
         //System.out.println(this.currentID);
         for (int i = 0; i < this.currentID; i++){
@@ -104,12 +109,43 @@ public class MazeAnalyzer {
 
                     if (x[0][i] == 'P'){
                         h++;
+                        G++;
                         this.Start = currentID;
                         this.StartPos = columns * (currentRows - 2) + i;
+                        nodes.add(directions());
+                        nodes.get(currentID)[4] = currentID + 1; //do hakai?
+                        nodes.get(currentID)[5] = 1;
+                        Numbers[i] = 0;
+                        ID[i] = currentID; 
+
+                        nodes.get(currentID)[8] = i + 1;//x
+                        nodes.get(currentID)[9] = currentRows - 2;//y
+
+                        currentID++;
+                        nodes.add(directions());
+
+                        nodes.get(currentID)[0] = currentID - 1;
+                        nodes.get(currentID)[1] = 1;
+
                     } else if (x[0][i] == 'K'){
                         h++;
+                        G++;
                         this.End = currentID;
                         this.EndPos = columns * (currentRows - 2)+ i;
+                        nodes.add(directions());
+                        nodes.get(currentID)[4] = currentID + 1;
+                        nodes.get(currentID)[5] = 1;
+                        Numbers[i] = 0;
+                        ID[i] = currentID; 
+
+                        nodes.get(currentID)[8] = i +1;//x
+                        nodes.get(currentID)[9] = currentRows - 2;//y
+
+                        currentID++;
+                        nodes.add(directions());
+
+                        nodes.get(currentID)[0] = currentID - 1;
+                        nodes.get(currentID)[1] = 1;
                     } else {
                         G++;
                         h++;
@@ -121,12 +157,42 @@ public class MazeAnalyzer {
 
                     if (x[1][i-1] == 'P'){
                         h++;
+                        L++;
                         this.Start = currentID;
                         this.StartPos = columns * (currentRows -1) + i -1;
+                        nodes.add(directions());
+                        nodes.get(currentID)[2] = currentID + 1;
+                        nodes.get(currentID)[3] = 1;
+                        Numbers[i-1] = 0;
+                        ID[i-1] = currentID; 
+
+                        nodes.get(currentID)[8] = i;//x
+                        nodes.get(currentID)[9] = currentRows - 1;//y
+
+                        currentID++;
+                        nodes.add(directions());
+
+                        nodes.get(currentID)[6] = currentID - 1;
+                        nodes.get(currentID)[7] = 1;
                     } else if (x[1][i-1] == 'K'){
                         h++;
+                        L++;
                         this.End = currentID;
                         this.EndPos = columns * (currentRows - 1) + i -1;
+                        nodes.add(directions());
+                        nodes.get(currentID)[2] = currentID + 1;
+                        nodes.get(currentID)[3] = 1;
+                        Numbers[i-1] = 0;
+                        ID[i-1] = currentID;
+
+                        nodes.get(currentID)[8] = i;//x
+                        nodes.get(currentID)[9] = currentRows - 1;//y
+
+                        currentID++;
+                        nodes.add(directions());
+
+                        nodes.get(currentID)[6] = currentID - 1;
+                        nodes.get(currentID)[7] = 1;
                     } else {
                         L++;
                         h++;
@@ -141,11 +207,35 @@ public class MazeAnalyzer {
                         D++;
                         this.Start = currentID;
                         this.StartPos = columns * currentRows + i;
+                        nodes.add(directions());
+                        nodes.get(currentID)[0] = currentID + 1;
+                        nodes.get(currentID)[1] = 1;
+
+                        nodes.get(currentID)[8] = i +1;//x
+                        nodes.get(currentID)[9] = currentRows;//y
+
+                        currentID++;
+                        nodes.add(directions());
+
+                        nodes.get(currentID)[4] = currentID - 1;
+                        nodes.get(currentID)[5] = 1;
                     } else if (x[2][i] == 'K'){
                         h++;
                         D++;
                         this.End = currentID;
                         this.EndPos = columns * currentRows + i ;
+                        nodes.add(directions());
+                        nodes.get(currentID)[0] = currentID + 1;
+                        nodes.get(currentID)[1] = 1;
+
+                        nodes.get(currentID)[8] = i +1;//x
+                        nodes.get(currentID)[9] = currentRows;//y
+
+                        currentID++;
+                        nodes.add(directions());
+
+                        nodes.get(currentID)[4] = currentID - 1;
+                        nodes.get(currentID)[5] = 1;
                     } else {
                         D++;
                         h++;
@@ -159,11 +249,38 @@ public class MazeAnalyzer {
                         P++;
                         this.Start = currentID;
                         this.StartPos = columns * (currentRows - 1) + i + 1;
+                        nodes.add(directions());
+                        nodes.get(currentID)[6] = currentID + 1;
+                        nodes.get(currentID)[7] = 1;
+                        Numbers[i+1] = 0;
+                        ID[i+1] = currentID;
+
+                        nodes.get(currentID)[8] = i + 2;//x
+                        nodes.get(currentID)[9] = currentRows -1;//y
+
+                        currentID++;
+                        nodes.add(directions());
+
+                        nodes.get(currentID)[2] = currentID - 1;
+                        nodes.get(currentID)[3] = 1;
                     } else if (x[1][i+1] == 'K'){
                         h++;
                         P++;
                         this.End = currentID;
                         this.EndPos = columns * (currentRows - 1) + i + 1;
+                        nodes.add(directions());
+                        nodes.get(currentID)[6] = currentID + 1;
+                        nodes.get(currentID)[7] = 1;
+                        Numbers[i+1] = 0;
+                        ID[i+1] = currentID;
+                        nodes.get(currentID)[8] = i + 2;//x
+                        nodes.get(currentID)[9] = currentRows -1;//y
+
+                        currentID++;
+                        nodes.add(directions());
+
+                        nodes.get(currentID)[2] = currentID - 1;
+                        nodes.get(currentID)[3] = 1;
                     } else {
                         P++;
                         h++;
@@ -176,12 +293,8 @@ public class MazeAnalyzer {
                 //System.out.printf("G:%c, P:%c, D:%c, L:%c \n", x[0][i], x[1][i-1], x[2][i], x[1][i+1]);
                 //System.out.println("");
 
-                if (Start == currentID || End == currentID){
-                    x[1][i] = 'Z';
-                    Link(Numbers, ID, i, G, L);
-                }
                 //jeśli node (skręt, zaułek, rozdroże w labiryncie) 3 razy to samo popraw!!!
-                else if ( h == 1){ //zaulek
+                if ( h == 1){ //zaulek
                     x[1][i] = 'Z';
                     
                     Link( Numbers, ID, i, G, L);
@@ -242,9 +355,10 @@ public class MazeAnalyzer {
     }
 
     private void Link( int[] Numbers, int[]ID, int i, int G, int L ){
-
-        nodes.add(directions());
         
+        if (Start != currentID - 1 && End != currentID - 1){
+            nodes.add(directions());
+        }
         if (G == 1){
 
             nodes.get(this.currentID)[1] = Numbers[i] + 1;
@@ -280,5 +394,155 @@ public class MazeAnalyzer {
         nodes.get(currentID)[9] = currentRows - 1;//y
         this.currentID++;
 
+    }
+
+    public void customAnalyzer (int[] pathi, int[] custom, int columns, char c){
+
+
+        int[] ID1,ID2;   
+        int G = 0;
+        int P = 0;
+        int D = 0;
+        int L = 0;
+        int h = 0;
+        int ID = custom[0] + custom[1] * columns;
+        
+        //góra
+        if( pathi[ID - columns] == 1){
+
+            h++;
+            G++;
+
+        }
+        //lewo
+        if( pathi[ID - 1] == 1){
+
+            h++;
+            L++;
+        }
+        //dół
+        if( pathi[ID + columns] == 1){
+                
+            h++;
+            D++;
+        }
+            //prawo
+        if( pathi[ID + 1] == 1){
+
+            P++;
+            h++;
+        }
+            
+        if ( h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3){ //zaulek
+            //jesteśmy od początku na nodzie hip hip hurra
+        } else {
+            nodes.add(new Integer[]{0,0,0,0,0,0,0,0,0,0});
+
+            if ( h == 2 && P == 1){
+                if (c == 'S'){
+                    ID1 = searchCustom(pathi,columns,ID, 2);
+                    nodes.get(Start)[6] = ID1[0];
+                    nodes.get(Start)[7] = ID1[1];
+                    ID2 = searchCustom(pathi,columns,ID, 3);
+                    nodes.get(Start)[2] = ID2[0];
+                    nodes.get(Start)[3] = ID2[1];
+                } else {
+                    ID1 = searchCustom(pathi,columns,ID, 2);
+                    nodes.get(End)[6] = ID1[0];
+                    nodes.get(End)[7] = ID1[1];
+                    ID2 = searchCustom(pathi,columns,ID, 3);
+                    nodes.get(End)[2] = ID2[0];
+                    nodes.get(End)[3] = ID2[1];
+                }
+            }else {
+                if( c == 'S'){
+                    ID1 = searchCustom(pathi,columns,ID, 0);
+                    nodes.get(Start)[0] = ID1[0];
+                    nodes.get(Start)[1] = ID1[1];
+                    ID2 = searchCustom(pathi,columns,ID, 1);
+                    nodes.get(Start)[4] = ID2[0];
+                    nodes.get(Start)[5] = ID2[1];
+                } else{
+                    ID1 = searchCustom(pathi,columns,ID, 0);
+                    nodes.get(End)[0] = ID1[0];
+                    nodes.get(End)[1] = ID1[1];
+                    ID2 = searchCustom(pathi,columns,ID, 1);
+                    nodes.get(End)[4] = ID2[0];
+                    nodes.get(End)[5] = ID2[1];
+                }
+            }
+        }
+        
+    }
+
+    private int[] searchCustom(int [] pathi, int columns, int ID, int mod){
+
+        int x = 0;
+        int distance = 0;
+        int G,L,P,D,h;
+        int z[] = new int[2];
+
+        while (x != 1){
+
+            G = 0;
+            L = 0;
+            P = 0;
+            D = 0;
+            h = 0;
+
+            if( pathi[ID - columns] == 1){
+
+                h++;
+                G++;
+    
+            }
+            //lewo
+            if( pathi[ID - 1] == 1){
+    
+                h++;
+                L++;
+            }
+            //dół
+            if( pathi[ID + columns] == 1){
+                    
+                h++;
+                D++;
+            }
+                //prawo
+            if( pathi[ID + 1] == 1){
+    
+                P++;
+                h++;
+            }
+                
+            if ( h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3){ //zaulek
+                //jesteśmy na nodzie hip hip hurra
+                x = 1;
+                z[0] = ID;
+                z[1] = distance;
+                return z;
+            }
+
+            switch (mod) {
+                case 0:
+                    ID -= columns;
+                    break;
+                case 1:
+                    ID += columns;
+                    break;
+                case 2:
+                    ID -= 1;
+                    break;
+                case 3:
+                    ID += 1;
+                    break;
+                default:
+                    break;
+            }
+
+            distance++;
+        }
+        //zmien na id noda
+        return z;
     }
 }
