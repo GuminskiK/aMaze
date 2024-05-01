@@ -411,13 +411,6 @@ public class MazeAnalyzer {
 
 
         Clear(c);
-        if (c == 'S'){
-            nodes.get(Start)[8] = custom[0]+1;
-            nodes.get(Start)[9] = custom[1];
-        } else {
-            nodes.get(End)[8] = custom[0]; 
-            nodes.get(End)[9] = custom[1];
-        }
         
         //góra
         if( pathi[ID - columns] == 1){
@@ -447,8 +440,23 @@ public class MazeAnalyzer {
             
         if ( h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3){ //zaulek
             //jesteśmy od początku na nodzie hip hip hurra
+            d = SearchForNode(custom[0]+ 1, custom[1]);
+            if(c == 'S'){
+                this.Start = d; // jeżeli używamy parokrotnie, to musimy odwoływać się potem do startu bazowego
+                System.out.println(this.Start);
+            } else {
+                End = d;
+            }
+            
             System.out.println("Node!");
         } else {
+            if (c == 'S'){
+                nodes.get(Start)[8] = custom[0]+1;
+                nodes.get(Start)[9] = custom[1];
+            } else {
+                nodes.get(End)[8] = custom[0]; 
+                nodes.get(End)[9] = custom[1];
+            }
 
             if ( h == 2 && P == 1){
                 if (c == 'S'){
