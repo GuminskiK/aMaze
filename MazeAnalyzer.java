@@ -454,7 +454,7 @@ public class MazeAnalyzer {
                 nodes.get(Start)[8] = custom[0]+1;
                 nodes.get(Start)[9] = custom[1];
             } else {
-                nodes.get(End)[8] = custom[0]; 
+                nodes.get(End)[8] = custom[0] + 1;//test 
                 nodes.get(End)[9] = custom[1];
             }
 
@@ -516,7 +516,7 @@ public class MazeAnalyzer {
                     nodes.get(End)[0] = d;
                     nodes.get(End)[1] = ID1[1];
 
-                    nodes.get(d)[4] = Start;
+                    nodes.get(d)[4] = End;
                     nodes.get(d)[5] = ID1[1];
 
                     ID2 = searchCustom(pathi,columns,ID, 1);
@@ -524,7 +524,7 @@ public class MazeAnalyzer {
                     nodes.get(End)[4] = d;
                     nodes.get(End)[5] = ID2[1];
 
-                    nodes.get(d)[0] = Start;
+                    nodes.get(d)[0] = End;
                     nodes.get(d)[1] = ID2[1];
                 }
             }
