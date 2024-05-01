@@ -406,6 +406,18 @@ public class MazeAnalyzer {
         int L = 0;
         int h = 0;
         int ID = custom[0] + custom[1] * columns;
+        int d;
+        System.out.println(ID);
+
+
+        Clear(c);
+        if (c == 'S'){
+            nodes.get(Start)[8] = custom[0]+1;
+            nodes.get(Start)[9] = custom[1];
+        } else {
+            nodes.get(End)[8] = custom[0]; 
+            nodes.get(End)[9] = custom[1];
+        }
         
         //góra
         if( pathi[ID - columns] == 1){
@@ -435,40 +447,77 @@ public class MazeAnalyzer {
             
         if ( h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3){ //zaulek
             //jesteśmy od początku na nodzie hip hip hurra
+            System.out.println("Node!");
         } else {
-            nodes.add(new Integer[]{0,0,0,0,0,0,0,0,0,0});
 
             if ( h == 2 && P == 1){
                 if (c == 'S'){
                     ID1 = searchCustom(pathi,columns,ID, 2);
-                    nodes.get(Start)[6] = ID1[0];
+                    d = SearchForNode((ID1[0]%columns) + 1, ID1[0]/columns);
+                    nodes.get(Start)[6] = d;
                     nodes.get(Start)[7] = ID1[1];
+
+                    nodes.get(d)[2] = Start;
+                    nodes.get(d)[3] = ID1[1];
+
                     ID2 = searchCustom(pathi,columns,ID, 3);
-                    nodes.get(Start)[2] = ID2[0];
+                    d = SearchForNode((ID2[0]%columns) + 1, ID2[0]/columns);
+                    nodes.get(Start)[2] = d;
                     nodes.get(Start)[3] = ID2[1];
+
+                    nodes.get(d)[6] = Start;
+                    nodes.get(d)[7] = ID2[1];
                 } else {
                     ID1 = searchCustom(pathi,columns,ID, 2);
-                    nodes.get(End)[6] = ID1[0];
+                    d = SearchForNode((ID1[0]%columns) + 1, ID1[0]/columns);
+                    nodes.get(End)[6] = d;
                     nodes.get(End)[7] = ID1[1];
+
+                    nodes.get(d)[2] = End;
+                    nodes.get(d)[3] = ID1[1];
+
                     ID2 = searchCustom(pathi,columns,ID, 3);
-                    nodes.get(End)[2] = ID2[0];
+                    d = SearchForNode((ID2[0]%columns) + 1, ID2[0]/columns);
+                    nodes.get(End)[2] = d;
                     nodes.get(End)[3] = ID2[1];
+
+                    nodes.get(d)[6] = End;
+                    nodes.get(d)[7] = ID2[1];
                 }
             }else {
                 if( c == 'S'){
                     ID1 = searchCustom(pathi,columns,ID, 0);
-                    nodes.get(Start)[0] = ID1[0];
+                    d = SearchForNode((ID1[0]%columns) + 1, ID1[0]/columns);
+                    nodes.get(Start)[0] = d;
                     nodes.get(Start)[1] = ID1[1];
+
+                    nodes.get(d)[4] = Start;
+                    nodes.get(d)[5] = ID1[1];
+
                     ID2 = searchCustom(pathi,columns,ID, 1);
-                    nodes.get(Start)[4] = ID2[0];
+                    d = SearchForNode((ID2[0]%columns) + 1, ID2[0]/columns);
+                    nodes.get(Start)[4] = d;
                     nodes.get(Start)[5] = ID2[1];
+
+                    nodes.get(d)[0] = Start;
+                    nodes.get(d)[1] = ID2[1];
+
                 } else{
                     ID1 = searchCustom(pathi,columns,ID, 0);
-                    nodes.get(End)[0] = ID1[0];
+                    d = SearchForNode((ID1[0]%columns) + 1, ID1[0]/columns);
+                    nodes.get(End)[0] = d;
                     nodes.get(End)[1] = ID1[1];
+
+                    nodes.get(d)[4] = Start;
+                    nodes.get(d)[5] = ID1[1];
+
                     ID2 = searchCustom(pathi,columns,ID, 1);
-                    nodes.get(End)[4] = ID2[0];
+                    d = SearchForNode((ID2[0]%columns) + 1, ID2[0]/columns);
+                    nodes.get(End)[4] = d;
                     nodes.get(End)[5] = ID2[1];
+
+                    nodes.get(d)[0] = Start;
+                    nodes.get(d)[1] = ID2[1];
                 }
             }
         }
@@ -544,5 +593,61 @@ public class MazeAnalyzer {
         }
         //zmien na id noda
         return z;
+    }
+
+    private int SearchForNode(int x, int y){
+        
+        int i = 0;
+
+        while (nodes.get(i)[8] != x || nodes.get(i)[9] != y ){
+            
+            i++;
+        }
+
+        return i;
+    }
+
+    private void Clear(char c){
+
+        int y = 0;
+        int obj = 0;
+
+        if (c == 'S'){
+            obj = Start;
+        } else{
+            obj = End;
+        }
+
+        while ( y != 8){
+            if (nodes.get(obj)[y] != -1){
+                switch(y){
+                    case 0:
+                        nodes.get(nodes.get(obj)[y])[4] = -1;
+                        nodes.get(nodes.get(obj)[y])[5] = -1;
+                        break;
+                    case 2:
+                        nodes.get(nodes.get(obj)[y])[6] = -1;
+                        nodes.get(nodes.get(obj)[y])[7] = -1;
+                        break;
+                    case 4:
+                        nodes.get(nodes.get(obj)[y])[0] = -1;
+                        nodes.get(nodes.get(obj)[y])[1] = -1;
+                        break;
+                    case 6:
+                        nodes.get(nodes.get(obj)[y])[2] = -1;
+                        nodes.get(nodes.get(obj)[y])[3] = -1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+           
+            y += 2;
+        }
+
+        for (int i = 0; i < 10; i ++){
+                nodes.get(obj)[i] = -1;
+        }
     }
 }

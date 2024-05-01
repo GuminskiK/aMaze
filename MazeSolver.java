@@ -68,7 +68,7 @@ public class MazeSolver {
             y += 2;
         }
 
-        if (y == 8){
+        if (y == 8 || ID_now == End ){
             ID_n = -1;
         } else {
             length_now += nodes.get(ID_now)[y+1];

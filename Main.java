@@ -183,7 +183,7 @@ public class Main {
             oldCustomEnd[0] = ramka.ContentPanel.customEnd[0];
             oldCustomEnd[1] = ramka.ContentPanel.customEnd[1]; 
 
-            mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customStart , columns, 'E');
+            mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customEnd , columns, 'E');
 
             mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(lastEndColor);
             lastEndColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).getBackground();
