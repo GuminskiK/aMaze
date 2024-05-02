@@ -64,14 +64,14 @@ public class Main {
         ActionListener customStartListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                CheckIfCustomStart();
+                customChange('S');
             }
         };
 
         ActionListener customEndListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                CheckIfCustomEnd();
+                customChange('E');
             }
         };
 
@@ -185,79 +185,74 @@ public class Main {
 
     }
 
-    private static void CheckIfCustomStart(){
-        
-        if (mazeCreator.path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] == 1){
+    private static void customChange( char c){
 
-            ramka.ToolPanel.ToolEnable(false, 3);
-            ramka.ToolPanel.ToolEnable(false, 4);
+        int colorNr;
+        int[] switchSE;
+        int[] customObject = new int[2];
 
-            oldCustomStart[0] = ramka.ContentPanel.customStart[0];
-            oldCustomStart[1] = ramka.ContentPanel.customStart[1]; 
+        if (c == 'S'){
+            customObject[0] = ramka.ContentPanel.customStart[0];
+            customObject[1] = ramka.ContentPanel.customStart[1];
+        } else {
+            customObject[0] = ramka.ContentPanel.customEnd[0];
+            customObject[1] = ramka.ContentPanel.customEnd[1];
+        }
 
-            mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customStart , columns, 'S');
+        if (mazeCreator.path[columns * customObject[1] + customObject[0]] == 1){
             
-            path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] = 3;
-            ramka.ContentPanel.mazePanel.rePaint(1, path);
-            mazeAnalyzer.StartPos = columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0];
+            if (c == 'S'){
 
-            StartEndSwitch++;
-    
-            ramka.ToolPanel.ToolEnable(true, 3);
-            ramka.ToolPanel.ToolEnable(true, 4);
-            ramka.ToolPanel.ToolEnable(true, 5);
+                colorNr = 3;
+                switchSE = new int[]{2,3};
 
-            if (StartEndSwitch == 2){
-                ramka.ToolPanel.ToolEnable(false, 2);
-                ramka.ToolPanel.ToolEnable(false, 3);
             } else {
-                ramka.ToolPanel.ToolEnable(false, 2);
-                ramka.ToolPanel.ToolEnable(true, 3);
+
+                colorNr = 4;
+                switchSE = new int[]{3,2};
+
             }
 
-        } else {
-            ramka.ContentPanel.customStart[0] = oldCustomStart[0];
-            ramka.ContentPanel.customStart[1] = oldCustomStart[1]; 
-            ramka.customError();
-        }
-
-    }
-
-    private static void CheckIfCustomEnd(){
-        
-        if (mazeCreator.path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] == 1){
-            ramka.ToolPanel.ToolEnable(false, 3);
             ramka.ToolPanel.ToolEnable(false, 4);
+            ramka.ToolPanel.ToolEnable(false, 5);
 
-            oldCustomEnd[0] = ramka.ContentPanel.customEnd[0];
-            oldCustomEnd[1] = ramka.ContentPanel.customEnd[1]; 
+            mazeAnalyzer.customAnalyzer( path, customObject , columns, c);
 
-            mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customEnd , columns, 'E');
-
-            path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] = 4;
+            path[columns * customObject[1] + customObject[0]] = colorNr;
             ramka.ContentPanel.mazePanel.rePaint(1, path);
-            mazeAnalyzer.EndPos = columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0];
 
-            ramka.ToolPanel.ToolEnable(true, 3);
+            if (c == 'S'){
+                mazeAnalyzer.StartPos = columns * customObject[1] + customObject[0];
+            } else {
+                mazeAnalyzer.EndPos = columns * customObject[1] + customObject[0];
+            }
+            
             ramka.ToolPanel.ToolEnable(true, 4);
             ramka.ToolPanel.ToolEnable(true, 5);
 
             StartEndSwitch++;
 
             if (StartEndSwitch == 2){
-                ramka.ToolPanel.ToolEnable(false, 2);
-                ramka.ToolPanel.ToolEnable(false, 3);
+                ramka.ToolPanel.ToolEnable(false, switchSE[0]);
+                ramka.ToolPanel.ToolEnable(false, switchSE[1]);
             } else {
-                ramka.ToolPanel.ToolEnable(false, 2);
-                ramka.ToolPanel.ToolEnable(true, 3);
+                ramka.ToolPanel.ToolEnable(false, switchSE[0]);
+                ramka.ToolPanel.ToolEnable(true, switchSE[1]);
             }
-
+            
         } else {
-            ramka.ContentPanel.customEnd[0] = oldCustomEnd[0];
-            ramka.ContentPanel.customEnd[1] = oldCustomEnd[1];
-            ramka.customError(); 
-        }
 
+            if (c == 'S'){
+                ramka.ContentPanel.customStart[0] = oldCustomStart[0];
+                ramka.ContentPanel.customStart[1] = oldCustomStart[1]; 
+                ramka.customError();
+            } else {
+                ramka.ContentPanel.customEnd[0] = oldCustomEnd[0];
+                ramka.ContentPanel.customEnd[1] = oldCustomEnd[1];
+                ramka.customError();
+            }
+             
+        }
     }
 
     static void InOutWall(){

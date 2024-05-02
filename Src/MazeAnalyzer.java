@@ -342,9 +342,9 @@ public class MazeAnalyzer {
                 object = End;
             }
 
-            if (h == 2 && P == 1) {
+            if (h == 2 && P == 1) { //poziom
                 z = new int[] { 6, 7, 2, 3, 2,3};
-            } else {
+            } else { //pion
                 z = new int[] { 0, 1, 4, 5, 0, 1};
             }
 
