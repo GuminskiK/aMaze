@@ -12,6 +12,12 @@ public class MazeAnalyzer {
     public int EndPos;
     public ArrayList<Integer[]> nodes;
     public int maxID;
+    int G;
+    int L;
+    int P;
+    int D;
+    int h;
+
 
 
     int currentRows;
@@ -98,23 +104,31 @@ public class MazeAnalyzer {
             
             if ( x[1][i] == ' '){
                 
-                int G = 0;
-                int P = 0;
-                int D = 0;
-			    int L = 0;
-			    int h = 0;
+                G = 0;
+                P = 0;
+                D = 0;
+			    L = 0;
+			    h = 0;
 
                 //góra
-                if( path(x[0][i])){
+                if( x[0][i] == ' ' || x[0][i] == 'P' ||  x[0][i] == 'K'){
 
-                    if (x[0][i] == 'P'){
-                        h++;
-                        G++;
-                        this.Start = currentID;
-                        this.StartPos = columns * (currentRows - 2) + i;
+                    if( x[0][i] == 'P' || x[0][i] == 'K'){
+
+                        if (x[0][i] == 'P'){
+
+                            this.Start = currentID;
+                            this.StartPos = columns * (currentRows - 2) + i;
+
+                        } else {
+
+                            this.End = currentID;
+                            this.EndPos = columns * (currentRows - 2)+ i;
+
+                        }
+
                         nodes.add(directions());
-                        nodes.get(currentID)[4] = currentID + 1; //do hakai?
-                        nodes.get(currentID)[5] = 1;
+
                         Numbers[i] = 0;
                         ID[i] = currentID; 
 
@@ -123,65 +137,32 @@ public class MazeAnalyzer {
 
                         currentID++;
                         nodes.add(directions());
-
-                        nodes.get(currentID)[0] = currentID - 1;
-                        nodes.get(currentID)[1] = 1;
-
-                    } else if (x[0][i] == 'K'){
-                        h++;
-                        G++;
-                        this.End = currentID;
-                        this.EndPos = columns * (currentRows - 2)+ i;
-                        nodes.add(directions());
-                        nodes.get(currentID)[4] = currentID + 1;
-                        nodes.get(currentID)[5] = 1;
-                        Numbers[i] = 0;
-                        ID[i] = currentID; 
-
-                        nodes.get(currentID)[8] = i +1;//x
-                        nodes.get(currentID)[9] = currentRows - 2;//y
-
-                        currentID++;
-                        nodes.add(directions());
-
-                        nodes.get(currentID)[0] = currentID - 1;
-                        nodes.get(currentID)[1] = 1;
-                    } else {
-                        G++;
-                        h++;
                     }
+                    
+                    G++;
+                    h++;
+                    
 
                 }
                 //lewo
-                if( path(x[1][i-1])){
+                if( x[1][i-1] == ' ' || x[1][i-1] == 'P' ||  x[1][i-1] == 'K'){
 
-                    if (x[1][i-1] == 'P'){
-                        h++;
-                        L++;
-                        this.Start = currentID;
-                        this.StartPos = columns * (currentRows -1) + i -1;
+                    if( x[1][i-1] == 'P' || x[1][i-1] == 'K'){
+
+                        if (x[1][i-1] == 'P'){
+
+                            this.Start = currentID;
+                            this.StartPos = columns * (currentRows -1) + i -1;
+
+                        } else {
+
+                            this.End = currentID;
+                            this.EndPos = columns * (currentRows - 1) + i -1;
+
+                        }
+
                         nodes.add(directions());
-                        nodes.get(currentID)[2] = currentID + 1;
-                        nodes.get(currentID)[3] = 1;
-                        Numbers[i-1] = 0;
-                        ID[i-1] = currentID; 
-
-                        nodes.get(currentID)[8] = i;//x
-                        nodes.get(currentID)[9] = currentRows - 1;//y
-
-                        currentID++;
-                        nodes.add(directions());
-
-                        nodes.get(currentID)[6] = currentID - 1;
-                        nodes.get(currentID)[7] = 1;
-                    } else if (x[1][i-1] == 'K'){
-                        h++;
-                        L++;
-                        this.End = currentID;
-                        this.EndPos = columns * (currentRows - 1) + i -1;
-                        nodes.add(directions());
-                        nodes.get(currentID)[2] = currentID + 1;
-                        nodes.get(currentID)[3] = 1;
+  
                         Numbers[i-1] = 0;
                         ID[i-1] = currentID;
 
@@ -191,22 +172,29 @@ public class MazeAnalyzer {
                         currentID++;
                         nodes.add(directions());
 
-                        nodes.get(currentID)[6] = currentID - 1;
-                        nodes.get(currentID)[7] = 1;
-                    } else {
-                        L++;
-                        h++;
                     }
+
+                    L++;
+                    h++;
 
                 }
                 //dół
-                if( path(x[2][i])){
+                if( x[2][i] == ' ' || x[2][i] == 'P' ||  x[2][i] == 'K'){
                     
-                    if (x[2][i] == 'P'){
-                        h++;
-                        D++;
-                        this.Start = currentID;
-                        this.StartPos = columns * currentRows + i;
+                    if( x[2][i] == 'P' || x[2][i] == 'K'){
+
+                        if (x[2][i] == 'P'){
+
+                            this.Start = currentID;
+                            this.StartPos = columns * currentRows + i;
+
+                        } else {
+
+                            this.End = currentID;
+                            this.EndPos = columns * currentRows + i ;
+
+                        }
+
                         nodes.add(directions());
                         nodes.get(currentID)[0] = currentID + 1;
                         nodes.get(currentID)[1] = 1;
@@ -219,55 +207,29 @@ public class MazeAnalyzer {
 
                         nodes.get(currentID)[4] = currentID - 1;
                         nodes.get(currentID)[5] = 1;
-                    } else if (x[2][i] == 'K'){
-                        h++;
-                        D++;
-                        this.End = currentID;
-                        this.EndPos = columns * currentRows + i ;
-                        nodes.add(directions());
-                        nodes.get(currentID)[0] = currentID + 1;
-                        nodes.get(currentID)[1] = 1;
-
-                        nodes.get(currentID)[8] = i +1;//x
-                        nodes.get(currentID)[9] = currentRows;//y
-
-                        currentID++;
-                        nodes.add(directions());
-
-                        nodes.get(currentID)[4] = currentID - 1;
-                        nodes.get(currentID)[5] = 1;
-                    } else {
-                        D++;
-                        h++;
                     }
+
+                    D++;
+                    h++;
+                    
                 }
                 //prawo
-                if( path(x[1][i+1])){
+                if( x[1][i+1] == ' ' || x[1][i+1] == 'P' ||  x[1][i+1] == 'K'){
 
-                    if (x[1][i+1] == 'P'){
-                        h++;
-                        P++;
-                        this.Start = currentID;
-                        this.StartPos = columns * (currentRows - 1) + i + 1;
-                        nodes.add(directions());
-                        nodes.get(currentID)[6] = currentID + 1;
-                        nodes.get(currentID)[7] = 1;
-                        Numbers[i+1] = 0;
-                        ID[i+1] = currentID;
+                    if( x[1][i+1]  == 'P' || x[1][i+1]  == 'K'){
 
-                        nodes.get(currentID)[8] = i + 2;//x
-                        nodes.get(currentID)[9] = currentRows -1;//y
+                        if (x[1][i+1]  == 'P'){
 
-                        currentID++;
-                        nodes.add(directions());
+                            this.Start = currentID;
+                            this.StartPos = columns * (currentRows - 1) + i + 1;
 
-                        nodes.get(currentID)[2] = currentID - 1;
-                        nodes.get(currentID)[3] = 1;
-                    } else if (x[1][i+1] == 'K'){
-                        h++;
-                        P++;
-                        this.End = currentID;
-                        this.EndPos = columns * (currentRows - 1) + i + 1;
+                        } else {
+
+                            this.End = currentID;
+                            this.EndPos = columns * (currentRows - 1) + i + 1;
+
+                        }
+
                         nodes.add(directions());
                         nodes.get(currentID)[6] = currentID + 1;
                         nodes.get(currentID)[7] = 1;
@@ -281,10 +243,11 @@ public class MazeAnalyzer {
 
                         nodes.get(currentID)[2] = currentID - 1;
                         nodes.get(currentID)[3] = 1;
-                    } else {
-                        P++;
-                        h++;
                     }
+
+                    P++;
+                    h++;
+                    
                 }
 
                 
@@ -295,17 +258,14 @@ public class MazeAnalyzer {
 
                 //jeśli node (skręt, zaułek, rozdroże w labiryncie) 3 razy to samo popraw!!!
                 if ( h == 1){ //zaulek
-                    x[1][i] = 'Z';
                     
                     Link( Numbers, ID, i, G, L);
         
-                } else if (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1)) ){ // skret
-                    x[1][i] = 'S';
+                } else if (h >= 3 ){ // rozdroze
 
                     Link( Numbers, ID, i, G, L );
 
-                } else if (h >= 3){ //rozdroze
-                    x[1][i] = 'R';
+                } else if (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))){ //skret
                     
                     Link( Numbers, ID, i, G, L );
 
@@ -338,15 +298,6 @@ public class MazeAnalyzer {
         System.out.println("------------------------------------");
         */
         
-    }
-
-    private boolean path( char x){
-
-        if(x == ' ' || x == 'Z' || x == 'S' || x == 'R'|| x == 'P' ||  x == 'K'){
-            return true;
-        }else {
-            return false;
-        }
     }
 
     private Integer[] directions(){
