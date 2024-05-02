@@ -17,6 +17,7 @@ public class Main {
     static int[] oldCustomEnd = new int[2];
     static int StartEndSwitch = 0;
     static int[] path;
+    static char[][] x;
     
 
     public static void main (String[] args){
@@ -94,11 +95,24 @@ public class Main {
         ramka.menuBar.setloadEnabled(false);
         file = ramka.menuBar.file;
         fileReader = new FileReader();
-        fileReader.CountRowsColumns(file); 
-        char[][] x = fileReader.ReadFileTXT(file);
-        columns = fileReader.columns;
+
+        //char [][]x =  new char[columns][fileReader.rows];
+        //to nie działa do końca bo skad wezmę wymiary za nim przeczytam
+        
+        if (ramka.menuBar.fileType.equals("txt")){
+            
+            fileReader.CountRowsColumns(file);
+            columns = fileReader.columns;
+            x = fileReader.ReadFileTXT(file);
+
+        } else {
+            //czytanie binarne
+            //inczaej wywali się program, pozdrawiam
+        }
+
         //createMaze
         mazeCreator = new MazeCreator();
+
         int wait = mazeCreator.CreateMaze( x, fileReader.columns, fileReader.rows);
         path = mazeCreator.path;
         
@@ -174,18 +188,14 @@ public class Main {
     private static void CheckIfCustomStart(){
         
         if (mazeCreator.path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] == 1){
-            //System.out.println("path");
+
             ramka.ToolPanel.ToolEnable(false, 3);
             ramka.ToolPanel.ToolEnable(false, 4);
 
             oldCustomStart[0] = ramka.ContentPanel.customStart[0];
             oldCustomStart[1] = ramka.ContentPanel.customStart[1]; 
 
-            //do testu
             mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customStart , columns, 'S');
-
-            //mazeCreator.maze.get( mazeAnalyzer.StartPos).setBackground(lastStartColor);
-            //lastStartColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).getBackground();
             
             path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] = 3;
             ramka.ContentPanel.mazePanel.rePaint(1, path);
@@ -216,7 +226,6 @@ public class Main {
     private static void CheckIfCustomEnd(){
         
         if (mazeCreator.path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] == 1){
-            //System.out.println("path");
             ramka.ToolPanel.ToolEnable(false, 3);
             ramka.ToolPanel.ToolEnable(false, 4);
 
@@ -224,9 +233,6 @@ public class Main {
             oldCustomEnd[1] = ramka.ContentPanel.customEnd[1]; 
 
             mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customEnd , columns, 'E');
-
-            //mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(lastEndColor);
-            //lastEndColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).getBackground();
 
             path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] = 4;
             ramka.ContentPanel.mazePanel.rePaint(1, path);

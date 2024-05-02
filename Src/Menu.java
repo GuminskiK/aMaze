@@ -2,10 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileFilter;
-
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -24,6 +21,8 @@ public class Menu extends JMenuBar implements ActionListener {
 
     ActionListener listener;
     ActionListener helpListener;
+
+    String fileType;
 
 
     Menu(ActionListener listener, ActionListener helpListener){
@@ -71,6 +70,7 @@ public class Menu extends JMenuBar implements ActionListener {
 
             if (response == JFileChooser.APPROVE_OPTION){
                 File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+                this.fileType = file.getAbsolutePath().substring(file.getAbsolutePath().length() - 3);
                 this.file = file;
                 this.done = 1;
                 this.listener.actionPerformed(e);
