@@ -19,7 +19,8 @@ import java.awt.event.MouseEvent;
 
 public class ContentPanel extends JPanel {
 
-    public JPanel MazePanel;
+    //public JPanel MazePanel;
+    public MazePanel mazePanel;
     JPanel HelpPanel;
     int x;
     Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
@@ -33,15 +34,15 @@ public class ContentPanel extends JPanel {
         this.setBackground(Color.white);
 
         HelpPanel = new JPanel();
-        MazePanel = new JPanel();
+        //MazePanel = new JPanel();
 
-        this.MazePanel.setVisible(false);
+        //this.MazePanel.setVisible(false);
         this.HelpPanel.setVisible(false);
 
         Help();
 
         this.add(HelpPanel);
-        this.add(MazePanel);
+        //this.add(MazePanel);
         on = false;
 
         this.customStart = new int[2];
@@ -53,21 +54,18 @@ public class ContentPanel extends JPanel {
 
     }
 
-    public void addPanel (int columns, int rows){
+    public void addPanel (int columns, int rows, int[] path){
 
         HelpPanel.setVisible(false);
         Component[] components = this.getComponents();
         if ( components.length != 0){
-            this.remove(components[1]);
+            //this.remove(components[1]);
         }
         x++;
-        this.MazePanel = new JPanel();
-        this.MazePanel.setSize(columns * 10, rows * 10);
-        this.MazePanel.setLayout(new GridLayout(columns, rows, 0,0));
-        this.MazePanel.setBorder(border);
-        this.MazePanel.setVisible(false);
-
-        this.add(MazePanel);
+        this.mazePanel = new MazePanel(columns, rows, path);
+        //mazePanel.rePaint(2);
+        this.add(mazePanel);
+        mazePanel.setVisible(true);
         on = true;
 
         
@@ -94,7 +92,7 @@ public class ContentPanel extends JPanel {
 
         backButton.addActionListener(
 
-            (e) -> {this.MazePanel.setVisible(true);
+            (e) -> {//this.MazePanel.setVisible(true);
                     this.HelpPanel.setVisible(false);}
 
         );
@@ -106,13 +104,13 @@ public class ContentPanel extends JPanel {
 
     public void setHelpEnabled(){
         System.out.println("help");
-        this.MazePanel.setVisible(false);
+        //this.MazePanel.setVisible(false);
         this.HelpPanel.setVisible(true);
     }
 
     public void start(ActionListener listener, char c, ContentPanel contentPanel, ActionListener customListener){
 
-        MazePanel.addMouseListener(new MouseAdapter() {
+        mazePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int x = e.getX();
@@ -126,7 +124,7 @@ public class ContentPanel extends JPanel {
                     contentPanel.customEnd[1] = (y-5)/10;
                     saveCustom(customEnd, 'E');
                 }
-                MazePanel.removeMouseListener(MazePanel.getMouseListeners()[0]);
+                mazePanel.removeMouseListener(mazePanel.getMouseListeners()[0]);
                 listener.actionPerformed(null);
                 customListener.actionPerformed(null);
             }

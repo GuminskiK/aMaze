@@ -12,27 +12,27 @@ public class SolutionWriter {
     int p = 0;
     int length_now;
 
-    public void WriteSolution(boolean[] solution, ArrayList<JLabel> panels, int Start, int End, ArrayList<Integer[]> nodes, int columns, int StartPos, int EndPos){
+    public void WriteSolution(boolean[] solution, int[] path, int Start, int End, ArrayList<Integer[]> nodes, int columns, int StartPos, int EndPos){
 
         this.Start = Start;
         this.End = End;
 
-        int x = solve(nodes, solution, panels, columns);
-        drawStartEnd(nodes, panels, columns, StartPos, 0);
-        drawStartEnd(nodes, panels, columns, EndPos, 1);
+        int x = solve(nodes, solution, path, columns);
+        drawStartEnd(path, columns, StartPos, 0);
+        drawStartEnd(path, columns, EndPos, 1);
         System.out.println(length_now);
 
     }
 
-    private void drawStartEnd(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int Pos, int x){
+    private void drawStartEnd(int[] path, int columns, int Pos, int x){
 
         if (x == 0){
-            panels.get(Pos).setBackground(Color.GREEN);
+            path[Pos] = 3;
         } else {
-            panels.get(Pos).setBackground(Color.PINK);
+            path[Pos] = 4;
         }
     }
-    private void drawingSolution(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int y){
+    private void drawingSolution(ArrayList<Integer[]> nodes, int[] path, int columns, int y){
         //ID_now
         int length = nodes.get(ID_now)[y+1];
         int direction = y/2;
@@ -40,22 +40,22 @@ public class SolutionWriter {
         switch (direction) {
             case 0:
                 for (int i = 0; i < length; i++){
-                    panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] - i) * columns - 1).setBackground(Color.red);
+                    path[nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] - i) * columns - 1] = 2;
                 }
                 break;
             case 1:
                 for (int i = 0; i < length; i++){
-                    panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 + i).setBackground(Color.red);
+                    path[nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 + i] = 2;
                 }
                 break;
             case 2:
                 for (int i = 0; i < length; i++){
-                    panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] + i)* columns - 1).setBackground(Color.red);
+                    path[nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] + i)* columns - 1] = 2;
                 }
                 break;
             case 3:
                 for (int i = 0; i < length; i++){
-                    panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 - i).setBackground(Color.red);
+                    path[nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 - i] = 2;
                 }
                 break;
             default:
@@ -64,7 +64,7 @@ public class SolutionWriter {
 
     }
     //mode shortest
-    private int solve(ArrayList<Integer[]> nodes, boolean[] solution, ArrayList<JLabel> panels, int columns){
+    private int solve(ArrayList<Integer[]> nodes, boolean[] solution, int[] path, int columns){
 
         ID_next = Start;
         length_now = 0;
@@ -76,16 +76,15 @@ public class SolutionWriter {
                 break;
             }
             solution[ID_now] = false;
-            ID_next = whichNext(nodes, solution, panels, columns);
+            ID_next = whichNext(nodes, solution, path, columns);
 
         }
-        panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 ).setBackground(Color.RED);
-
+        path[nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1] = 2;
         return 0;
         
     }
 
-    private int whichNext(ArrayList<Integer[]> nodes, boolean[] solution, ArrayList<JLabel> panels, int columns){
+    private int whichNext(ArrayList<Integer[]> nodes, boolean[] solution, int[] path, int columns){
         
         int y = 0;
         int ID_n = 0;
@@ -103,7 +102,7 @@ public class SolutionWriter {
 
         length_now += nodes.get(ID_now)[y+1];
 
-        drawingSolution(nodes, panels, columns, y);
+        drawingSolution(nodes, path, columns, y);
 
         return ID_n;
 
