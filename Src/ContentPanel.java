@@ -33,15 +33,11 @@ public class ContentPanel extends JPanel {
         this.setBackground(Color.white);
 
         HelpPanel = new JPanel();
-        //MazePanel = new JPanel();
-
-        //this.MazePanel.setVisible(false);
         this.HelpPanel.setVisible(false);
 
         Help();
 
         this.add(HelpPanel);
-        //this.add(MazePanel);
         on = false;
 
         this.customStart = new int[2];
@@ -57,12 +53,12 @@ public class ContentPanel extends JPanel {
 
         HelpPanel.setVisible(false);
         Component[] components = this.getComponents();
-        if ( components.length != 0){
-            //this.remove(components[1]);
+        if ( components.length != 0 && on){
+            this.remove(components[1]);
         }
         x++;
+
         this.mazePanel = new MazePanel(columns, rows, path);
-        //mazePanel.rePaint(2);
         this.add(mazePanel);
         mazePanel.setVisible(true);
         on = true;
@@ -77,22 +73,31 @@ public class ContentPanel extends JPanel {
         JButton backButton = new JButton("Back");
         JTextArea area = new JTextArea();
 
-        this.HelpPanel.setPreferredSize(new Dimension(420, 500));
+        this.HelpPanel.setPreferredSize(new Dimension(420, 650));
         help.setText("Help");
         help.setFont( new FontUIResource("Arial", Font.BOLD, 32));
-        area.setPreferredSize(new Dimension(400,400));
+        area.setPreferredSize(new Dimension(400,550));
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
-        area.setText("Witamy w pomocy dotyczącej korzystanie za aplikacji aMaze, która pomoże Ci rozwiązać Twój labirynt. \n\n" + 
-        "Program obsługuje labirynty zapisane w postaci pliku binarnego lub tekstowego, takiego że: \n - Ścieżka -> \" \" \n - Ściana -> X \n - Wejście -> P \n - Wyjście -> K \n" + 
-        "\n Aby skorzystać z programu należy wybrac w pasku menu File -> load -> wybrać plik z labiryntem, po załadowaniu -> Analyze (z panelu bocznego). Następnie" + 
-        " możemy albo ustawić nowy Start lub End za pomocą wybrania takiej opcji z panelu, a następnie kliknięcia na labirynt w odpoiednio wybranym miejscu (musi być to na ścieżce). " + 
+        area.setEditable(false);
+        area.setText("Witamy w pomocy dotyczącej korzystanie za aplikacji aMaze, która pomoże Ci rozwiązać labirynt. \n\n" + 
+        "Program obsługuje labirynty zapisane w postaci pliku tekstowego, takiego że: \n - Ścieżka -> \" \" \n - Ściana -> X \n - Wejście -> P \n - Wyjście -> K \n" + 
+        "a także pliku binarnego takiego, że: \n - Zawiera nagłówek pliku: \n  a) File Id w 32 bitach\n  b) Escape w 8 bitach\n  c) Liczbę kolumn labiryntu w 16 bitach" 
+        + "\n d) Liczbę wierszy labiryntu w 16 bitach\n e) Współrzędne wejścia do labiryntu (X w 16 bitach i Y w 16 bitach) \n  f) Współrzędne wyjścia z labiryntu (X w 16 bitach i Y w 16 bitach)" +
+        "\n g) 96 bitów zarezerwowanych do przyszłego wykorzystania \n h) Liczbę słów kodowych w 32 bitach \n i) Offset w pliku do sekcji zawierającej rozwiązanie w 32 bitach," +
+        "\n k) Separator w 8 bitach \n l) Ściana w 8 bitach \n m) Path w 8 bitach" + "\n-Słowa kodowe będace odzwierciedleniem jak wygląda labirynt: \n  a)Separator - 8bitów \n b)Wartość słowa kodowego - 8bitów"+
+        "\n  c)Liczba wystąpień (gdzie 0 oznacza jedno wystąpienie)- 8 bitów"
+        +"\n Aby skorzystać z programu należy wybrac w pasku menu File -> load -> wybrać plik z labiryntem, po załadowaniu -> Analyze (z panelu bocznego). Następnie" + 
+        " możemy albo ustawić nowy Start lub End za pomocą wybrania takiej opcji z panelu (najpierw trzeba je odblokować poprzez wybranie opcji custom), a następnie kliknięcia na labirynt w odpowiednio wybranym miejscu (musi być to na ścieżce). " + 
         "Po wybraniu lub nie przechodzimy do Shortest, jeśli chcemy znależć najkrótszą drogę lub Whole by przejść cały labirynt.");
 
         backButton.addActionListener(
 
-            (e) -> {//this.MazePanel.setVisible(true);
-                    this.HelpPanel.setVisible(false);}
+            (e) -> {    Component[] components = this.getComponents();
+                        if ( components.length > 1){
+                            this.mazePanel.setVisible(true);
+                        }
+                        this.HelpPanel.setVisible(false);}
 
         );
         
@@ -103,7 +108,10 @@ public class ContentPanel extends JPanel {
 
     public void setHelpEnabled(){
         System.out.println("help");
-        //this.MazePanel.setVisible(false);
+        Component[] components = this.getComponents();
+        if ( components.length > 1){
+            this.mazePanel.setVisible(false);
+        }
         this.HelpPanel.setVisible(true);
     }
 
@@ -140,8 +148,6 @@ public class ContentPanel extends JPanel {
             this.customEnd[0] = s[0];
             this.customEnd[1] = s[1];
         }
-        //System.out.println(this.customStart[0] + " " + this.customStart[1]);
-        //System.out.println(this.customEnd[0] + " " + this.customEnd[1]);
     }
 
 }
