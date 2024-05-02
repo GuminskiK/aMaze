@@ -17,6 +17,7 @@ public class Main {
     static int[] oldCustomEnd = new int[2];
     static int StartEndSwitch = 0;
     static int[] path;
+    static char[][] x;
     
 
     public static void main (String[] args){
@@ -63,14 +64,14 @@ public class Main {
         ActionListener customStartListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                CheckIfCustomStart();
+                customChange('S');
             }
         };
 
         ActionListener customEndListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                CheckIfCustomEnd();
+                customChange('E');
             }
         };
 
@@ -94,11 +95,24 @@ public class Main {
         ramka.menuBar.setloadEnabled(false);
         file = ramka.menuBar.file;
         fileReader = new FileReader();
-        fileReader.CountRowsColumns(file); 
-        char[][] x = fileReader.ReadFileTXT(file);
-        columns = fileReader.columns;
+
+        //char [][]x =  new char[columns][fileReader.rows];
+        //to nie działa do końca bo skad wezmę wymiary za nim przeczytam
+        
+        if (ramka.menuBar.fileType.equals("txt")){
+            
+            fileReader.CountRowsColumns(file);
+            columns = fileReader.columns;
+            x = fileReader.ReadFileTXT(file);
+
+        } else {
+            //czytanie binarne
+            //inczaej wywali się program, pozdrawiam
+        }
+
         //createMaze
         mazeCreator = new MazeCreator();
+
         int wait = mazeCreator.CreateMaze( x, fileReader.columns, fileReader.rows);
         path = mazeCreator.path;
         
@@ -106,7 +120,7 @@ public class Main {
         ramka.ContentPanel.addPanel(fileReader.columns, fileReader.rows, path);
         
 
-        ramka.ToolPanel.ToolEnable(true, 0); //Analyze
+        ramka.ToolPanel.ToolEnable(true, new int[]{0}); //Analyze
 
         StartEndSwitch = 0;
 
@@ -114,28 +128,23 @@ public class Main {
 
     private static void Analyze(){
         
-        ramka.ToolPanel.ToolEnable(false, 0);
+        ramka.ToolPanel.ToolEnable(false, new int[]{0});
 
         mazeAnalyzer = new MazeAnalyzer();
-        int wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
+        int wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows, ramka.menuBar.fileType);
 
         oldCustomStart[0] = mazeAnalyzer.StartPos/columns;
         oldCustomStart[1] = mazeAnalyzer.StartPos%columns;
         oldCustomEnd[0] = mazeAnalyzer.EndPos/columns;
         oldCustomEnd[1] = mazeAnalyzer.EndPos%columns;
 
-        ramka.ToolPanel.ToolEnable(true, 1);
-        ramka.ToolPanel.ToolEnable(true, 4);
-        ramka.ToolPanel.ToolEnable(true, 5);
+        ramka.ToolPanel.ToolEnable(true, new int[]{1,4,5});
+
     }
 
     private static void Shortest(){
 
-        ramka.ToolPanel.ToolEnable(false, 1);
-        ramka.ToolPanel.ToolEnable(false, 2);
-        ramka.ToolPanel.ToolEnable(false, 3);
-        ramka.ToolPanel.ToolEnable(false, 4);
-        ramka.ToolPanel.ToolEnable(false, 5);
+        ramka.ToolPanel.ToolEnable(false, new int[]{1,2,3,4,5});
 
         MazeSolver mazeSolver = new MazeSolver();
         int wait = mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 0);
@@ -148,11 +157,7 @@ public class Main {
 
     private static void Whole(){
 
-        ramka.ToolPanel.ToolEnable(false, 1);
-        ramka.ToolPanel.ToolEnable(false, 2);
-        ramka.ToolPanel.ToolEnable(false, 3);
-        ramka.ToolPanel.ToolEnable(false, 4);
-        ramka.ToolPanel.ToolEnable(false, 5);
+        ramka.ToolPanel.ToolEnable(false, new int[]{1,2,3,4,5});
 
         //tylko dla wersji podstawowej XD
         /*
@@ -171,87 +176,71 @@ public class Main {
 
     }
 
-    private static void CheckIfCustomStart(){
-        
-        if (mazeCreator.path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] == 1){
-            //System.out.println("path");
-            ramka.ToolPanel.ToolEnable(false, 3);
-            ramka.ToolPanel.ToolEnable(false, 4);
+    private static void customChange( char c){
 
-            oldCustomStart[0] = ramka.ContentPanel.customStart[0];
-            oldCustomStart[1] = ramka.ContentPanel.customStart[1]; 
+        int colorNr;
+        int[] switchSE;
+        int[] customObject = new int[2];
 
-            //do testu
-            mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customStart , columns, 'S');
+        if (c == 'S'){
+            customObject[0] = ramka.ContentPanel.customStart[0];
+            customObject[1] = ramka.ContentPanel.customStart[1];
+        } else {
+            customObject[0] = ramka.ContentPanel.customEnd[0];
+            customObject[1] = ramka.ContentPanel.customEnd[1];
+        }
 
-            //mazeCreator.maze.get( mazeAnalyzer.StartPos).setBackground(lastStartColor);
-            //lastStartColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).getBackground();
+        if (mazeCreator.path[columns * customObject[1] + customObject[0]] == 1){
             
-            path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] = 3;
-            ramka.ContentPanel.mazePanel.rePaint(1, path);
-            mazeAnalyzer.StartPos = columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0];
+            if (c == 'S'){
 
-            StartEndSwitch++;
-    
-            ramka.ToolPanel.ToolEnable(true, 3);
-            ramka.ToolPanel.ToolEnable(true, 4);
-            ramka.ToolPanel.ToolEnable(true, 5);
+                colorNr = 3;
+                switchSE = new int[]{2,3};
 
-            if (StartEndSwitch == 2){
-                ramka.ToolPanel.ToolEnable(false, 2);
-                ramka.ToolPanel.ToolEnable(false, 3);
             } else {
-                ramka.ToolPanel.ToolEnable(false, 2);
-                ramka.ToolPanel.ToolEnable(true, 3);
+
+                colorNr = 4;
+                switchSE = new int[]{3,2};
+
             }
 
-        } else {
-            ramka.ContentPanel.customStart[0] = oldCustomStart[0];
-            ramka.ContentPanel.customStart[1] = oldCustomStart[1]; 
-            ramka.customError();
-        }
+            ramka.ToolPanel.ToolEnable(false, new int[] {4,5});
 
-    }
+            mazeAnalyzer.customAnalyzer( path, customObject , columns, c);
 
-    private static void CheckIfCustomEnd(){
-        
-        if (mazeCreator.path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] == 1){
-            //System.out.println("path");
-            ramka.ToolPanel.ToolEnable(false, 3);
-            ramka.ToolPanel.ToolEnable(false, 4);
-
-            oldCustomEnd[0] = ramka.ContentPanel.customEnd[0];
-            oldCustomEnd[1] = ramka.ContentPanel.customEnd[1]; 
-
-            mazeAnalyzer.customAnalyzer( mazeCreator.path, ramka.ContentPanel.customEnd , columns, 'E');
-
-            //mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(lastEndColor);
-            //lastEndColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).getBackground();
-
-            path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] = 4;
+            path[columns * customObject[1] + customObject[0]] = colorNr;
             ramka.ContentPanel.mazePanel.rePaint(1, path);
-            mazeAnalyzer.EndPos = columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0];
 
-            ramka.ToolPanel.ToolEnable(true, 3);
-            ramka.ToolPanel.ToolEnable(true, 4);
-            ramka.ToolPanel.ToolEnable(true, 5);
+            if (c == 'S'){
+                mazeAnalyzer.StartPos = columns * customObject[1] + customObject[0];
+            } else {
+                mazeAnalyzer.EndPos = columns * customObject[1] + customObject[0];
+            }
+            
+            ramka.ToolPanel.ToolEnable(true, new int[]{4,5});
 
             StartEndSwitch++;
 
             if (StartEndSwitch == 2){
-                ramka.ToolPanel.ToolEnable(false, 2);
-                ramka.ToolPanel.ToolEnable(false, 3);
+                ramka.ToolPanel.ToolEnable(false, switchSE);
             } else {
-                ramka.ToolPanel.ToolEnable(false, 2);
-                ramka.ToolPanel.ToolEnable(true, 3);
+                ramka.ToolPanel.ToolEnable(false, new int[]{switchSE[0]});
+                ramka.ToolPanel.ToolEnable(true, new int[]{switchSE[1]});
             }
 
         } else {
-            ramka.ContentPanel.customEnd[0] = oldCustomEnd[0];
-            ramka.ContentPanel.customEnd[1] = oldCustomEnd[1];
-            ramka.customError(); 
-        }
 
+            if (c == 'S'){
+                ramka.ContentPanel.customStart[0] = oldCustomStart[0];
+                ramka.ContentPanel.customStart[1] = oldCustomStart[1]; 
+                ramka.customError();
+            } else {
+                ramka.ContentPanel.customEnd[0] = oldCustomEnd[0];
+                ramka.ContentPanel.customEnd[1] = oldCustomEnd[1];
+                ramka.customError();
+            }
+             
+        }
     }
 
     static void InOutWall(){
@@ -262,12 +251,10 @@ public class Main {
         ramka.ContentPanel.mazePanel.rePaint(1, path);
 
         if( StartEndSwitch == 0){
-            ramka.ToolPanel.ToolEnable(true, 2);
-            ramka.ToolPanel.ToolEnable(true, 3);
+            ramka.ToolPanel.ToolEnable(true, new int[]{2,3});
         }
 
-        ramka.ToolPanel.ToolEnable(false, 1);
+        ramka.ToolPanel.ToolEnable(false, new int[]{1});
         
-
     }
 }
