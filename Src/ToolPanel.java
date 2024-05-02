@@ -117,31 +117,34 @@ public class ToolPanel extends JPanel{
         button.setEnabled(false);
     }
 
-    public void ToolEnable(boolean x, int y){
+    public void ToolEnable(boolean x, int[] y){
         
-        switch(y){
+        for (int i = 0; i < y.length; i++){
+            
+            switch(y[i]){
 
-            case 0:
-                analyze.setEnabled(x);
-                break;
-            case 1:
-                custom.setEnabled(x);
-                break;
-            case 2:
-                start.setEnabled(x);
-                break;
-            case 3:
-                end.setEnabled(x);
-                break;
-            case 4:
-                shortest.setEnabled(x);
-                break;
-            case 5:
-                whole.setEnabled(x);
-                break;
-            default:
-                break;
-        }
+                case 0:
+                    analyze.setEnabled(x);
+                    break;
+                case 1:
+                    custom.setEnabled(x);
+                    break;
+                case 2:
+                    start.setEnabled(x);
+                    break;
+                case 3:
+                    end.setEnabled(x);
+                    break;
+                case 4:
+                    shortest.setEnabled(x);
+                    break;
+                case 5:
+                    whole.setEnabled(x);
+                    break;
+                default:
+                    break;
+            }
+        }    
     }
 
 }

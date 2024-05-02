@@ -23,8 +23,7 @@ public class SolutionWriterWhole {
         this.Start = Start;
         this.End = End;
         nodeMap = new ArrayList<>();
-        drawStartEnd(path, columns, StartPos, 0);
-        drawStartEnd(path, columns, EndPos, 1);
+        
         
         for (int i = 0; i < nodes.size(); i++){
 
@@ -36,6 +35,8 @@ public class SolutionWriterWhole {
 
         solve(nodes, path, columns);
         
+        drawStartEnd(path, columns, StartPos, 0);
+        drawStartEnd(path, columns, EndPos, 1);
         return 0;
     }
 
