@@ -131,7 +131,7 @@ public class Main {
         ramka.ToolPanel.ToolEnable(false, new int[]{0});
 
         mazeAnalyzer = new MazeAnalyzer();
-        int wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows);
+        int wait = mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows, ramka.menuBar.fileType);
 
         oldCustomStart[0] = mazeAnalyzer.StartPos/columns;
         oldCustomStart[1] = mazeAnalyzer.StartPos%columns;

@@ -21,26 +21,25 @@ public class MazeAnalyzer {
 
     int currentRows;
 
-    public int analyzeMaze(File file, int columns, int rows) {
+    public int analyzeMaze(File file, int columns, int rows, String type) {
 
         char[][] x = new char[3][columns];
         this.nodes = new ArrayList<>();
         this.Start = -2;
         this.End = -2;
-
-        try {
-            Scanner scanner = new Scanner(file);
-            readTXT(file, columns, rows, x, scanner);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        if (type.equals("txt")){
+            readTXT(file, columns, rows, x);
+        } else {
+            //czytanie binarne
+            //inczaej wywali się program, pozdrawiam
         }
-
+        
         this.maxID = currentID;
 
         return 0;
     }
 
-    private void readTXT(File file, int columns, int rows, char[][] x, Scanner scaneer) {
+    private void readTXT(File file, int columns, int rows, char[][] x) {
 
         int[] ID = new int[columns];
         int[] Numbers = new int[columns];
