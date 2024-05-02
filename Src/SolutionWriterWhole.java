@@ -17,14 +17,14 @@ public class SolutionWriterWhole {
     public boolean[] save;
     int mode;
 
-    public int solveMaze(ArrayList<Integer[]> nodes, int Start, int End, int mode, ArrayList<JLabel> panels, int columns, int StartPos, int EndPos){
+    public int solveMaze(ArrayList<Integer[]> nodes, int Start, int End, int mode, int[] path, int columns, int StartPos, int EndPos){
 
         this.mode = mode;
         this.Start = Start;
         this.End = End;
         nodeMap = new ArrayList<>();
-        drawStartEnd(nodes, panels, columns, StartPos, 0);
-        drawStartEnd(nodes, panels, columns, EndPos, 1);
+        drawStartEnd(path, columns, StartPos, 0);
+        drawStartEnd(path, columns, EndPos, 1);
         
         for (int i = 0; i < nodes.size(); i++){
 
@@ -34,22 +34,22 @@ public class SolutionWriterWhole {
 
         this.save = new boolean[nodeMap.size()];
 
-        solve(nodes, panels, columns);
+        solve(nodes, path, columns);
         
         return 0;
     }
 
-    private void solve(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns){
+    private void solve(ArrayList<Integer[]> nodes, int[] path, int columns){
 
         ID_next = Start;
 
         while (p != 1){
             
             ID_now = ID_next;
-            panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9]) * columns - 1).setBackground(Color.red);
+            path[nodes.get(ID_now)[8] + (nodes.get(ID_now)[9]) * columns - 1] = 2;
             nodeMap.get(ID_now).visited = true;
 
-            ID_next = whichNext(nodes, panels, columns);
+            ID_next = whichNext(nodes, path, columns);
             if ( ID_next == -1){
                 endDeadEnd(nodes);
             }
@@ -58,7 +58,7 @@ public class SolutionWriterWhole {
         
     }
 
-    private int whichNext(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns){
+    private int whichNext(ArrayList<Integer[]> nodes, int[] path, int columns){
         
         int y = nodeMap.get(ID_now).directionToMin * 2;
         int ID_n = 0;
@@ -81,7 +81,7 @@ public class SolutionWriterWhole {
             nodeMap.get(ID_n).directionFrom = searchForDirection(nodes, ID_n); 
         }
 
-        drawingSolution(nodes, panels, columns, y);
+        drawingSolution(nodes, path, columns, y);
 
         return ID_n;
 
@@ -133,7 +133,7 @@ public class SolutionWriterWhole {
         } 
     }
 
-    private void drawingSolution(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int y){
+    private void drawingSolution(ArrayList<Integer[]> nodes, int[] path, int columns, int y){
         //ID_now
         int length = nodes.get(ID_now)[y+1];
         int direction = y/2;
@@ -141,22 +141,22 @@ public class SolutionWriterWhole {
         switch (direction) {
             case 0:
                 for (int i = 0; i < length; i++){
-                    panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] - i) * columns - 1).setBackground(Color.red);
+                    path[nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] - i) * columns - 1] = 2;
                 }
                 break;
             case 1:
                 for (int i = 0; i < length; i++){
-                    panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 + i).setBackground(Color.red);
+                    path[nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 + i] = 2;
                 }
                 break;
             case 2:
                 for (int i = 0; i < length; i++){
-                    panels.get(nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] + i)* columns - 1).setBackground(Color.red);
+                    path[nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] + i)* columns - 1] = 2;
                 }
                 break;
             case 3:
                 for (int i = 0; i < length; i++){
-                    panels.get(nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 - i).setBackground(Color.red);
+                    path[nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 - i] = 2;
                 }
                 break;
             default:
@@ -165,12 +165,12 @@ public class SolutionWriterWhole {
 
     }
 
-    private void drawStartEnd(ArrayList<Integer[]> nodes, ArrayList<JLabel> panels, int columns, int Pos, int x){
+    private void drawStartEnd(int[] path, int columns, int Pos, int x){
 
         if (x == 0){
-            panels.get(Pos).setBackground(Color.GREEN);
+            path[Pos] = 3;
         } else {
-            panels.get(Pos).setBackground(Color.PINK);
+            path[Pos] = 4;
         }
     }
 }

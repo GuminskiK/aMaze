@@ -16,6 +16,7 @@ public class Main {
     static int[] oldCustomStart = new int[2];
     static int[] oldCustomEnd = new int[2];
     static int StartEndSwitch = 0;
+    static int[] path;
     
 
     public static void main (String[] args){
@@ -96,10 +97,14 @@ public class Main {
         fileReader.CountRowsColumns(file); 
         char[][] x = fileReader.ReadFileTXT(file);
         columns = fileReader.columns;
-        ramka.ContentPanel.addPanel(fileReader.columns, fileReader.rows);
-
+        //createMaze
         mazeCreator = new MazeCreator();
-        int wait = mazeCreator.CreateMaze(ramka.ContentPanel.MazePanel, x, fileReader.columns, fileReader.rows);
+        int wait = mazeCreator.CreateMaze( x, fileReader.columns, fileReader.rows);
+        path = mazeCreator.path;
+        
+        //rysowanie
+        ramka.ContentPanel.addPanel(fileReader.columns, fileReader.rows, path);
+        
 
         ramka.ToolPanel.ToolEnable(true, 0); //Analyze
 
@@ -136,7 +141,8 @@ public class Main {
         int wait = mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 0);
 
         SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.save, mazeCreator.maze, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
+        solutionWriter.WriteSolution(mazeSolver.save, path, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
+        ramka.ContentPanel.mazePanel.rePaint(1, path);
         ramka.menuBar.setloadEnabled(true);
     }
 
@@ -159,8 +165,8 @@ public class Main {
         panels.get(mazeAnalyzer.EndPos).setBackground(Color.PINK);
         */
         SolutionWriterWhole solutionWriterWhole = new SolutionWriterWhole();
-        solutionWriterWhole.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 1, mazeCreator.maze, columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
-
+        solutionWriterWhole.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 1, path, columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
+        ramka.ContentPanel.mazePanel.rePaint(1, path);
         ramka.menuBar.setloadEnabled(true);
 
     }
@@ -180,8 +186,9 @@ public class Main {
 
             //mazeCreator.maze.get( mazeAnalyzer.StartPos).setBackground(lastStartColor);
             //lastStartColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).getBackground();
-       
-            mazeCreator.maze.get( columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]).setBackground(Color.GREEN);
+            
+            path[columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0]] = 3;
+            ramka.ContentPanel.mazePanel.rePaint(1, path);
             mazeAnalyzer.StartPos = columns * ramka.ContentPanel.customStart[1] + ramka.ContentPanel.customStart[0];
 
             StartEndSwitch++;
@@ -221,7 +228,8 @@ public class Main {
             //mazeCreator.maze.get( mazeAnalyzer.EndPos).setBackground(lastEndColor);
             //lastEndColor = mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).getBackground();
 
-            mazeCreator.maze.get( columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]).setBackground(Color.PINK);
+            path[columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0]] = 4;
+            ramka.ContentPanel.mazePanel.rePaint(1, path);
             mazeAnalyzer.EndPos = columns * ramka.ContentPanel.customEnd[1] + ramka.ContentPanel.customEnd[0];
 
             ramka.ToolPanel.ToolEnable(true, 3);
@@ -248,14 +256,10 @@ public class Main {
 
     static void InOutWall(){
 
-        mazeCreator.maze.get(mazeAnalyzer.StartPos).setBackground(Color.BLACK);
-        mazeCreator.maze.get(mazeAnalyzer.EndPos).setBackground(Color.BLACK);
-
-        System.out.println(mazeAnalyzer.Start);
-        System.out.println(mazeAnalyzer.End);
-
-        mazeCreator.path[mazeAnalyzer.StartPos] = 0;
-        mazeCreator.path[mazeAnalyzer.EndPos] = 0;
+        path[mazeAnalyzer.StartPos] = 0;
+        path[mazeAnalyzer.EndPos] = 0;
+        
+        ramka.ContentPanel.mazePanel.rePaint(1, path);
 
         if( StartEndSwitch == 0){
             ramka.ToolPanel.ToolEnable(true, 2);
