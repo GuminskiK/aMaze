@@ -12,10 +12,9 @@ import javax.swing.JPanel;
 public class ToolPanel extends JPanel{
 
     JButton analyze = new JButton();
-
     JButton custom = new JButton();
-    JButton start = new JButton();
-    JButton end = new JButton();
+
+    CustomPanel customPanel;
 
     JComboBox modes;
 
@@ -30,28 +29,6 @@ public class ToolPanel extends JPanel{
         
         CreateToolButton( analyze, "Analyze maze", font);
         CreateToolButton( custom, "Choose Start/End", font);
-        CreateToolButton( start, "Start", font);
-        CreateToolButton( end, "End", font);
-
-        ActionListener Start = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                start.setEnabled(true);
-            }
-
-        };
-
-        ActionListener End = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                end.setEnabled(true);
-            }
-
-        };
 
         analyze.addActionListener(
 
@@ -61,30 +38,12 @@ public class ToolPanel extends JPanel{
         );
 
         custom.addActionListener(
-            
-            (e) -> customListener.actionPerformed(e)
+
+            (e) -> {ToolEnable(true, new int[]{3,4,5});
+                    ToolEnable(false, new int[]{2});
+                    customListener.actionPerformed(e);}
         );
         
-        start.addActionListener(
-
-            (e) -> {    start.setEnabled(false);
-                        end.setEnabled(false);
-                        modes.setEnabled(false);
-                        contentPanel.start(Start, 'S', contentPanel, customStartListener); }
-
-        );
-
-        end.addActionListener(
-
-            (e) -> {    end.setEnabled(false);
-                        start.setEnabled(false);
-                        modes.setEnabled(false);
-                        contentPanel.start(End, 'E', contentPanel, customEndListener); }
-
-        );
-
-        
-
         String[] modesList = new String[]{"-Choose algorithm-","Shortest", "Whole"}; 
         modes = new JComboBox(modesList);
         modes.setPreferredSize(new Dimension(140, 30));
@@ -101,10 +60,13 @@ public class ToolPanel extends JPanel{
         });
         modes.setEnabled(false);
         
+
+        customPanel = new CustomPanel(contentPanel, modes, customStartListener, customEndListener);
+        customPanel.setVisible(false);
+
         this.add(analyze);
         this.add(custom);
-        this.add(start);
-        this.add(end);
+        this.add(customPanel);
         this.add(modes);
 
     }
@@ -131,13 +93,16 @@ public class ToolPanel extends JPanel{
                     custom.setEnabled(x);
                     break;
                 case 2:
-                    start.setEnabled(x);
+                    modes.setEnabled(x);
                     break;
                 case 3:
-                    end.setEnabled(x);
+                    customPanel.setVisible(x);
                     break;
                 case 4:
-                    modes.setEnabled(x);
+                    customPanel.setPickStartEnabled(x);
+                    break;
+                case 5:
+                    customPanel.setPickEndEnabled(x);
                     break;
                 default:
                     break;

@@ -7,11 +7,13 @@ public class MazeAnalyzer {
 
     public int currentID;
     public int Start;
-    public int StartPos;
+    public Integer StartPos = null;
     public int End;
-    public int EndPos;
+    public Integer EndPos = null;
     public ArrayList<Integer[]> nodes;
     public int maxID;
+
+    CustomPanel customPanel;
 
     int G;
     int L;
@@ -21,8 +23,9 @@ public class MazeAnalyzer {
 
     int currentRows;
 
-    public int analyzeMaze(File file, int columns, int rows, String type) {
+    public int analyzeMaze(File file, int columns, int rows, String type, CustomPanel customPanel) {
 
+        this.customPanel = customPanel;
         char[][] x = new char[3][columns];
         this.nodes = new ArrayList<>();
         this.Start = -2;
@@ -106,11 +109,13 @@ public class MazeAnalyzer {
 
                             this.Start = currentID;
                             this.StartPos = columns * (currentRows - 2) + i;
+                            this.customPanel.changeStartPos(i, currentRows-1);
 
                         } else {
 
                             this.End = currentID;
                             this.EndPos = columns * (currentRows - 2) + i;
+                            this.customPanel.changeEndPos(i, currentRows-1);
 
                         }
 
@@ -139,11 +144,13 @@ public class MazeAnalyzer {
 
                             this.Start = currentID;
                             this.StartPos = columns * (currentRows - 1) + i - 1;
+                            this.customPanel.changeStartPos(i, currentRows-1);
 
                         } else {
 
                             this.End = currentID;
                             this.EndPos = columns * (currentRows - 1) + i - 1;
+                            this.customPanel.changeEndPos(i, currentRows-1);
 
                         }
 
@@ -173,11 +180,13 @@ public class MazeAnalyzer {
 
                             this.Start = currentID;
                             this.StartPos = columns * currentRows + i;
+                            this.customPanel.changeStartPos(i, currentRows-1);
 
                         } else {
 
                             this.End = currentID;
                             this.EndPos = columns * currentRows + i;
+                            this.customPanel.changeEndPos(i, currentRows-1);
 
                         }
 
@@ -208,11 +217,13 @@ public class MazeAnalyzer {
 
                             this.Start = currentID;
                             this.StartPos = columns * (currentRows - 1) + i + 1;
+                            this.customPanel.changeStartPos(i, currentRows-1);
 
                         } else {
 
                             this.End = currentID;
                             this.EndPos = columns * (currentRows - 1) + i + 1;
+                            this.customPanel.changeEndPos(i, currentRows-1);
 
                         }
 
