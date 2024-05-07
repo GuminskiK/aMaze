@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 
@@ -16,8 +17,7 @@ public class ToolPanel extends JPanel{
     JButton start = new JButton();
     JButton end = new JButton();
 
-    JButton shortest = new JButton();
-    JButton whole = new JButton();
+    JComboBox modes;
 
 
     Font font = new Font( "Dialog", Font.BOLD, 10);
@@ -25,15 +25,13 @@ public class ToolPanel extends JPanel{
     ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener){
 
         this.setBackground(Color.DARK_GRAY);
-        this.setPreferredSize(new Dimension(100,50));
+        this.setPreferredSize(new Dimension(150,50));
         //this.setLayout();
         
-        CreateToolButton( analyze, "Analyze", font);
-        CreateToolButton( custom, "Custom", font);
+        CreateToolButton( analyze, "Analyze maze", font);
+        CreateToolButton( custom, "Choose Start/End", font);
         CreateToolButton( start, "Start", font);
         CreateToolButton( end, "End", font);
-        CreateToolButton( shortest, "Shortest", font);
-        CreateToolButton( whole, "Whole", font);
 
         ActionListener Start = new ActionListener() {
 
@@ -71,8 +69,7 @@ public class ToolPanel extends JPanel{
 
             (e) -> {    start.setEnabled(false);
                         end.setEnabled(false);
-                        shortest.setEnabled(false);
-                        whole.setEnabled(false);
+                        modes.setEnabled(false);
                         contentPanel.start(Start, 'S', contentPanel, customStartListener); }
 
         );
@@ -81,30 +78,34 @@ public class ToolPanel extends JPanel{
 
             (e) -> {    end.setEnabled(false);
                         start.setEnabled(false);
-                        shortest.setEnabled(false);
-                        whole.setEnabled(false);
+                        modes.setEnabled(false);
                         contentPanel.start(End, 'E', contentPanel, customEndListener); }
 
         );
-    
-        shortest.addActionListener(
-    
-            (e) -> shortestListener.actionPerformed(e)
 
-        );
+        
 
-        whole.addActionListener(
-    
-            (e) -> wholeListener.actionPerformed(e)
+        String[] modesList = new String[]{"-Choose algorithm-","Shortest", "Whole"}; 
+        modes = new JComboBox(modesList);
+        modes.setPreferredSize(new Dimension(140, 30));
+        modes.addActionListener( new ActionListener() {
 
-        );
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (modes.getSelectedItem() == "Shortest"){
+                    shortestListener.actionPerformed(e);
+                } else if (modes.getSelectedItem() == "Whole"){
+                    wholeListener.actionPerformed(e);
+                }
+            }
+        });
+        modes.setEnabled(false);
         
         this.add(analyze);
         this.add(custom);
         this.add(start);
         this.add(end);
-        this.add(shortest);
-        this.add(whole);
+        this.add(modes);
 
     }
 
@@ -113,7 +114,7 @@ public class ToolPanel extends JPanel{
         button.setText(txt);
         button.setFont(font);
         button.setFocusable(false);
-        button.setPreferredSize(new Dimension(80, 30));
+        button.setPreferredSize(new Dimension(140, 30));
         button.setEnabled(false);
     }
 
@@ -136,10 +137,7 @@ public class ToolPanel extends JPanel{
                     end.setEnabled(x);
                     break;
                 case 4:
-                    shortest.setEnabled(x);
-                    break;
-                case 5:
-                    whole.setEnabled(x);
+                    modes.setEnabled(x);
                     break;
                 default:
                     break;
