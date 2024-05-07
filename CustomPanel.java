@@ -32,7 +32,7 @@ public class CustomPanel extends JPanel{
 
     Font font = new Font( "Dialog", Font.BOLD, 10);
     
-    CustomPanel(ContentPanel contentPanel, JComboBox modes, ActionListener customStartListener, ActionListener customEndListener){
+    CustomPanel(ContentPanel contentPanel, JComboBox modes, ActionListener customStartListener, ActionListener customEndListener, JLabel infoLabel){
         
 
         ActionListener StartAL = new ActionListener() {
@@ -63,6 +63,7 @@ public class CustomPanel extends JPanel{
             (e) -> {modes.setEnabled(false);
                     PickStart.setEnabled(false);
                     PickEnd.setEnabled(false);
+                    infoLabel.setText("Kliknij na ściężkę labiryntu by wybrać nowy Start");
                     contentPanel.start(StartAL, 'S', contentPanel, customStartListener);}
         );
         
@@ -89,6 +90,7 @@ public class CustomPanel extends JPanel{
             (e) -> {modes.setEnabled(false); 
                     PickStart.setEnabled(false);
                     PickEnd.setEnabled(false);
+                    infoLabel.setText("Kliknij na ściężkę labiryntu by wybrać nowy End");
                     contentPanel.start(EndAL, 'E', contentPanel, customEndListener);}
         );
 

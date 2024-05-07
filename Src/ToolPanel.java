@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -21,7 +22,7 @@ public class ToolPanel extends JPanel{
 
     Font font = new Font( "Dialog", Font.BOLD, 10);
 
-    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener){
+    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener, JLabel infoLabel){
 
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(150,50));
@@ -41,7 +42,8 @@ public class ToolPanel extends JPanel{
 
             (e) -> {ToolEnable(true, new int[]{3,4,5});
                     ToolEnable(false, new int[]{2});
-                    customListener.actionPerformed(e);}
+                    customListener.actionPerformed(e);
+                    infoLabel.setText("By wybrać nowy Start/End naciśnij PickStart/PickEnd.");}
         );
         
         String[] modesList = new String[]{"-Choose algorithm-","Shortest", "Whole"}; 
@@ -61,7 +63,7 @@ public class ToolPanel extends JPanel{
         modes.setEnabled(false);
         
 
-        customPanel = new CustomPanel(contentPanel, modes, customStartListener, customEndListener);
+        customPanel = new CustomPanel(contentPanel, modes, customStartListener, customEndListener, infoLabel);
         customPanel.setVisible(false);
 
         this.add(analyze);

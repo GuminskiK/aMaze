@@ -148,14 +148,14 @@ public class Main {
 
         ramka.ToolPanel.ToolEnable(true, new int[]{1,2});
 
-        ramka.infoLabel.setText("Analiza zakończona pomyślnie.");
+        ramka.infoLabel.setText("Można wybrać tryb rozwiązywania labiryntu, a także nowy Start/End");
 
     }
 
     private static void Shortest(){
 
         ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
-
+        ramka.infoLabel.setText("Szukam najkrótszego rozwiązania labiryntu...");
         MazeSolver mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 0);
 
@@ -163,6 +163,7 @@ public class Main {
         solutionWriter.WriteSolution(mazeSolver.save, path, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
         ramka.ContentPanel.mazePanel.rePaint(1, path);
         ramka.menuBar.setloadEnabled(true);
+        ramka.infoLabel.setText("Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load");
     }
 
     private static void Whole(){
@@ -197,12 +198,14 @@ public class Main {
                 colorNr = 3;
                 switchSE = new int[]{4,5};
                 ramka.ToolPanel.customPanel.changeStartPos(customObject[0], customObject[1]);
+                ramka.infoLabel.setText("Wybrano nowy Start. Trwa jego lokalizowanie...");
 
             } else {
 
                 colorNr = 4;
                 switchSE = new int[]{5,4};
                 ramka.ToolPanel.customPanel.changeEndPos(customObject[0], customObject[1]);
+                ramka.infoLabel.setText("Wybrano nowy End. Trwa jego lokalizowanie...");
 
             }
 
@@ -229,6 +232,23 @@ public class Main {
                 ramka.ToolPanel.ToolEnable(false, new int[]{switchSE[0]});
                 ramka.ToolPanel.ToolEnable(true, new int[]{switchSE[1]});
             }
+
+            if (c == 'S'){
+                if (StartEndSwitch == 2){
+                    ramka.infoLabel.setText("Wybierz tryb rozwiązywania.");
+                } else {
+                    ramka.infoLabel.setText("Wybór Startu zakończył się pomyślnie. Możesz teraz wybrać End (PickEnd) lub tryb rozwiązywania.");
+                }
+                
+
+            } else {
+                if (StartEndSwitch == 2){
+                    ramka.infoLabel.setText("Wybierz tryb rozwiązywania.");
+                } else {
+                    ramka.infoLabel.setText("Wybór Endu zakończył się pomyślnie. Możesz teraz wybrać Start (PickStart) lub tryb rozwiązywania.");
+                }
+            }
+
 
         } else {
 

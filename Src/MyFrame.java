@@ -17,7 +17,7 @@ public class MyFrame extends JFrame{
     public ContentPanel ContentPanel;
     public ToolPanel ToolPanel;
     JPanel outerContent;
-    JLabel infoLabel;
+    JLabel infoLabel = new JLabel();
 
 
     MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener){
@@ -25,10 +25,9 @@ public class MyFrame extends JFrame{
 
         this.menuBar = new Menu(readListener, helpListener);
         this.ContentPanel = new ContentPanel();
-        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, customEndListener, wholeListener, customListener);
+        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, customEndListener, wholeListener, customListener, infoLabel);
         JScrollPane scrollPane = new JScrollPane(ContentPanel);
         
-        infoLabel = new JLabel();
         infoLabel.setText("Info");
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
