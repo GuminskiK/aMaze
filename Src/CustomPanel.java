@@ -142,5 +142,16 @@ public class CustomPanel extends JPanel{
         this.EndPosY = EndPosY;
         CurrentPosEnd.setText("X:"+ EndPosX +"\nY:" + EndPosY);
     }
+
+    public boolean[] ifNull(){
+        boolean[] Null = new boolean[2];
+        if(StartPosX == null){
+            Null[0] = true;
+        }
+        if(EndPosX == null){
+            Null[1] = true;
+        }
+        return Null;
+    }
 }
 

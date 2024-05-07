@@ -30,13 +30,13 @@ public class MazeAnalyzer {
         this.nodes = new ArrayList<>();
         this.Start = -2;
         this.End = -2;
-        if (type.equals("txt")){
+        if (type.equals("txt")) {
             readTXT(file, columns, rows, x);
         } else {
-            //czytanie binarne
-            //inczaej wywali się program, pozdrawiam
+            // czytanie binarne
+            // inczaej wywali się program, pozdrawiam
         }
-        
+
         this.maxID = currentID;
 
         return 0;
@@ -109,13 +109,13 @@ public class MazeAnalyzer {
 
                             this.Start = currentID;
                             this.StartPos = columns * (currentRows - 2) + i;
-                            this.customPanel.changeStartPos(i, currentRows-1);
+                            this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
                             this.End = currentID;
                             this.EndPos = columns * (currentRows - 2) + i;
-                            this.customPanel.changeEndPos(i, currentRows-1);
+                            this.customPanel.changeEndPos(i, currentRows - 1);
 
                         }
 
@@ -144,13 +144,13 @@ public class MazeAnalyzer {
 
                             this.Start = currentID;
                             this.StartPos = columns * (currentRows - 1) + i - 1;
-                            this.customPanel.changeStartPos(i, currentRows-1);
+                            this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
                             this.End = currentID;
                             this.EndPos = columns * (currentRows - 1) + i - 1;
-                            this.customPanel.changeEndPos(i, currentRows-1);
+                            this.customPanel.changeEndPos(i, currentRows - 1);
 
                         }
 
@@ -180,13 +180,13 @@ public class MazeAnalyzer {
 
                             this.Start = currentID;
                             this.StartPos = columns * currentRows + i;
-                            this.customPanel.changeStartPos(i, currentRows-1);
+                            this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
                             this.End = currentID;
                             this.EndPos = columns * currentRows + i;
-                            this.customPanel.changeEndPos(i, currentRows-1);
+                            this.customPanel.changeEndPos(i, currentRows - 1);
 
                         }
 
@@ -217,13 +217,13 @@ public class MazeAnalyzer {
 
                             this.Start = currentID;
                             this.StartPos = columns * (currentRows - 1) + i + 1;
-                            this.customPanel.changeStartPos(i, currentRows-1);
+                            this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
                             this.End = currentID;
                             this.EndPos = columns * (currentRows - 1) + i + 1;
-                            this.customPanel.changeEndPos(i, currentRows-1);
+                            this.customPanel.changeEndPos(i, currentRows - 1);
 
                         }
 
@@ -327,7 +327,27 @@ public class MazeAnalyzer {
         int object;
         int z[];
 
-        Clear(c);
+        if (c == 'S' && StartPos != null) {
+            Clear(c);
+        } else if (c == 'S' && StartPos == null) {
+
+            nodes.add(directions());
+            Start = currentID;
+            this.currentID++;
+            this.maxID++;
+            
+
+        }
+
+        if (c == 'E' && EndPos != null) {
+            Clear(c);
+        } else if (c == 'E' && EndPos == null){
+            nodes.add(directions());
+            End = currentID;
+            this.currentID++;
+            this.maxID++;
+            
+        }
 
         checkIfEqual(pathi[ID - columns], pathi[ID - 1], pathi[ID + columns], pathi[ID + 1], 1);
 
@@ -352,10 +372,10 @@ public class MazeAnalyzer {
                 object = End;
             }
 
-            if (h == 2 && P == 1) { //poziom
-                z = new int[] { 6, 7, 2, 3, 2,3};
-            } else { //pion
-                z = new int[] { 0, 1, 4, 5, 0, 1};
+            if (h == 2 && P == 1) { // poziom
+                z = new int[] { 6, 7, 2, 3, 2, 3 };
+            } else { // pion
+                z = new int[] { 0, 1, 4, 5, 0, 1 };
             }
 
             ID1 = searchCustom(pathi, columns, ID, z[4]);
@@ -386,7 +406,7 @@ public class MazeAnalyzer {
         while (x != 1) {
 
             checkIfEqual(pathi[ID - columns], pathi[ID - 1], pathi[ID + columns], pathi[ID + 1], 1);
-            
+
             if (h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3) { // zaulek
                 // jesteśmy na nodzie hip hip hurra
                 x = 1;
@@ -473,7 +493,7 @@ public class MazeAnalyzer {
         }
     }
 
-    private void checkIfEqual(int x1, int x2, int x3, int x4, int y){
+    private void checkIfEqual(int x1, int x2, int x3, int x4, int y) {
 
         this.G = 0;
         this.L = 0;
@@ -481,26 +501,26 @@ public class MazeAnalyzer {
         this.D = 0;
         this.h = 0;
         // góra
-        if ( x1 == y) {
+        if (x1 == y) {
 
             h++;
             G++;
 
         }
         // lewo
-        if ( x2 == y) {
+        if (x2 == y) {
 
             h++;
             L++;
         }
         // dół
-        if ( x3 == y) {
+        if (x3 == y) {
 
             h++;
             D++;
         }
         // prawo
-        if ( x4 == y) {
+        if (x4 == y) {
 
             P++;
             h++;

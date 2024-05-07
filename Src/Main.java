@@ -13,11 +13,12 @@ public class Main {
     static int columns;
     static Color lastStartColor = new Color (0,0,0);
     static Color lastEndColor = new Color (0,0,0);
-    static int[] oldCustomStart = new int[2];
-    static int[] oldCustomEnd = new int[2];
+    static Integer[] oldCustomStart = new Integer[2];
+    static Integer[] oldCustomEnd = new Integer[2];
     static int StartEndSwitch = 0;
     static int[] path;
     static char[][] x;
+    static int NoStartEnd = 0;
     
 
     public static void main (String[] args){
@@ -93,7 +94,7 @@ public class Main {
     }
 
     private static void Read(){
-        
+        reset();
         ramka.infoLabel.setText("Ładowanie labiryntu...");
         ramka.menuBar.setloadEnabled(false);
         ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4,5});
@@ -141,14 +142,51 @@ public class Main {
         mazeAnalyzer = new MazeAnalyzer();
         mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows, ramka.menuBar.fileType, ramka.ToolPanel.customPanel);
 
-        oldCustomStart[0] = mazeAnalyzer.StartPos/columns;
-        oldCustomStart[1] = mazeAnalyzer.StartPos%columns;
-        oldCustomEnd[0] = mazeAnalyzer.EndPos/columns;
-        oldCustomEnd[1] = mazeAnalyzer.EndPos%columns;
+        if (mazeAnalyzer.StartPos == null){
+            oldCustomStart[0] = null;
+            oldCustomStart[1] = null;
+        } else {
+            oldCustomStart[0] = mazeAnalyzer.StartPos/columns;
+            oldCustomStart[1] = mazeAnalyzer.StartPos%columns;
+        }
+        
+        if (mazeAnalyzer.EndPos == null){
+            oldCustomEnd[0] = null;
+            oldCustomEnd[1] = null;
+        } else{
+            oldCustomEnd[0] = mazeAnalyzer.EndPos/columns;
+            oldCustomEnd[1] = mazeAnalyzer.EndPos%columns;
+        }
+
 
         ramka.ToolPanel.ToolEnable(true, new int[]{1,2});
 
-        ramka.infoLabel.setText("Można wybrać tryb rozwiązywania labiryntu, a także nowy Start/End");
+        NoStartEnd = 0;
+
+        if (ramka.ToolPanel.customPanel.ifNull()[0] == true || ramka.ToolPanel.customPanel.ifNull()[1] == true){
+
+            if (ramka.ToolPanel.customPanel.ifNull()[0] == true && ramka.ToolPanel.customPanel.ifNull()[1] == true){
+                ramka.infoLabel.setText("Proszę wybrać Start i End.");
+                ramka.ToolPanel.ToolEnable(true, new int[]{3,4,5});
+                ramka.ToolPanel.ToolEnable(false, new int[]{1,2});
+                NoStartEnd += 2;
+            } else if (ramka.ToolPanel.customPanel.ifNull()[0] == true){
+                ramka.infoLabel.setText("Proszę wybrać Start.");
+                ramka.ToolPanel.ToolEnable(true, new int[]{3,4});
+                ramka.ToolPanel.ToolEnable(false, new int[]{1,2});
+
+                NoStartEnd++;
+            }
+            else if (ramka.ToolPanel.customPanel.ifNull()[1] == true){
+                ramka.infoLabel.setText("Proszę wybrać End.");
+                ramka.ToolPanel.ToolEnable(true, new int[]{3,5});
+                NoStartEnd++;
+            }
+
+        } else {
+            ramka.infoLabel.setText("Można wybrać tryb rozwiązywania labiryntu, a także nowy Start/End");
+        }
+        
 
     }
 
@@ -221,9 +259,13 @@ public class Main {
             } else {
                 mazeAnalyzer.EndPos = columns * customObject[1] + customObject[0];
             }
-            
-            ramka.ToolPanel.ToolEnable(true, new int[]{2});
 
+            if (NoStartEnd == 2){
+                NoStartEnd--;
+            } else {
+                ramka.ToolPanel.ToolEnable(true, new int[]{2});
+            }
+            
             StartEndSwitch++;
 
             if (StartEndSwitch == 2){
@@ -280,5 +322,11 @@ public class Main {
 */
         ramka.ToolPanel.ToolEnable(false, new int[]{1});
         
+    }
+
+    private static void reset(){
+        NoStartEnd = 0;
+        ramka.ToolPanel.customPanel.changeStartPos(null,null);
+        ramka.ToolPanel.customPanel.changeEndPos(null,null);
     }
 }
