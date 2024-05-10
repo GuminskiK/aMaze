@@ -23,13 +23,15 @@ public class MyFrame extends JFrame{
     MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener){
 
 
-        this.menuBar = new Menu(readListener, helpListener);
+        this.menuBar = new Menu(readListener, helpListener, this);
         this.ContentPanel = new ContentPanel();
         this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, customEndListener, wholeListener, customListener, infoLabel);
         JScrollPane scrollPane = new JScrollPane(ContentPanel);
         
         infoLabel.setText("Info");
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        infoLabel.setVerticalAlignment(SwingConstants.CENTER);
+        infoLabel.setPreferredSize(new Dimension(300,50));
 
 
         outerContent = new JPanel();

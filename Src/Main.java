@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -84,7 +85,8 @@ public class Main {
         };
 
         ramka = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener, wholeListener, customListener);
-        ramka.infoLabel.setText("Proszę załadować labirynt Files->Load.");
+        ramka.menuBar.setexportEnabled(false);
+        ramka.infoLabel.setText("Proszę załadować labirynt Files->Load Maze.");
         
         
     }
@@ -200,8 +202,9 @@ public class Main {
         SolutionWriter solutionWriter = new SolutionWriter();
         solutionWriter.WriteSolution(mazeSolver.save, path, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
         ramka.ContentPanel.mazePanel.rePaint(1, path);
+        ramka.infoLabel.setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
         ramka.menuBar.setloadEnabled(true);
-        ramka.infoLabel.setText("Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load");
+        ramka.menuBar.setexportEnabled(true);
     }
 
     private static void Whole(){
@@ -211,7 +214,9 @@ public class Main {
         SolutionWriterWhole solutionWriterWhole = new SolutionWriterWhole();
         solutionWriterWhole.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 1, path, columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
         ramka.ContentPanel.mazePanel.rePaint(1, path);
+        ramka.infoLabel.setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
         ramka.menuBar.setloadEnabled(true);
+        ramka.menuBar.setexportEnabled(true);
 
     }
 
@@ -328,5 +333,6 @@ public class Main {
         NoStartEnd = 0;
         ramka.ToolPanel.customPanel.changeStartPos(null,null);
         ramka.ToolPanel.customPanel.changeEndPos(null,null);
+        ramka.menuBar.setexportEnabled(false);
     }
 }
