@@ -9,6 +9,7 @@ public class Main {
     static MazeAnalyzer mazeAnalyzer;
     static FileReader fileReader;
     static Maze maze;
+    static Graph graph;
     static File file;
     static int columns;
     static Color lastStartColor = new Color (0,0,0);
@@ -109,7 +110,6 @@ public class Main {
             columns = fileReader.columns;
             x = fileReader.ReadFileTXT(file);
             
-
         } else {
 
             /*  
@@ -137,8 +137,10 @@ public class Main {
         ramka.infoLabel.setText("Analizowanie w toku...");
         ramka.ToolPanel.ToolEnable(false, new int[]{0});
 
+        graph = new Graph();
+
         mazeAnalyzer = new MazeAnalyzer();
-        mazeAnalyzer.analyzeMaze(file, ramka.menuBar.fileType, ramka.ToolPanel.customPanel, maze);
+        mazeAnalyzer.analyzeMaze(file, ramka.menuBar.fileType, ramka.ToolPanel.customPanel, maze, graph);
 
         if (maze.getStart()[0] == null){
             oldCustomStart[0] = null;
@@ -193,10 +195,10 @@ public class Main {
         ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
         ramka.infoLabel.setText("Szukam najkrótszego rozwiązania labiryntu...");
         MazeSolver mazeSolver = new MazeSolver();
-        mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End);
+        mazeSolver.solveMaze(graph, mazeAnalyzer.Start, mazeAnalyzer.End);
 
         SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.save, maze, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes);
+        solutionWriter.WriteSolution(mazeSolver.save, maze, mazeAnalyzer.Start, mazeAnalyzer.End, graph);
         ramka.ContentPanel.mazePanel.rePaint(maze);
         ramka.infoLabel.setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
         ramka.menuBar.setloadEnabled(true);
@@ -208,7 +210,7 @@ public class Main {
         ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
 
         SolutionWriterWhole solutionWriterWhole = new SolutionWriterWhole();
-        solutionWriterWhole.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, maze);
+        solutionWriterWhole.solveMaze(mazeAnalyzer.Start, mazeAnalyzer.End, maze, graph);
         ramka.ContentPanel.mazePanel.rePaint(maze);
         ramka.infoLabel.setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
         ramka.menuBar.setloadEnabled(true);
