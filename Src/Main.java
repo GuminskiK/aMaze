@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -114,8 +113,12 @@ public class Main {
             x = fileReader.ReadFileTXT(file);
 
         } else {
-            //czytanie binarne
-            //inczaej wywali się program, pozdrawiam
+
+            /* 
+            fileReader.readNumberOfRowsColumns(file);
+            columns = fileReader.columns;
+            x = fileReader.ReadFileBIN(file);
+            */
         }
 
         //createMaze
@@ -142,7 +145,7 @@ public class Main {
         ramka.ToolPanel.ToolEnable(false, new int[]{0});
 
         mazeAnalyzer = new MazeAnalyzer();
-        mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows, ramka.menuBar.fileType, ramka.ToolPanel.customPanel);
+        mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows, ramka.menuBar.fileType, ramka.ToolPanel.customPanel, x);
 
         if (mazeAnalyzer.StartPos == null){
             oldCustomStart[0] = null;

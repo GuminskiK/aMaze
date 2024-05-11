@@ -23,26 +23,22 @@ public class MazeAnalyzer {
 
     int currentRows;
 
-    public int analyzeMaze(File file, int columns, int rows, String type, CustomPanel customPanel) {
+    public int analyzeMaze(File file, int columns, int rows, String type, CustomPanel customPanel, char[][] maze) {
 
         this.customPanel = customPanel;
         char[][] x = new char[3][columns];
         this.nodes = new ArrayList<>();
         this.Start = -2;
-        this.End = -2;
-        if (type.equals("txt")) {
-            readTXT(file, columns, rows, x);
-        } else {
-            // czytanie binarne
-            // inczaej wywali się program, pozdrawiam
-        }
+        this.End = -2; 
+
+        Analyze(file, columns, rows, x, maze);
 
         this.maxID = currentID;
 
         return 0;
     }
 
-    private void readTXT(File file, int columns, int rows, char[][] x) {
+    private void Analyze(File file, int columns, int rows, char[][] x, char[][] maze) {
 
         int[] ID = new int[columns];
         int[] Numbers = new int[columns];
@@ -55,35 +51,24 @@ public class MazeAnalyzer {
             Numbers[i] = -1;
         }
 
-        try {
+        for (int i = 0; i < 3; i++) {
 
-            Scanner scanner = new Scanner(file);
-            for (int i = 0; i < 3; i++) {
+            System.arraycopy(maze[i], 0, x[i], 0, columns);
 
-                String line = scanner.nextLine();
-                System.arraycopy(line.toCharArray(), 0, x[i], 0, line.length());
+        }
+        currentRows = 2;
+        ifNode(x, columns, rows, ID, Numbers, currentRows);
 
-            }
-            currentRows = 2;
+        for (int i = 0; i < rows - 3; i++) {
+
+            currentRows++;
+            // Przepisanie na wyższe wiersze w x
+            System.arraycopy(x[1], 0, x[0], 0, columns);
+            System.arraycopy(x[2], 0, x[1], 0, columns);
+
+            System.arraycopy(maze[i + 3], 0, x[2], 0, columns);
             ifNode(x, columns, rows, ID, Numbers, currentRows);
 
-            for (int i = 0; i < rows - 3; i++) {
-
-                currentRows++;
-                // Przepisanie na wyższe wiersze w x
-                System.arraycopy(x[1], 0, x[0], 0, columns);
-                System.arraycopy(x[2], 0, x[1], 0, columns);
-
-                String line = scanner.nextLine();
-                System.arraycopy(line.toCharArray(), 0, x[2], 0, line.length());
-                ifNode(x, columns, rows, ID, Numbers, currentRows);
-
-            }
-
-            scanner.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
 
     }
@@ -335,18 +320,17 @@ public class MazeAnalyzer {
             Start = currentID;
             this.currentID++;
             this.maxID++;
-            
 
         }
 
         if (c == 'E' && EndPos != null) {
             Clear(c);
-        } else if (c == 'E' && EndPos == null){
+        } else if (c == 'E' && EndPos == null) {
             nodes.add(directions());
             End = currentID;
             this.currentID++;
             this.maxID++;
-            
+
         }
 
         checkIfEqual(pathi[ID - columns], pathi[ID - 1], pathi[ID + columns], pathi[ID + 1], 1);
