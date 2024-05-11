@@ -9,25 +9,26 @@ import javax.swing.border.Border;
 public class MazePanel extends JPanel{
     
     Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
-    int path[];
+    Maze maze;
     int columns;
     int rows;
     int mode = 1;
 
-    MazePanel(int columns, int rows, int path[]){
+    MazePanel(int columns, int rows, Maze maze){
 
 
         this.setPreferredSize(new Dimension(columns * 10 + 10, rows * 10 + 10));
         this.setBorder(border);
         this.setVisible(false);
-        this.path = path;
+        this.maze = maze;
         this.columns = columns;
         this.rows = rows;
 
     }
 
-    public void rePaint(int mode, int[] path){
-        this.path = path;
+    public void rePaint(Maze maze){
+        
+        this.maze = maze;
         this.repaint();
 
     }
@@ -36,30 +37,33 @@ public class MazePanel extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (mode == 1){
-            int columnMax = columns * 10;
+        int columnMax = columns * 10;
 
-            for (int i = 0; i < path.length; i++){
-                //wall czy path
-                if( path[i] == 0){
-                    g.setColor(Color.BLACK);
-                } else if (path[i] == 1){
-                    g.setColor(Color.WHITE);
-                } else if (path[i] == 2){
-                    g.setColor(Color.RED);
-                } else if (path[i] == 3){
-                    g.setColor(Color.GREEN);
-                }else {
-                    g.setColor(Color.PINK);
+        for (int y = 0; y < maze.getRows(); y++){
+            for (int x = 0; x < maze.getColumns(); x++){
+
+                switch(maze.getCharFromMaze(x, y)){
+                    case 'X':
+                        g.setColor(Color.BLACK);
+                        break;
+                    case ' ':
+                        g.setColor(Color.WHITE);
+                        break;
+                    case 'R':
+                        g.setColor(Color.RED);
+                        break;
+                    case 'P':
+                        g.setColor(Color.GREEN);
+                        break;
+                    case 'K':
+                        g.setColor(Color.PINK);
+                        break;
+                    default:
+                        break;
                 }
 
-                g.fillRect( (i * 10) % columnMax + 5 , (i /columns) * 10 + 5, 10, 10);
+                g.fillRect( (x % columnMax) * 10 + 5 , y * 10 + 5, 10, 10);
             }
-        } 
-        // Tutaj możesz rysować na panelu
-        
+        }
     }
-
-
-
 }

@@ -1,17 +1,15 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class MazeAnalyzer {
 
     public int currentID;
     public int Start;
-    public Integer StartPos = null;
     public int End;
-    public Integer EndPos = null;
     public ArrayList<Integer[]> nodes;
     public int maxID;
+
+    private Maze maze;
 
     CustomPanel customPanel;
 
@@ -23,29 +21,31 @@ public class MazeAnalyzer {
 
     int currentRows;
 
-    public int analyzeMaze(File file, int columns, int rows, String type, CustomPanel customPanel, char[][] maze) {
+    public int analyzeMaze(File file, String type, CustomPanel customPanel, Maze maze) {
 
+        this.maze = maze;
         this.customPanel = customPanel;
-        char[][] x = new char[3][columns];
+
+        char[][] x = new char[3][maze.getColumns()];
         this.nodes = new ArrayList<>();
         this.Start = -2;
         this.End = -2; 
 
-        Analyze(file, columns, rows, x, maze);
+        Analyze(file, x);
 
         this.maxID = currentID;
 
         return 0;
     }
 
-    private void Analyze(File file, int columns, int rows, char[][] x, char[][] maze) {
+    private void Analyze(File file, char[][] x) {
 
-        int[] ID = new int[columns];
-        int[] Numbers = new int[columns];
+        int[] ID = new int[maze.getColumns()];
+        int[] Numbers = new int[maze.getColumns()];
         this.currentID = 0;
         this.currentRows = 0;
 
-        for (int i = 0; i < columns; i++) {
+        for (int i = 0; i < maze.getColumns(); i++) {
 
             ID[i] = -1;
             Numbers[i] = -1;
@@ -53,29 +53,29 @@ public class MazeAnalyzer {
 
         for (int i = 0; i < 3; i++) {
 
-            System.arraycopy(maze[i], 0, x[i], 0, columns);
+            System.arraycopy(maze.getMaze()[i], 0, x[i], 0, maze.getColumns());
 
         }
         currentRows = 2;
-        ifNode(x, columns, rows, ID, Numbers, currentRows);
+        ifNode(x, ID, Numbers, currentRows);
 
-        for (int i = 0; i < rows - 3; i++) {
+        for (int i = 0; i < maze.getRows() - 3; i++) {
 
             currentRows++;
             // Przepisanie na wyższe wiersze w x
-            System.arraycopy(x[1], 0, x[0], 0, columns);
-            System.arraycopy(x[2], 0, x[1], 0, columns);
+            System.arraycopy(x[1], 0, x[0], 0, maze.getColumns());
+            System.arraycopy(x[2], 0, x[1], 0, maze.getColumns());
 
-            System.arraycopy(maze[i + 3], 0, x[2], 0, columns);
-            ifNode(x, columns, rows, ID, Numbers, currentRows);
+            System.arraycopy(maze.getMaze()[i + 3], 0, x[2], 0, maze.getColumns());
+            ifNode(x, ID, Numbers, currentRows);
 
         }
 
     }
 
-    private void ifNode(char[][] x, int columns, int rows, int[] ID, int[] Numbers, int currentRows) {
+    private void ifNode(char[][] x, int[] ID, int[] Numbers, int currentRows) {
 
-        for (int i = 1; i < columns - 1; i++) {
+        for (int i = 1; i < maze.getColumns() - 1; i++) {
 
             if (x[1][i] == ' ') {
 
@@ -93,13 +93,14 @@ public class MazeAnalyzer {
                         if (x[0][i] == 'P') {
 
                             this.Start = currentID;
-                            this.StartPos = columns * (currentRows - 2) + i;
+                            maze.setStart(i, currentRows - 2);
                             this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
                             this.End = currentID;
-                            this.EndPos = columns * (currentRows - 2) + i;
+
+                            maze.setEnd(i, currentRows - 2);
                             this.customPanel.changeEndPos(i, currentRows - 1);
 
                         }
@@ -128,13 +129,13 @@ public class MazeAnalyzer {
                         if (x[1][i - 1] == 'P') {
 
                             this.Start = currentID;
-                            this.StartPos = columns * (currentRows - 1) + i - 1;
+                            maze.setStart(i - 1, currentRows - 1);
                             this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
                             this.End = currentID;
-                            this.EndPos = columns * (currentRows - 1) + i - 1;
+                            maze.setEnd(i - 1, currentRows - 1);
                             this.customPanel.changeEndPos(i, currentRows - 1);
 
                         }
@@ -164,13 +165,13 @@ public class MazeAnalyzer {
                         if (x[2][i] == 'P') {
 
                             this.Start = currentID;
-                            this.StartPos = columns * currentRows + i;
+                            maze.setStart(i, currentRows);
                             this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
                             this.End = currentID;
-                            this.EndPos = columns * currentRows + i;
+                            maze.setEnd(i, currentRows);
                             this.customPanel.changeEndPos(i, currentRows - 1);
 
                         }
@@ -201,13 +202,13 @@ public class MazeAnalyzer {
                         if (x[1][i + 1] == 'P') {
 
                             this.Start = currentID;
-                            this.StartPos = columns * (currentRows - 1) + i + 1;
+                            maze.setStart(i + 1, currentRows - 1);
                             this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
                             this.End = currentID;
-                            this.EndPos = columns * (currentRows - 1) + i + 1;
+                            maze.setEnd(i + 1, currentRows - 1);
                             this.customPanel.changeEndPos(i, currentRows - 1);
 
                         }
@@ -304,17 +305,17 @@ public class MazeAnalyzer {
 
     }
 
-    public void customAnalyzer(int[] pathi, int[] custom, int columns, char c) {
+    public void customAnalyzer(int[] custom, char c) {
 
         int[] ID1, ID2;
-        int ID = custom[0] + custom[1] * columns;
+        int ID = custom[0] + custom[1] * maze.getColumns();
         int d;
         int object;
         int z[];
 
-        if (c == 'S' && StartPos != null) {
+        if (c == 'S' && maze.getStart()[0] != null) {
             Clear(c);
-        } else if (c == 'S' && StartPos == null) {
+        } else if (c == 'S' && maze.getStart()[0] == null) {
 
             nodes.add(directions());
             Start = currentID;
@@ -323,17 +324,16 @@ public class MazeAnalyzer {
 
         }
 
-        if (c == 'E' && EndPos != null) {
+        if (c == 'E' && maze.getEnd()[0] != null) {
             Clear(c);
-        } else if (c == 'E' && EndPos == null) {
+        } else if (c == 'E' && maze.getEnd()[0] == null) {
             nodes.add(directions());
             End = currentID;
             this.currentID++;
             this.maxID++;
 
         }
-
-        checkIfEqual(pathi[ID - columns], pathi[ID - 1], pathi[ID + columns], pathi[ID + 1], 1);
+        checkIfEqual(maze.getCharFromMaze(custom[0], custom[1] - 1), maze.getCharFromMaze(custom[0] - 1, custom[1]), maze.getCharFromMaze(custom[0], custom[1] + 1), maze.getCharFromMaze(custom[0] + 1, custom[1]), ' ');
 
         if (h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3) { // zaulek
 
@@ -362,55 +362,57 @@ public class MazeAnalyzer {
                 z = new int[] { 0, 1, 4, 5, 0, 1 };
             }
 
-            ID1 = searchCustom(pathi, columns, ID, z[4]);
-            d = SearchForNode((ID1[0] % columns) + 1, ID1[0] / columns);
+            ID1 = searchCustom(z[4], custom);
+            d = SearchForNode((ID1[0]) + 1, ID1[1]);
             nodes.get(object)[z[0]] = d;
-            nodes.get(object)[z[1]] = ID1[1];
+            nodes.get(object)[z[1]] = ID1[2];
 
             nodes.get(d)[z[2]] = object;
-            nodes.get(d)[z[3]] = ID1[1];
+            nodes.get(d)[z[3]] = ID1[2];
 
-            ID2 = searchCustom(pathi, columns, ID, z[5]);
-            d = SearchForNode((ID2[0] % columns) + 1, ID2[0] / columns);
+            ID2 = searchCustom(z[5], custom);
+            d = SearchForNode((ID2[0]) + 1, ID2[1]);
             nodes.get(object)[z[2]] = d;
-            nodes.get(object)[z[3]] = ID2[1];
+            nodes.get(object)[z[3]] = ID2[2];
 
             nodes.get(d)[z[0]] = object;
-            nodes.get(d)[z[1]] = ID2[1];
+            nodes.get(d)[z[1]] = ID2[2];
 
         }
     }
 
-    private int[] searchCustom(int[] pathi, int columns, int ID, int mod) {
+    private int[] searchCustom(int mod, int[] custom) {
 
         int x = 0;
         int distance = 0;
-        int z[] = new int[2];
+        int[] z = new int[3];
+        int[] customSave  = new int[]{custom[0], custom[1]};
 
         while (x != 1) {
 
-            checkIfEqual(pathi[ID - columns], pathi[ID - 1], pathi[ID + columns], pathi[ID + 1], 1);
+            checkIfEqual(maze.getCharFromMaze(customSave[0], customSave[1] - 1), maze.getCharFromMaze(customSave[0] - 1, customSave[1]), maze.getCharFromMaze(customSave[0], customSave[1] + 1), maze.getCharFromMaze(customSave[0] + 1, customSave[1]), ' ');
 
             if (h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3) { // zaulek
                 // jesteśmy na nodzie hip hip hurra
                 x = 1;
-                z[0] = ID;
-                z[1] = distance;
+                z[0] = customSave[0];
+                z[1] = customSave[1];
+                z[2] = distance;
                 return z;
             }
 
             switch (mod) {
                 case 0:
-                    ID -= columns;
+                    customSave[1] -= 1;
                     break;
                 case 1:
-                    ID += columns;
+                    customSave[1] += 1;
                     break;
                 case 2:
-                    ID -= 1;
+                    customSave[0] -= 1;
                     break;
                 case 3:
-                    ID += 1;
+                    customSave[0] += 1;
                     break;
                 default:
                     break;

@@ -1,7 +1,4 @@
-import java.awt.Color;
 import java.util.ArrayList;
-
-import javax.swing.JLabel;
 
 public class SolutionWriterWhole {
 
@@ -13,13 +10,13 @@ public class SolutionWriterWhole {
     int ID_next;
     int p = 0;
     ArrayList<Node> nodeMap;
+    Maze maze;
 
     public boolean[] save;
-    int mode;
 
-    public int solveMaze(ArrayList<Integer[]> nodes, int Start, int End, int mode, int[] path, int columns, int StartPos, int EndPos){
+    public int solveMaze(ArrayList<Integer[]> nodes, int Start, int End, Maze maze){
 
-        this.mode = mode;
+        this.maze = maze;
         this.Start = Start;
         this.End = End;
         nodeMap = new ArrayList<>();
@@ -33,24 +30,25 @@ public class SolutionWriterWhole {
 
         this.save = new boolean[nodeMap.size()];
 
-        solve(nodes, path, columns);
+        solve(nodes);
+        maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'P');
+        maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'K');
         
-        drawStartEnd(path, columns, StartPos, 0);
-        drawStartEnd(path, columns, EndPos, 1);
         return 0;
     }
 
-    private void solve(ArrayList<Integer[]> nodes, int[] path, int columns){
+    private void solve(ArrayList<Integer[]> nodes){
 
         ID_next = Start;
 
         while (p != 1){
             
             ID_now = ID_next;
-            path[nodes.get(ID_now)[8] + (nodes.get(ID_now)[9]) * columns - 1] = 2;
+            
+            maze.setCharFromMaze(nodes.get(ID_now)[8] - 1 , nodes.get(ID_now)[9], 'R');
             nodeMap.get(ID_now).visited = true;
 
-            ID_next = whichNext(nodes, path, columns);
+            ID_next = whichNext(nodes);
             if ( ID_next == -1){
                 endDeadEnd(nodes);
             }
@@ -59,7 +57,7 @@ public class SolutionWriterWhole {
         
     }
 
-    private int whichNext(ArrayList<Integer[]> nodes, int[] path, int columns){
+    private int whichNext(ArrayList<Integer[]> nodes){
         
         int y = nodeMap.get(ID_now).directionToMin * 2;
         int ID_n = 0;
@@ -82,7 +80,7 @@ public class SolutionWriterWhole {
             nodeMap.get(ID_n).directionFrom = searchForDirection(nodes, ID_n); 
         }
 
-        drawingSolution(nodes, path, columns, y);
+        drawingSolution(nodes, y);
 
         return ID_n;
 
@@ -102,12 +100,8 @@ public class SolutionWriterWhole {
              
             length_now -= nodes.get(ID_now)[((int) nodeMap.get(ID_now).directionFrom) * 2 + 1];
             ID_next = nodes.get(ID_now)[(int) nodeMap.get(ID_now).directionFrom * 2];
-            if (mode == 0){
-                nodeMap.get(ID_next).directionToMin = searchForDirection(nodes, ID_next) +1;
-                nodeMap.get(ID_now).visited = false;
-            } else {
-                nodeMap.get(ID_next).directionToMin = searchForDirection(nodes, ID_next);
-            }
+          
+            nodeMap.get(ID_next).directionToMin = searchForDirection(nodes, ID_next);
 
         } else {
 
@@ -134,7 +128,7 @@ public class SolutionWriterWhole {
         } 
     }
 
-    private void drawingSolution(ArrayList<Integer[]> nodes, int[] path, int columns, int y){
+    private void drawingSolution(ArrayList<Integer[]> nodes, int y){
         //ID_now
         int length = nodes.get(ID_now)[y+1];
         int direction = y/2;
@@ -142,36 +136,27 @@ public class SolutionWriterWhole {
         switch (direction) {
             case 0:
                 for (int i = 0; i < length; i++){
-                    path[nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] - i) * columns - 1] = 2;
+                    maze.setCharFromMaze(nodes.get(ID_now)[8] - 1, nodes.get(ID_now)[9] - i, 'R');
                 }
                 break;
             case 1:
                 for (int i = 0; i < length; i++){
-                    path[nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 + i] = 2;
+                    maze.setCharFromMaze(nodes.get(ID_now)[8] + i - 1, nodes.get(ID_now)[9], 'R');
                 }
                 break;
             case 2:
                 for (int i = 0; i < length; i++){
-                    path[nodes.get(ID_now)[8] + (nodes.get(ID_now)[9] + i)* columns - 1] = 2;
+                    maze.setCharFromMaze(nodes.get(ID_now)[8] - 1, nodes.get(ID_now)[9] + i , 'R');
                 }
                 break;
             case 3:
                 for (int i = 0; i < length; i++){
-                    path[nodes.get(ID_now)[8] + nodes.get(ID_now)[9] * columns - 1 - i] = 2;
+                    maze.setCharFromMaze(nodes.get(ID_now)[8] - i - 1, nodes.get(ID_now)[9], 'R');
                 }
                 break;
             default:
                 break;
         }
 
-    }
-
-    private void drawStartEnd(int[] path, int columns, int Pos, int x){
-
-        if (x == 0){
-            path[Pos] = 3;
-        } else {
-            path[Pos] = 4;
-        }
     }
 }

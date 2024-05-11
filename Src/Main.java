@@ -7,8 +7,8 @@ public class Main {
 
     static MyFrame ramka;
     static MazeAnalyzer mazeAnalyzer;
-    static MazeCreator mazeCreator;
     static FileReader fileReader;
+    static Maze maze;
     static File file;
     static int columns;
     static Color lastStartColor = new Color (0,0,0);
@@ -16,7 +16,6 @@ public class Main {
     static Integer[] oldCustomStart = new Integer[2];
     static Integer[] oldCustomEnd = new Integer[2];
     static int StartEndSwitch = 0;
-    static int[] path;
     static char[][] x;
     static int NoStartEnd = 0;
     
@@ -95,6 +94,7 @@ public class Main {
     }
 
     private static void Read(){
+
         reset();
         ramka.infoLabel.setText("Ładowanie labiryntu...");
         ramka.menuBar.setloadEnabled(false);
@@ -102,34 +102,27 @@ public class Main {
 
         file = ramka.menuBar.file;
         fileReader = new FileReader();
-
-        //char [][]x =  new char[columns][fileReader.rows];
-        //to nie działa do końca bo skad wezmę wymiary za nim przeczytam
         
         if (ramka.menuBar.fileType.equals("txt")){
             
             fileReader.CountRowsColumns(file);
             columns = fileReader.columns;
             x = fileReader.ReadFileTXT(file);
+            
 
         } else {
 
-            /* 
+            /*  
             fileReader.readNumberOfRowsColumns(file);
             columns = fileReader.columns;
             x = fileReader.ReadFileBIN(file);
             */
         }
-
-        //createMaze
-        mazeCreator = new MazeCreator();
-
-        mazeCreator.CreateMaze( x, fileReader.columns, fileReader.rows);
-        path = mazeCreator.path;
+        
+        maze = new Maze(fileReader.columns, fileReader.rows, x);
         
         //rysowanie
-        ramka.ContentPanel.addPanel(fileReader.columns, fileReader.rows, path);
-        
+        ramka.ContentPanel.addPanel(fileReader.columns, fileReader.rows, maze);
 
         ramka.ToolPanel.ToolEnable(true, new int[]{0}); //Analyze
 
@@ -145,22 +138,22 @@ public class Main {
         ramka.ToolPanel.ToolEnable(false, new int[]{0});
 
         mazeAnalyzer = new MazeAnalyzer();
-        mazeAnalyzer.analyzeMaze(file, fileReader.columns, fileReader.rows, ramka.menuBar.fileType, ramka.ToolPanel.customPanel, x);
+        mazeAnalyzer.analyzeMaze(file, ramka.menuBar.fileType, ramka.ToolPanel.customPanel, maze);
 
-        if (mazeAnalyzer.StartPos == null){
+        if (maze.getStart()[0] == null){
             oldCustomStart[0] = null;
             oldCustomStart[1] = null;
         } else {
-            oldCustomStart[0] = mazeAnalyzer.StartPos/columns;
-            oldCustomStart[1] = mazeAnalyzer.StartPos%columns;
+            oldCustomStart[0] = maze.getStart()[0];
+            oldCustomStart[1] = maze.getStart()[1];
         }
         
-        if (mazeAnalyzer.EndPos == null){
+        if (maze.getEnd()[0] == null){
             oldCustomEnd[0] = null;
             oldCustomEnd[1] = null;
         } else{
-            oldCustomEnd[0] = mazeAnalyzer.EndPos/columns;
-            oldCustomEnd[1] = mazeAnalyzer.EndPos%columns;
+            oldCustomEnd[0] = maze.getEnd()[0];
+            oldCustomEnd[1] = maze.getEnd()[1];
         }
 
 
@@ -200,11 +193,11 @@ public class Main {
         ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
         ramka.infoLabel.setText("Szukam najkrótszego rozwiązania labiryntu...");
         MazeSolver mazeSolver = new MazeSolver();
-        mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 0);
+        mazeSolver.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End);
 
         SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.save, path, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes, fileReader.columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
-        ramka.ContentPanel.mazePanel.rePaint(1, path);
+        solutionWriter.WriteSolution(mazeSolver.save, maze, mazeAnalyzer.Start, mazeAnalyzer.End ,mazeAnalyzer.nodes);
+        ramka.ContentPanel.mazePanel.rePaint(maze);
         ramka.infoLabel.setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
         ramka.menuBar.setloadEnabled(true);
         ramka.menuBar.setexportEnabled(true);
@@ -215,8 +208,8 @@ public class Main {
         ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
 
         SolutionWriterWhole solutionWriterWhole = new SolutionWriterWhole();
-        solutionWriterWhole.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, 1, path, columns, mazeAnalyzer.StartPos, mazeAnalyzer.EndPos);
-        ramka.ContentPanel.mazePanel.rePaint(1, path);
+        solutionWriterWhole.solveMaze(mazeAnalyzer.nodes, mazeAnalyzer.Start, mazeAnalyzer.End, maze);
+        ramka.ContentPanel.mazePanel.rePaint(maze);
         ramka.infoLabel.setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
         ramka.menuBar.setloadEnabled(true);
         ramka.menuBar.setexportEnabled(true);
@@ -225,7 +218,7 @@ public class Main {
 
     private static void customChange( char c){
 
-        int colorNr;
+        char colorNr;
         int[] switchSE;
         int[] customObject = new int[2];
 
@@ -237,18 +230,18 @@ public class Main {
             customObject[1] = ramka.ContentPanel.customEnd[1];
         }
 
-        if (mazeCreator.path[columns * customObject[1] + customObject[0]] == 1){
+        if (maze.getCharFromMaze(customObject[0], customObject[1]) == ' '){
             
             if (c == 'S'){
 
-                colorNr = 3;
+                colorNr = 'P';
                 switchSE = new int[]{4,5};
                 ramka.ToolPanel.customPanel.changeStartPos(customObject[0], customObject[1]);
                 ramka.infoLabel.setText("Wybrano nowy Start. Trwa jego lokalizowanie...");
 
             } else {
 
-                colorNr = 4;
+                colorNr = 'K';
                 switchSE = new int[]{5,4};
                 ramka.ToolPanel.customPanel.changeEndPos(customObject[0], customObject[1]);
                 ramka.infoLabel.setText("Wybrano nowy End. Trwa jego lokalizowanie...");
@@ -257,15 +250,15 @@ public class Main {
 
             ramka.ToolPanel.ToolEnable(false, new int[] {2});
 
-            mazeAnalyzer.customAnalyzer( path, customObject , columns, c);
+            mazeAnalyzer.customAnalyzer(customObject, c);
 
-            path[columns * customObject[1] + customObject[0]] = colorNr;
-            ramka.ContentPanel.mazePanel.rePaint(1, path);
+            maze.setCharFromMaze(customObject[0], customObject[1], colorNr);
+            ramka.ContentPanel.mazePanel.rePaint(maze);
 
             if (c == 'S'){
-                mazeAnalyzer.StartPos = columns * customObject[1] + customObject[0];
+                maze.setStart(customObject[0], customObject[1]);
             } else {
-                mazeAnalyzer.EndPos = columns * customObject[1] + customObject[0];
+                maze.setEnd(customObject[0], customObject[1]);
             }
 
             if (NoStartEnd == 2){
@@ -319,10 +312,10 @@ public class Main {
 
     static void InOutWall(){
 
-        path[mazeAnalyzer.StartPos] = 0;
-        path[mazeAnalyzer.EndPos] = 0;
+        maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'X');
+        maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'X');
         
-        ramka.ContentPanel.mazePanel.rePaint(1, path);
+        ramka.ContentPanel.mazePanel.rePaint(maze);
 /* 
         if( StartEndSwitch == 0){
             ramka.ToolPanel.ToolEnable(true, new int[]{2,3});

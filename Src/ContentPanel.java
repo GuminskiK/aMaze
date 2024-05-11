@@ -49,7 +49,7 @@ public class ContentPanel extends JPanel {
 
     }
 
-    public void addPanel (int columns, int rows, int[] path){
+    public void addPanel (int columns, int rows, Maze maze){
 
         HelpPanel.setVisible(false);
         Component[] components = this.getComponents();
@@ -58,7 +58,7 @@ public class ContentPanel extends JPanel {
         }
         x++;
 
-        this.mazePanel = new MazePanel(columns, rows, path);
+        this.mazePanel = new MazePanel(columns, rows, maze);
         this.add(mazePanel);
         mazePanel.setVisible(true);
         on = true;
