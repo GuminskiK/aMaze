@@ -22,7 +22,8 @@ public class ToolPanel extends JPanel{
 
     Font font = new Font( "Dialog", Font.BOLD, 10);
 
-    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener, JLabel infoLabel){
+    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener,
+     ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener, JLabel infoLabel, Maze maze){
 
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(150,50));
@@ -43,7 +44,7 @@ public class ToolPanel extends JPanel{
             (e) -> {ToolEnable(true, new int[]{3,4,5});
                     ToolEnable(false, new int[]{2});
                     customListener.actionPerformed(e);
-                    infoLabel.setText("By wybrać nowy Start/End naciśnij PickStart/PickEnd.");}
+                    infoLabel.setText("By wybrać nowy Start/End naciśnij Pick Start/Pick End lub Type Start/ Type End.");}
         );
         
         String[] modesList = new String[]{"-Choose algorithm-","Shortest", "Whole"}; 
@@ -63,7 +64,7 @@ public class ToolPanel extends JPanel{
         modes.setEnabled(false);
         
 
-        customPanel = new CustomPanel(contentPanel, modes, customStartListener, customEndListener, infoLabel);
+        customPanel = new CustomPanel(contentPanel, modes, customStartListener, customEndListener, infoLabel, customListener, maze);
         customPanel.setVisible(false);
 
         this.add(analyze);

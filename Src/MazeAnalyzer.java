@@ -1,5 +1,4 @@
 import java.io.File;
-import java.util.ArrayList;
 
 public class MazeAnalyzer {
 
@@ -27,7 +26,7 @@ public class MazeAnalyzer {
         char[][] x = new char[3][maze.getColumns()];
 
         this.Start = -2;
-        this.End = -2; 
+        this.End = -2;
 
         Analyze(file, x);
 
@@ -105,8 +104,8 @@ public class MazeAnalyzer {
                         Numbers[i] = 0;
                         ID[i] = graph.getCurrentNodes();
 
-                        graph.setNodeValue(graph.getCurrentNodes(), 8, i + 1); //x
-                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 2); //y
+                        graph.setNodeValue(graph.getCurrentNodes(), 8, i + 1); // x
+                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 2); // y
 
                         graph.addCurrentNodes();
                         graph.addNode();
@@ -140,8 +139,8 @@ public class MazeAnalyzer {
                         Numbers[i - 1] = 0;
                         ID[i - 1] = graph.getCurrentNodes();
 
-                        graph.setNodeValue(graph.getCurrentNodes(), 8, i); //x
-                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 1); //y
+                        graph.setNodeValue(graph.getCurrentNodes(), 8, i); // x
+                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 1); // y
 
                         graph.addCurrentNodes();
                         graph.addNode();
@@ -259,7 +258,6 @@ public class MazeAnalyzer {
 
     }
 
-
     private void Link(int[] Numbers, int[] ID, int i, int G, int L) {
 
         if (Start != graph.getCurrentNodes() - 1 && End != graph.getCurrentNodes() - 1) {
@@ -307,29 +305,19 @@ public class MazeAnalyzer {
 
         int[] ID1, ID2;
         int d;
-        int object;
+        int object = 0;
         int z[];
 
         if (c == 'S' && maze.getStart()[0] != null) {
             Clear(c);
-        } else if (c == 'S' && maze.getStart()[0] == null) {
-
-            graph.addNode();
-            Start = graph.getCurrentNodes();
-            graph.addCurrentNodes();
-
-
         }
 
         if (c == 'E' && maze.getEnd()[0] != null) {
             Clear(c);
-        } else if (c == 'E' && maze.getEnd()[0] == null) {
-            graph.addNode();
-            End = graph.getCurrentNodes();
-            graph.addCurrentNodes();
-
         }
-        checkIfEqual(maze.getCharFromMaze(custom[0], custom[1] - 1), maze.getCharFromMaze(custom[0] - 1, custom[1]), maze.getCharFromMaze(custom[0], custom[1] + 1), maze.getCharFromMaze(custom[0] + 1, custom[1]), ' ');
+
+        checkIfEqual(maze.getCharFromMaze(custom[0], custom[1] - 1), maze.getCharFromMaze(custom[0] - 1, custom[1]),
+                maze.getCharFromMaze(custom[0], custom[1] + 1), maze.getCharFromMaze(custom[0] + 1, custom[1]), ' ');
 
         if (h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3) { // zaulek
 
@@ -342,17 +330,38 @@ public class MazeAnalyzer {
 
         } else {
 
-            if (c == 'S') {
+            if (c == 'S' && Start != -2) {
 
                 graph.setNodeValue(Start, 8, custom[0] + 1);
                 graph.setNodeValue(Start, 9, custom[1]);
                 object = Start;
-            } else {
+            } else if (c == 'E' && End != -2) {
 
                 graph.setNodeValue(End, 8, custom[0] + 1);
                 graph.setNodeValue(End, 9, custom[1]);
-  
+
                 object = End;
+
+            } else if (c == 'S') {
+
+                graph.addNode();
+                graph.setNodeValue(graph.getCurrentNodes(), 8, custom[0] + 1);
+                graph.setNodeValue(graph.getCurrentNodes(), 9, custom[1]);
+                Start = graph.getCurrentNodes();
+                graph.addCurrentNodes();
+
+                object = Start;
+
+            } else if (c == 'E') {
+
+                graph.addNode();
+                graph.setNodeValue(graph.getCurrentNodes(), 8, custom[0] + 1);
+                graph.setNodeValue(graph.getCurrentNodes(), 9, custom[1]);
+                End = graph.getCurrentNodes();
+                graph.addCurrentNodes();
+
+                object = End;
+
             }
 
             if (h == 2 && P == 1) { // poziom
@@ -361,7 +370,7 @@ public class MazeAnalyzer {
                 z = new int[] { 0, 1, 4, 5, 0, 1 };
             }
 
-            ID1 = searchCustom(z[4], custom);
+            ID1 = searchCustom(z[4], custom, c);
             d = SearchForNode((ID1[0]) + 1, ID1[1]);
 
             graph.setNodeValue(object, z[0], d);
@@ -370,32 +379,33 @@ public class MazeAnalyzer {
             graph.setNodeValue(d, z[2], object);
             graph.setNodeValue(d, z[3], ID1[2]);
 
-            ID2 = searchCustom(z[5], custom);
+            ID2 = searchCustom(z[5], custom, c);
             d = SearchForNode((ID2[0]) + 1, ID2[1]);
 
             graph.setNodeValue(object, z[2], d);
             graph.setNodeValue(object, z[3], ID2[2]);
 
-            
             graph.setNodeValue(d, z[0], object);
             graph.setNodeValue(d, z[1], ID2[2]);
 
         }
     }
 
-    private int[] searchCustom(int mod, int[] custom) {
+    private int[] searchCustom(int mod, int[] custom, char c) {
 
         Integer x = 0;
         int distance = 0;
         int[] z = new int[3];
-        int[] customSave  = new int[]{custom[0], custom[1]};
+        int[] customSave = new int[] { custom[0], custom[1] };
 
         while (x != 1) {
 
-            checkIfEqual(maze.getCharFromMaze(customSave[0], customSave[1] - 1), maze.getCharFromMaze(customSave[0] - 1, customSave[1]), maze.getCharFromMaze(customSave[0], customSave[1] + 1), maze.getCharFromMaze(customSave[0] + 1, customSave[1]), ' ');
+            checkIfEqual(maze.getCharFromMaze(customSave[0], customSave[1] - 1),
+                    maze.getCharFromMaze(customSave[0] - 1, customSave[1]),
+                    maze.getCharFromMaze(customSave[0], customSave[1] + 1),
+                    maze.getCharFromMaze(customSave[0] + 1, customSave[1]), ' ');
 
             if (h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3) { // zaulek
-                // jesteśmy na nodzie hip hip hurra
                 x = 1;
                 z[0] = customSave[0];
                 z[1] = customSave[1];
@@ -452,6 +462,9 @@ public class MazeAnalyzer {
         }
 
         while (y != 8) {
+            if (obj == -2) {
+                break;
+            }
             if (graph.getNodeValue(obj, y) != null) {
                 switch (y) {
                     case 0:
@@ -479,11 +492,14 @@ public class MazeAnalyzer {
         }
 
         for (int i = 0; i < 10; i++) {
+            if (obj == -2) {
+                break;
+            }
             graph.setNodeValue(obj, i, null);
         }
     }
 
-    private void checkIfEqual(int x1, int x2, int x3, int x4, int y) {
+    private void checkIfEqual(char x1, char x2, char x3, char x4, int y) {
 
         this.G = 0;
         this.L = 0;
@@ -491,26 +507,26 @@ public class MazeAnalyzer {
         this.D = 0;
         this.h = 0;
         // góra
-        if (x1 == y) {
+        if (x1 == ' ' || x1 == 'P' || x1 == 'K') {
 
             h++;
             G++;
 
         }
         // lewo
-        if (x2 == y) {
+        if (x2 == ' ' || x2 == 'P' || x2 == 'K') {
 
             h++;
             L++;
         }
         // dół
-        if (x3 == y) {
+        if (x3 == ' ' || x3 == 'P' || x3 == 'K') {
 
             h++;
             D++;
         }
         // prawo
-        if (x4 == y) {
+        if (x4 == ' ' || x4 == 'P' || x4 == 'K') {
 
             P++;
             h++;

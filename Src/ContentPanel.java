@@ -24,12 +24,12 @@ public class ContentPanel extends JPanel {
     int x;
     Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
     boolean on;
+    
+    Maze maze;
 
-    int[] customStart;
-    int[] customEnd;
+    ContentPanel(Maze maze){
 
-    ContentPanel(){
-
+        this.maze = maze;
         this.setBackground(Color.white);
 
         HelpPanel = new JPanel();
@@ -39,13 +39,6 @@ public class ContentPanel extends JPanel {
 
         this.add(HelpPanel);
         on = false;
-
-        this.customStart = new int[2];
-        this.customStart[0] = -1;
-        this.customStart[1] = -1;
-        this.customEnd = new int[2];
-        this.customEnd[0] = -1;
-        this.customEnd[1] = -1;
 
     }
 
@@ -123,13 +116,9 @@ public class ContentPanel extends JPanel {
                 int x = e.getX();
                 int y = e.getY();
                 if ( c == 'S'){
-                    contentPanel.customStart[0] = (x-5)/10;
-                    contentPanel.customStart[1] = (y-5)/10;
-                    saveCustom(customStart, 'S');
+                    maze.setCustomStart((x-5)/10, (y-5)/10);
                 } else {
-                    contentPanel.customEnd[0] = (x-5)/10;
-                    contentPanel.customEnd[1] = (y-5)/10;
-                    saveCustom(customEnd, 'E');
+                    maze.setCustomEnd((x-5)/10, (y-5)/10);
                 }
                 mazePanel.removeMouseListener(mazePanel.getMouseListeners()[0]);
                 listener.actionPerformed(null);
@@ -137,17 +126,6 @@ public class ContentPanel extends JPanel {
             }
         });
         
-    }
-
-    public void saveCustom (int[] s, char c){
-
-        if (c == 'S'){
-            this.customStart[0] = s[0];
-            this.customStart[1] = s[1];
-        } else {
-            this.customEnd[0] = s[0];
-            this.customEnd[1] = s[1];
-        }
     }
 
 }

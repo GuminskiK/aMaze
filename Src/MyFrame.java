@@ -20,12 +20,15 @@ public class MyFrame extends JFrame{
     JLabel infoLabel = new JLabel();
 
 
-    MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener){
+    MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, 
+    ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener,
+    ActionListener wholeListener, ActionListener customListener, Maze maze){
 
 
         this.menuBar = new Menu(readListener, helpListener, this);
-        this.ContentPanel = new ContentPanel();
-        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, customEndListener, wholeListener, customListener, infoLabel);
+        this.ContentPanel = new ContentPanel(maze);
+        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, 
+        customEndListener, wholeListener, customListener, infoLabel, maze);
         JScrollPane scrollPane = new JScrollPane(ContentPanel);
         
         infoLabel.setText("Info");

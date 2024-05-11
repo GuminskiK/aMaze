@@ -19,6 +19,7 @@ public class Main {
     static int StartEndSwitch = 0;
     static char[][] x;
     static int NoStartEnd = 0;
+    static int StartEndInNoStartEnd = 0;
     
 
     public static void main (String[] args){
@@ -82,8 +83,9 @@ public class Main {
                 InOutWall();
             }
         };
-
-        ramka = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener, wholeListener, customListener);
+        maze = new Maze();
+        ramka = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, 
+        customEndListener, wholeListener, customListener, maze);
         ramka.menuBar.setexportEnabled(false);
         ramka.infoLabel.setText("Proszę załadować labirynt Files->Load Maze.");
         
@@ -119,7 +121,9 @@ public class Main {
             */
         }
         
-        maze = new Maze(fileReader.columns, fileReader.rows, x);
+        maze.setColumns(fileReader.columns);
+        maze.setRows(fileReader.rows);
+        maze.setMaze(x);
         
         //rysowanie
         ramka.ContentPanel.addPanel(fileReader.columns, fileReader.rows, maze);
@@ -169,18 +173,26 @@ public class Main {
                 ramka.infoLabel.setText("Proszę wybrać Start i End.");
                 ramka.ToolPanel.ToolEnable(true, new int[]{3,4,5});
                 ramka.ToolPanel.ToolEnable(false, new int[]{1,2});
+                ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
+                ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
                 NoStartEnd += 2;
             } else if (ramka.ToolPanel.customPanel.ifNull()[0] == true){
                 ramka.infoLabel.setText("Proszę wybrać Start.");
                 ramka.ToolPanel.ToolEnable(true, new int[]{3,4});
                 ramka.ToolPanel.ToolEnable(false, new int[]{1,2});
+                ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
+                ramka.ToolPanel.customPanel.setTypeEndEnabled(false);
 
                 NoStartEnd++;
+                StartEndInNoStartEnd = 1;
             }
             else if (ramka.ToolPanel.customPanel.ifNull()[1] == true){
                 ramka.infoLabel.setText("Proszę wybrać End.");
                 ramka.ToolPanel.ToolEnable(true, new int[]{3,5});
+                ramka.ToolPanel.customPanel.setTypeStartEnabled(false);
+                ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
                 NoStartEnd++;
+                StartEndInNoStartEnd = 2;
             }
 
         } else {
@@ -225,14 +237,22 @@ public class Main {
         int[] customObject = new int[2];
 
         if (c == 'S'){
-            customObject[0] = ramka.ContentPanel.customStart[0];
-            customObject[1] = ramka.ContentPanel.customStart[1];
+            customObject[0] = maze.getCustomStart()[0];
+            customObject[1] = maze.getCustomStart()[1];
         } else {
-            customObject[0] = ramka.ContentPanel.customEnd[0];
-            customObject[1] = ramka.ContentPanel.customEnd[1];
+            customObject[0] = maze.getCustomEnd()[0];
+            customObject[1] = maze.getCustomEnd()[1];
         }
 
-        if (maze.getCharFromMaze(customObject[0], customObject[1]) == ' '){
+        if(StartEndInNoStartEnd != 0){
+            if(StartEndInNoStartEnd == 2 && c == 'S'){
+                maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'X');
+            } else if (StartEndInNoStartEnd == 1 && c == 'E') {
+                maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'X');
+            }
+        }
+
+        if (  ifPath(customObject) ){
             
             if (c == 'S'){
 
@@ -273,7 +293,16 @@ public class Main {
 
             if (StartEndSwitch == 2){
                 ramka.ToolPanel.ToolEnable(false, switchSE);
+                ramka.ToolPanel.customPanel.setTypeStartEnabled(false);
+                ramka.ToolPanel.customPanel.setTypeEndEnabled(false);
             } else {
+                if (c == 'S'){
+                    ramka.ToolPanel.customPanel.setTypeStartEnabled(false);
+                    ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
+                } else {
+                    ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
+                    ramka.ToolPanel.customPanel.setTypeEndEnabled(false);    
+                }
                 ramka.ToolPanel.ToolEnable(false, new int[]{switchSE[0]});
                 ramka.ToolPanel.ToolEnable(true, new int[]{switchSE[1]});
             }
@@ -298,15 +327,23 @@ public class Main {
         } else {
 
             if (c == 'S'){
-                ramka.ContentPanel.customStart[0] = oldCustomStart[0];
-                ramka.ContentPanel.customStart[1] = oldCustomStart[1];
+                maze.setCustomStart(oldCustomStart[0], oldCustomStart[1]); 
                 ramka.customError();
-                ramka.ToolPanel.ToolEnable(true, new int[]{4});
+                if (maze.whoPickedCustom() == 0){
+                    ramka.ToolPanel.ToolEnable(true, new int[]{4});
+                } else {
+                    ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
+                }
+                
             } else {
-                ramka.ContentPanel.customEnd[0] = oldCustomEnd[0];
-                ramka.ContentPanel.customEnd[1] = oldCustomEnd[1];
+                maze.setCustomEnd(oldCustomEnd[0], oldCustomEnd[1]);
                 ramka.customError();
-                ramka.ToolPanel.ToolEnable(true, new int[]{5});
+                if (maze.whoPickedCustom() == 0){
+                    ramka.ToolPanel.ToolEnable(true, new int[]{5});
+                } else {
+                    ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
+                }
+                
             }
              
         }
@@ -329,8 +366,25 @@ public class Main {
 
     private static void reset(){
         NoStartEnd = 0;
+        StartEndInNoStartEnd = 0;
         ramka.ToolPanel.customPanel.changeStartPos(null,null);
         ramka.ToolPanel.customPanel.changeEndPos(null,null);
         ramka.menuBar.setexportEnabled(false);
+        ramka.ToolPanel.customPanel.reset();
+        ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
+        ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
+        maze.reset();
+    }
+
+    private static boolean ifPath(int[] customObject){
+
+        boolean x = false;
+        if (customObject[0] < maze.getColumns() && customObject[1] < maze.getColumns()){
+            if (maze.getCharFromMaze(customObject[0], customObject[1]) == ' '){
+                x = true;
+            }
+        }
+
+        return x;
     }
 }

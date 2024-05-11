@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Graph {
 
     private ArrayList<Integer[]> nodes;
-    private int currentNodesNumber;
+    private Integer currentNodesNumber;
 
     Graph(){
         
@@ -27,11 +27,11 @@ public class Graph {
         nodes.add(nullNode());
     }
 
-    public int getCurrentNodes(){
+    public Integer getCurrentNodes(){
         return currentNodesNumber;
     }
 
-    public int setCurrentNodes(){
+    public Integer setCurrentNodes(){
         return currentNodesNumber;
     }
 
