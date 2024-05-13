@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -78,6 +79,7 @@ public class CustomPanel extends JPanel {
                     typeStart.setEnabled(false);
                     infoLabel.setText("Kliknij na ściężkę labiryntu by wybrać nowy Start");
                     contentPanel.start(StartAL, 'S', contentPanel, customStartListener);
+                    maze.pickCustom(0);
                 });
 
         CreateToolButton(typeStart, "Type Start", font);
@@ -86,8 +88,9 @@ public class CustomPanel extends JPanel {
         typeStart.addActionListener(
 
                 (e) -> {
-                    if (typeStartOn == 0) {
-                        typeStartOn++;
+                    System.out.println(this.typeStartOn);
+                    if (this.typeStartOn == 0) {
+                        
 
                         modes.setEnabled(false);
                         PickStart.setEnabled(false);
@@ -95,6 +98,8 @@ public class CustomPanel extends JPanel {
                         typeEnd.setEnabled(false);
                         infoLabel.setText("Wpisz koordynaty nowego Startu");
                         CurrentPosStart.setEditable(true);
+                        this.typeStartOn++;
+                        maze.pickCustom(1);
                     } else {
 
                         CurrentPosStart.setEditable(false);
@@ -111,8 +116,8 @@ public class CustomPanel extends JPanel {
                             customStartListener.actionPerformed(e);
 
                         } else {
-                            System.out.println("Nie poprawne koordynaty. Powinny być w postaci X:<liczba całkowita> Y:<liczba całkowita>");
-                            CurrentPosStart.setEditable(true);
+                            this.typeStartOn = 0;
+                            JOptionPane.showMessageDialog(contentPanel, "Nie poprawne koordynaty. Powinny być w postaci X:<liczba całkowita> Y:<liczba całkowita>", "typeError", JOptionPane.ERROR_MESSAGE);
                         }
                     }
 
@@ -146,6 +151,7 @@ public class CustomPanel extends JPanel {
                     typeStart.setEnabled(false);
                     infoLabel.setText("Kliknij na ściężkę labiryntu by wybrać nowy End");
                     contentPanel.start(EndAL, 'E', contentPanel, customEndListener);
+                    maze.pickCustom(0);
                 });
         CreateToolButton(typeEnd, "Type End", font);
         typeEnd.setVisible(true);
@@ -161,6 +167,7 @@ public class CustomPanel extends JPanel {
                         typeStart.setEnabled(false);
                         infoLabel.setText("Wpisz koordynaty nowego Endu");
                         CurrentPosEnd.setEditable(true);
+                        maze.pickCustom(1);
                     } else {
 
                         CurrentPosEnd.setEditable(false);
@@ -176,8 +183,9 @@ public class CustomPanel extends JPanel {
                             customEndListener.actionPerformed(e);
 
                         } else {
-                            System.out.println("Nie poprawne koordynaty. Powinny być w postaci X:<liczba całkowita> Y:<liczba całkowita>");
-                            CurrentPosEnd.setEditable(true);
+                            typeEndOn = 0;
+                            JOptionPane.showMessageDialog(contentPanel, "Nie poprawne koordynaty. Powinny być w postaci X:<liczba całkowita> Y:<liczba całkowita>", "typeError", JOptionPane.ERROR_MESSAGE);
+                            
                         }
                     }
 

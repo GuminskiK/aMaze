@@ -333,6 +333,7 @@ public class Main {
                     ramka.ToolPanel.ToolEnable(true, new int[]{4});
                 } else {
                     ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
+                    ramka.ToolPanel.customPanel.typeStartOn = 0;
                 }
                 
             } else {
@@ -342,6 +343,7 @@ public class Main {
                     ramka.ToolPanel.ToolEnable(true, new int[]{5});
                 } else {
                     ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
+                    ramka.ToolPanel.customPanel.typeEndOn = 0;
                 }
                 
             }
@@ -373,6 +375,7 @@ public class Main {
         ramka.ToolPanel.customPanel.reset();
         ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
         ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
+        ramka.ToolPanel.resetComboBoX();
         maze.reset();
     }
 

@@ -83,6 +83,10 @@ public class ToolPanel extends JPanel{
         button.setEnabled(false);
     }
 
+    public void resetComboBoX(){
+        modes.setSelectedIndex(0);
+    }
+
     public void ToolEnable(boolean x, int[] y){
         
         for (int i = 0; i < y.length; i++){
