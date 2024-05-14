@@ -1,8 +1,11 @@
+package Core;
+
 public class Maze {
 
     private int columns;
     private int rows;
     private char[][] maze;
+    //private MazeCell[][] mazeCells;
 
     private Integer startX;
     private Integer startY;

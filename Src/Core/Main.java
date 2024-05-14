@@ -1,7 +1,10 @@
+package Core;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
+import GUI.MyFrame;
 
 public class Main {
 

@@ -1,3 +1,4 @@
+package GUI;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -10,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.plaf.FontUIResource;
+
+import Core.Maze;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;

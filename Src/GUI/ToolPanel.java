@@ -1,3 +1,4 @@
+package GUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -8,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import Core.Maze;
 
 
 public class ToolPanel extends JPanel{

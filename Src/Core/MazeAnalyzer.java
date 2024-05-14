@@ -1,4 +1,7 @@
+package Core;
 import java.io.File;
+
+import GUI.CustomPanel;
 
 public class MazeAnalyzer {
 

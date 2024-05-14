@@ -1,3 +1,5 @@
+package Core;
+
 import java.util.ArrayList;
 
 public class SolutionWriterWhole {
@@ -115,7 +117,7 @@ public class SolutionWriterWhole {
         
         int i = 0;
         Integer ID = graph.getNodeValue(idNext, i);
-        while ( idNow != ID){
+        while ( !idNow.equals(ID)){
             i += 2;
             ID = graph.getNodeValue(idNext, i);
         }

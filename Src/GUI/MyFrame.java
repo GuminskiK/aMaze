@@ -1,3 +1,4 @@
+package GUI;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -6,6 +7,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+
+import Core.Maze;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -20,7 +23,7 @@ public class MyFrame extends JFrame{
     private  JLabel infoLabel = new JLabel();
 
 
-    MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, 
+    public MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, 
     ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener,
     ActionListener wholeListener, ActionListener customListener, Maze maze){
 
