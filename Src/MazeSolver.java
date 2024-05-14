@@ -2,17 +2,17 @@ import java.util.ArrayList;
 
 public class MazeSolver {
 
-    int start;
-    int end;
-    Integer idNow;
-    int lengthNow;
-    int lengthMin;
-    Integer idNext;
-    int p = 0;
-    ArrayList<Node> nodeMap;
+    private int start;
+    private int end;
+    private Integer idNow;
+    private int lengthNow;
+    private int lengthMin;
+    private Integer idNext;
+    private int p = 0;
+    private ArrayList<Node> nodeMap;
     private Graph graph;
 
-    public boolean[] save;
+    private  boolean[] save;
 
     public int solveMaze(Graph graph, int start, int end) {
 
@@ -107,7 +107,7 @@ public class MazeSolver {
 
         int i = 0;
         Integer ID = graph.getNodeValue(idNext, i);
-        while (idNow != ID) {
+        while ( !idNow.equals(ID)) {
             i += 2;
             ID = graph.getNodeValue(idNext, i);
         }
@@ -120,6 +120,10 @@ public class MazeSolver {
         for (int i = 0; i < nodeMap.size(); i++) {
             this.save[i] = nodeMap.get(i).visited;
         }
+    }
+
+    public boolean[] getSave(){
+        return this.save;
     }
 
 }

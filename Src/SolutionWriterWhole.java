@@ -2,16 +2,16 @@ import java.util.ArrayList;
 
 public class SolutionWriterWhole {
 
-    int start;
-    int end;
-    Integer idNow;
-    int lengthNow;
-    int lengthMin;
-    Integer idNext;
-    int p = 0;
-    ArrayList<Node> nodeMap;
-    Maze maze;
-    Graph graph;
+    private int start;
+    private int end;
+    private Integer idNow;
+    private int lengthNow;
+    private int lengthMin;
+    private Integer idNext;
+    private int p = 0;
+    private ArrayList<Node> nodeMap;
+    private Maze maze;
+    private Graph graph;
 
     public boolean[] save;
 

@@ -1,15 +1,15 @@
 
 public class SolutionWriter {
 
-    int start;
-    int end;
-    int idNext;
-    int idNow;
-    int p = 0;
-    int lengthNow;
+    private int start;
+    private int end;
+    private int idNext;
+    private int idNow;
+    private int p = 0;
+    private int lengthNow;
 
-    Maze maze;
-    Graph graph;
+    private Maze maze;
+    private Graph graph;
 
     public void WriteSolution(boolean[] solution, Maze maze, int start, int end, Graph graph){
 

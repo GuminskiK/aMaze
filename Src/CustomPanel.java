@@ -16,29 +16,29 @@ import javax.swing.JTextArea;
 
 public class CustomPanel extends JPanel {
 
-    JPanel startPanel;
-    JLabel start;
-    JButton pickStart = new JButton();
-    JTextArea currentPosStart;
+    private JPanel startPanel;
+    private JLabel start;
+    private JButton pickStart = new JButton();
+    private JTextArea currentPosStart;
 
-    Integer startPosX = null;
-    Integer startPosY = null;
+    private Integer startPosX = null;
+    private Integer startPosY = null;
 
-    JPanel endPanel;
-    JLabel end;
-    JButton pickEnd = new JButton();
-    JTextArea currentPosEnd;
+    private JPanel endPanel;
+    private JLabel end;
+    private JButton pickEnd = new JButton();
+    private JTextArea currentPosEnd;
 
-    Integer endPosX = null;
-    Integer endPosY = null;
+    private Integer endPosX = null;
+    private Integer endPosY = null;
 
-    JButton typeStart = new JButton();
-    JButton typeEnd = new JButton();
+    private JButton typeStart = new JButton();
+    private JButton typeEnd = new JButton();
 
-    int typeStartOn;
-    int typeEndOn;
+    private int typeStartOn;
+    private int typeEndOn;
 
-    Font font = new Font("Dialog", Font.BOLD, 10);
+    private Font font = new Font("Dialog", Font.BOLD, 10);
 
     CustomPanel(ContentPanel contentPanel, JComboBox modes, ActionListener customStartListener,
             ActionListener customEndListener, JLabel infoLabel, ActionListener customListener, Maze maze) {
@@ -263,5 +263,17 @@ public class CustomPanel extends JPanel {
     public void reset(){
         this.typeStartOn = 0;
         this.typeEndOn = 0;
+    }
+
+
+
+    //gettery i settery
+
+    public void setTypeEndOn(int typeEndOn){
+        this.typeEndOn = typeEndOn;
+    }
+
+    public void setTypeStartOn(int typeStartOn){
+        this.typeStartOn = typeStartOn;
     }
 }

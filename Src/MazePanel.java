@@ -8,11 +8,11 @@ import javax.swing.border.Border;
 
 public class MazePanel extends JPanel{
     
-    Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
-    Maze maze;
-    int columns;
-    int rows;
-    int mode = 1;
+    private Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
+    private Maze maze;
+    private int columns;
+    //private int rows;
+    //private int mode = 1;
 
     MazePanel(int columns, int rows, Maze maze){
 
@@ -22,7 +22,7 @@ public class MazePanel extends JPanel{
         this.setVisible(false);
         this.maze = maze;
         this.columns = columns;
-        this.rows = rows;
+        //this.rows = rows;
 
     }
 

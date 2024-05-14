@@ -13,22 +13,22 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Menu extends JMenuBar implements ActionListener {
 
-    JMenu fileMenu;
-    JMenu helpMenu;
-    MyFrame frame;
+    private JMenu fileMenu;
+    private JMenu helpMenu;
+    private MyFrame frame;
 
-    public JMenuItem loadItem;
-    JMenuItem exportItem;
-    JMenuItem helpItem;
+    private JMenuItem loadItem;
+    private JMenuItem exportItem;
+    private JMenuItem helpItem;
 
-    public File file;
-    public File fileToSave;
-    public Integer done;
+    private File file;
+    private File fileToSave;
+    private Integer done;
 
-    ActionListener listener;
-    ActionListener helpListener;
+    private ActionListener listener;
+    private ActionListener helpListener;
 
-    String fileType;
+    private String fileType;
 
     Menu(ActionListener listener, ActionListener helpListener, MyFrame frame) {
 
@@ -128,6 +128,14 @@ public class Menu extends JMenuBar implements ActionListener {
 
     public void setexportEnabled(boolean x){
         exportItem.setEnabled(x);
+    }
+
+    public File getFile(){
+        return this.file;
+    }
+
+    public String getFileType(){
+        return this.fileType;
     }
 
 }

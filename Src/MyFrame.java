@@ -13,11 +13,11 @@ import java.awt.event.ActionListener;
 
 public class MyFrame extends JFrame{
 
-    public Menu menuBar;
-    public ContentPanel contentPanel;
-    public ToolPanel toolPanel;
-    JPanel outerContent;
-    JLabel infoLabel = new JLabel();
+    private  Menu menuBar;
+    private  ContentPanel contentPanel;
+    private  ToolPanel toolPanel;
+    private  JPanel outerContent;
+    private  JLabel infoLabel = new JLabel();
 
 
     MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, 
@@ -64,6 +64,25 @@ public class MyFrame extends JFrame{
 
     public void customError(){
         JOptionPane.showMessageDialog(this, "Można wybrać tylko miejsce na ścieżce! Spróbuj ponownie!", "customError", JOptionPane.ERROR_MESSAGE);
+    }
+
+
+    //gettery i settery
+
+    public Menu getMenu(){
+        return this.menuBar;
+    }
+
+    public JLabel getInfoLabel(){
+        return this.infoLabel;
+    }
+
+    public ContentPanel getContentPanel(){
+        return this.contentPanel;
+    }
+
+    public ToolPanel getToolPanel(){
+        return this.toolPanel;
     }
 
 }

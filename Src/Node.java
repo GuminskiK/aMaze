@@ -1,6 +1,6 @@
 public class Node {
 
-    int id;
+    private int id;
     public int directionFrom; //skąd przyszliśmy
     public int directionToMin; //do jakiego poszliśmy, ale się cofneliśmy
     public boolean visited;

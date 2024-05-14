@@ -12,15 +12,15 @@ import javax.swing.JPanel;
 
 public class ToolPanel extends JPanel{
 
-    JButton analyze = new JButton();
-    JButton custom = new JButton();
+    private JButton analyze = new JButton();
+    private JButton custom = new JButton();
 
-    CustomPanel customPanel;
+    private CustomPanel customPanel;
 
-    JComboBox modes;
+    private JComboBox modes;
 
 
-    Font font = new Font( "Dialog", Font.BOLD, 10);
+    private Font font = new Font( "Dialog", Font.BOLD, 10);
 
     ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener,
      ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener, JLabel infoLabel, Maze maze){
@@ -115,6 +115,10 @@ public class ToolPanel extends JPanel{
                     break;
             }
         }    
+    }
+
+    public CustomPanel getCustomPanel(){
+        return this.customPanel;
     }
 
 }

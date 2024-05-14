@@ -18,13 +18,12 @@ import java.awt.event.MouseEvent;
 
 public class ContentPanel extends JPanel {
 
-    public MazePanel mazePanel;
-    JPanel helpPanel;
-    int x;
-    Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
-    boolean on;
-    
-    Maze maze;
+    private MazePanel mazePanel;
+    private JPanel helpPanel;
+    private int x;
+    private Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
+    private boolean on;
+    private Maze maze;
 
     ContentPanel(Maze maze){
 
@@ -125,6 +124,10 @@ public class ContentPanel extends JPanel {
             }
         });
         
+    }
+
+    public MazePanel getMazePanel(){
+        return this.mazePanel;
     }
 
 }

@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 public class FileReader {
 
-    public int columns;
-    public int rows;
+    private int columns;
+    private int rows;
     
     public void CountRowsColumns(File file) {
 
@@ -52,6 +52,15 @@ public class FileReader {
         }
 
         return x;
+    }
+
+
+    public int getColumns(){
+        return this.columns;
+    }
+
+    public int getRows(){
+        return this.rows;
     }
 
 

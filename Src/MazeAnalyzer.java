@@ -2,8 +2,8 @@ import java.io.File;
 
 public class MazeAnalyzer {
 
-    public int start;
-    public int end;
+    private int start;
+    private int end;
 
     private Maze maze;
     private Graph graph;
@@ -442,7 +442,7 @@ public class MazeAnalyzer {
         Integer X = x;
         Integer Y = y;
 
-        while (graph.getNodeValue(i, 8) != X || graph.getNodeValue(i, 9) != Y) {
+        while ( !(graph.getNodeValue(i, 8)).equals(X) || !(graph.getNodeValue(i, 9)).equals(Y)) {
 
             i++;
         }
@@ -491,7 +491,7 @@ public class MazeAnalyzer {
             y += 2;
         }
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 8; i++) {
             if (obj == -2) {
                 break;
             }
@@ -531,5 +531,13 @@ public class MazeAnalyzer {
             P++;
             h++;
         }
+    }
+
+    public int getStart(){
+        return this.start;
+    }
+
+    public int getEnd(){
+        return this.end;
     }
 }
