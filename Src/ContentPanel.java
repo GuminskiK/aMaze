@@ -18,9 +18,8 @@ import java.awt.event.MouseEvent;
 
 public class ContentPanel extends JPanel {
 
-    //public JPanel MazePanel;
     public MazePanel mazePanel;
-    JPanel HelpPanel;
+    JPanel helpPanel;
     int x;
     Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
     boolean on;
@@ -32,19 +31,19 @@ public class ContentPanel extends JPanel {
         this.maze = maze;
         this.setBackground(Color.white);
 
-        HelpPanel = new JPanel();
-        this.HelpPanel.setVisible(false);
+        helpPanel = new JPanel();
+        this.helpPanel.setVisible(false);
 
-        Help();
+        help();
 
-        this.add(HelpPanel);
+        this.add(helpPanel);
         on = false;
 
     }
 
     public void addPanel (int columns, int rows, Maze maze){
 
-        HelpPanel.setVisible(false);
+        helpPanel.setVisible(false);
         Component[] components = this.getComponents();
         if ( components.length != 0 && on){
             this.remove(components[1]);
@@ -60,13 +59,13 @@ public class ContentPanel extends JPanel {
         
     }
 
-    private void Help(){
+    private void help(){
 
         JLabel help = new JLabel();
         JButton backButton = new JButton("Back");
         JTextArea area = new JTextArea();
 
-        this.HelpPanel.setPreferredSize(new Dimension(420, 650));
+        this.helpPanel.setPreferredSize(new Dimension(420, 650));
         help.setText("Help");
         help.setFont( new FontUIResource("Arial", Font.BOLD, 32));
         area.setPreferredSize(new Dimension(400,550));
@@ -90,13 +89,13 @@ public class ContentPanel extends JPanel {
                         if ( components.length > 1){
                             this.mazePanel.setVisible(true);
                         }
-                        this.HelpPanel.setVisible(false);}
+                        this.helpPanel.setVisible(false);}
 
         );
         
-        this.HelpPanel.add(help);
-        this.HelpPanel.add(area);
-        this.HelpPanel.add(backButton);
+        this.helpPanel.add(help);
+        this.helpPanel.add(area);
+        this.helpPanel.add(backButton);
     }
 
     public void setHelpEnabled(){
@@ -105,7 +104,7 @@ public class ContentPanel extends JPanel {
         if ( components.length > 1){
             this.mazePanel.setVisible(false);
         }
-        this.HelpPanel.setVisible(true);
+        this.helpPanel.setVisible(true);
     }
 
     public void start(ActionListener listener, char c, ContentPanel contentPanel, ActionListener customListener){

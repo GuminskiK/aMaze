@@ -2,20 +2,20 @@ import java.io.File;
 
 public class MazeAnalyzer {
 
-    public int Start;
-    public int End;
+    public int start;
+    public int end;
 
     private Maze maze;
     private Graph graph;
     private CustomPanel customPanel;
 
-    int G;
-    int L;
-    int P;
-    int D;
-    int h;
+    private int G;
+    private int L;
+    private int P;
+    private int D;
+    private int h;
 
-    int currentRows;
+    private int currentRows;
 
     public int analyzeMaze(File file, String type, CustomPanel customPanel, Maze maze, Graph graph) {
 
@@ -25,8 +25,8 @@ public class MazeAnalyzer {
 
         char[][] x = new char[3][maze.getColumns()];
 
-        this.Start = -2;
-        this.End = -2;
+        this.start = -2;
+        this.end = -2;
 
         Analyze(file, x);
 
@@ -86,13 +86,13 @@ public class MazeAnalyzer {
 
                         if (x[0][i] == 'P') {
 
-                            this.Start = graph.getCurrentNodes();
+                            this.start = graph.getCurrentNodes();
                             maze.setStart(i, currentRows - 2);
                             this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
-                            this.End = graph.getCurrentNodes();
+                            this.end = graph.getCurrentNodes();
 
                             maze.setEnd(i, currentRows - 2);
                             this.customPanel.changeEndPos(i, currentRows - 1);
@@ -122,13 +122,13 @@ public class MazeAnalyzer {
 
                         if (x[1][i - 1] == 'P') {
 
-                            this.Start = graph.getCurrentNodes();
+                            this.start = graph.getCurrentNodes();
                             maze.setStart(i - 1, currentRows - 1);
                             this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
-                            this.End = graph.getCurrentNodes();
+                            this.end = graph.getCurrentNodes();
                             maze.setEnd(i - 1, currentRows - 1);
                             this.customPanel.changeEndPos(i, currentRows - 1);
 
@@ -158,13 +158,13 @@ public class MazeAnalyzer {
 
                         if (x[2][i] == 'P') {
 
-                            this.Start = graph.getCurrentNodes();
+                            this.start = graph.getCurrentNodes();
                             maze.setStart(i, currentRows);
                             this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
-                            this.End = graph.getCurrentNodes();
+                            this.end = graph.getCurrentNodes();
                             maze.setEnd(i, currentRows);
                             this.customPanel.changeEndPos(i, currentRows - 1);
 
@@ -197,13 +197,13 @@ public class MazeAnalyzer {
 
                         if (x[1][i + 1] == 'P') {
 
-                            this.Start = graph.getCurrentNodes();
+                            this.start = graph.getCurrentNodes();
                             maze.setStart(i + 1, currentRows - 1);
                             this.customPanel.changeStartPos(i, currentRows - 1);
 
                         } else {
 
-                            this.End = graph.getCurrentNodes();
+                            this.end = graph.getCurrentNodes();
                             maze.setEnd(i + 1, currentRows - 1);
                             this.customPanel.changeEndPos(i, currentRows - 1);
 
@@ -260,7 +260,7 @@ public class MazeAnalyzer {
 
     private void Link(int[] Numbers, int[] ID, int i, int G, int L) {
 
-        if (Start != graph.getCurrentNodes() - 1 && End != graph.getCurrentNodes() - 1) {
+        if (start != graph.getCurrentNodes() - 1 && end != graph.getCurrentNodes() - 1) {
             graph.addNode();
         }
         if (G == 1) {
@@ -323,44 +323,44 @@ public class MazeAnalyzer {
 
             d = SearchForNode(custom[0] + 1, custom[1]);
             if (c == 'S') {
-                this.Start = d;
+                this.start = d;
             } else {
-                End = d;
+                end = d;
             }
 
         } else {
 
-            if (c == 'S' && Start != -2) {
+            if (c == 'S' && start != -2) {
 
-                graph.setNodeValue(Start, 8, custom[0] + 1);
-                graph.setNodeValue(Start, 9, custom[1]);
-                object = Start;
-            } else if (c == 'E' && End != -2) {
+                graph.setNodeValue(start, 8, custom[0] + 1);
+                graph.setNodeValue(start, 9, custom[1]);
+                object = start;
+            } else if (c == 'E' && end != -2) {
 
-                graph.setNodeValue(End, 8, custom[0] + 1);
-                graph.setNodeValue(End, 9, custom[1]);
+                graph.setNodeValue(end, 8, custom[0] + 1);
+                graph.setNodeValue(end, 9, custom[1]);
 
-                object = End;
+                object = end;
 
             } else if (c == 'S') {
 
                 graph.addNode();
                 graph.setNodeValue(graph.getCurrentNodes(), 8, custom[0] + 1);
                 graph.setNodeValue(graph.getCurrentNodes(), 9, custom[1]);
-                Start = graph.getCurrentNodes();
+                start = graph.getCurrentNodes();
                 graph.addCurrentNodes();
 
-                object = Start;
+                object = start;
 
             } else if (c == 'E') {
 
                 graph.addNode();
                 graph.setNodeValue(graph.getCurrentNodes(), 8, custom[0] + 1);
                 graph.setNodeValue(graph.getCurrentNodes(), 9, custom[1]);
-                End = graph.getCurrentNodes();
+                end = graph.getCurrentNodes();
                 graph.addCurrentNodes();
 
-                object = End;
+                object = end;
 
             }
 
@@ -456,9 +456,9 @@ public class MazeAnalyzer {
         int obj = 0;
 
         if (c == 'S') {
-            obj = Start;
+            obj = start;
         } else {
-            obj = End;
+            obj = end;
         }
 
         while (y != 8) {

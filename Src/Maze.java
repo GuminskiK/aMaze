@@ -4,10 +4,10 @@ public class Maze {
     private int rows;
     private char[][] maze;
 
-    private Integer StartX;
-    private Integer StartY;
-    private Integer EndX;
-    private Integer EndY;
+    private Integer startX;
+    private Integer startY;
+    private Integer endX;
+    private Integer endY;
 
     private Integer customStart[];
     private Integer customEnd[];
@@ -16,10 +16,10 @@ public class Maze {
 
     Maze(){
 
-        this.StartX = null;
-        this.StartY = null;
-        this.EndX = null;
-        this.EndY = null;
+        this.startX = null;
+        this.startY = null;
+        this.endX = null;
+        this.endY = null;
 
         this.customStart = new Integer[]{null,null};
         this.customEnd = new Integer[]{null,null};
@@ -85,23 +85,23 @@ public class Maze {
     }
 
     // settery
-    public void setStart (Integer StartX, Integer StartY){
-        this.StartX = StartX;
-        this.StartY = StartY;
+    public void setStart (Integer startX, Integer startY){
+        this.startX = startX;
+        this.startY = startY;
     }
 
-    public void setEnd (Integer EndX, Integer EndY){
-        this.EndX = EndX;
-        this.EndY = EndY;
+    public void setEnd (Integer endX, Integer endY){
+        this.endX = endX;
+        this.endY = endY;
     }
 
     //gettery
     public Integer[] getStart (){
-        return new Integer[]{StartX, StartY};
+        return new Integer[]{startX, startY};
     }
 
     public Integer[] getEnd (){
-        return new Integer[]{EndX, EndY};
+        return new Integer[]{endX, endY};
     }
 
     public void reset(){
@@ -109,10 +109,10 @@ public class Maze {
         this.rows = 0;
         this.maze = null;
     
-        this.StartX = null;
-        this.StartY = null;
-        this.EndX = null;
-        this.EndY = null;
+        this.startX = null;
+        this.startY = null;
+        this.endX = null;
+        this.endY = null;
     
         this.customStart = new Integer[]{null,null};
         this.customEnd = new Integer[]{null,null};

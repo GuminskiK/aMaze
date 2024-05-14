@@ -14,8 +14,8 @@ import java.awt.event.ActionListener;
 public class MyFrame extends JFrame{
 
     public Menu menuBar;
-    public ContentPanel ContentPanel;
-    public ToolPanel ToolPanel;
+    public ContentPanel contentPanel;
+    public ToolPanel toolPanel;
     JPanel outerContent;
     JLabel infoLabel = new JLabel();
 
@@ -26,10 +26,10 @@ public class MyFrame extends JFrame{
 
 
         this.menuBar = new Menu(readListener, helpListener, this);
-        this.ContentPanel = new ContentPanel(maze);
-        this.ToolPanel = new ToolPanel(this.ContentPanel, analyzeListener, shortestListener, customStartListener, 
+        this.contentPanel = new ContentPanel(maze);
+        this.toolPanel = new ToolPanel(this.contentPanel, analyzeListener, shortestListener, customStartListener, 
         customEndListener, wholeListener, customListener, infoLabel, maze);
-        JScrollPane scrollPane = new JScrollPane(ContentPanel);
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
         
         infoLabel.setText("Info");
         infoLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -55,8 +55,8 @@ public class MyFrame extends JFrame{
         this.setIconImage(logo.getImage());
 
         this.setJMenuBar(menuBar);
-        this.add(ToolPanel, BorderLayout.WEST);
-        //this.add(ContentPanel);
+        this.add(toolPanel, BorderLayout.WEST);
+        //this.add(contentPanel);
         this.add(outerContent);
         this.setVisible(true);
            

@@ -2,12 +2,12 @@ import java.util.ArrayList;
 
 public class SolutionWriterWhole {
 
-    int Start;
-    int End;
-    Integer ID_now;
-    int length_now;
-    int length_min;
-    Integer ID_next;
+    int start;
+    int end;
+    Integer idNow;
+    int lengthNow;
+    int lengthMin;
+    Integer idNext;
     int p = 0;
     ArrayList<Node> nodeMap;
     Maze maze;
@@ -15,12 +15,12 @@ public class SolutionWriterWhole {
 
     public boolean[] save;
 
-    public int solveMaze( int Start, int End, Maze maze, Graph graph){
+    public int solveMaze( int start, int end, Maze maze, Graph graph){
 
         this.graph = graph;
         this.maze = maze;
-        this.Start = Start;
-        this.End = End;
+        this.start = start;
+        this.end = end;
         nodeMap = new ArrayList<>();
         
         
@@ -41,17 +41,17 @@ public class SolutionWriterWhole {
 
     private void solve(){
 
-        ID_next = Start;
+        idNext = start;
 
         while (p != 1){
             
-            ID_now = ID_next;
+            idNow = idNext;
             
-            maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) - 1 , graph.getNodeValue(ID_now, 9), 'R');
-            nodeMap.get(ID_now).visited = true;
+            maze.setCharFromMaze(graph.getNodeValue(idNow, 8) - 1 , graph.getNodeValue(idNow, 9), 'R');
+            nodeMap.get(idNow).visited = true;
 
-            ID_next = whichNext();
-            if ( ID_next == -1){
+            idNext = whichNext();
+            if ( idNext == -1){
                 endDeadEnd();
             }
 
@@ -61,11 +61,11 @@ public class SolutionWriterWhole {
 
     private int whichNext(){
         
-        int y = nodeMap.get(ID_now).directionToMin * 2;
+        int y = nodeMap.get(idNow).directionToMin * 2;
         Integer ID_n = 0;
 
         while (y != 8){
-            ID_n = graph.getNodeValue(ID_now, y);
+            ID_n = graph.getNodeValue(idNow, y);
             //następny nieodwiedzony, a długość połączenia nie równa 0;
             if ( ID_n != null){ 
                 if( nodeMap.get(ID_n).visited == false){
@@ -78,7 +78,7 @@ public class SolutionWriterWhole {
         if (y == 8){
             ID_n = -1;
         } else {
-            length_now += graph.getNodeValue(ID_now, y + 1);
+            lengthNow += graph.getNodeValue(idNow, y + 1);
             nodeMap.get(ID_n).directionFrom = searchForDirection(ID_n); 
         }
 
@@ -90,20 +90,20 @@ public class SolutionWriterWhole {
 
     private void endDeadEnd(){
 
-        if(ID_now != Start){
-            if(ID_now == End){
-                if( length_min == 0 || length_now > length_min){
+        if(idNow != start){
+            if(idNow == end){
+                if( lengthMin == 0 || lengthNow > lengthMin){
 
-                    length_min = length_now;
+                    lengthMin = lengthNow;
                     saveSolution();
 
                 } 
             }
              
-            length_now -= graph.getNodeValue(ID_now, ((int) nodeMap.get(ID_now).directionFrom) * 2 + 1);
-            ID_next = graph.getNodeValue(ID_now, (int) nodeMap.get(ID_now).directionFrom * 2);
+            lengthNow -= graph.getNodeValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1);
+            idNext = graph.getNodeValue(idNow, (int) nodeMap.get(idNow).directionFrom * 2);
           
-            nodeMap.get(ID_next).directionToMin = searchForDirection(ID_next);
+            nodeMap.get(idNext).directionToMin = searchForDirection(idNext);
 
         } else {
 
@@ -111,13 +111,13 @@ public class SolutionWriterWhole {
         }
     }
 
-    private int searchForDirection(int ID_next){
+    private int searchForDirection(int idNext){
         
         int i = 0;
-        Integer ID = graph.getNodeValue(ID_next, i);
-        while ( ID_now != ID){
+        Integer ID = graph.getNodeValue(idNext, i);
+        while ( idNow != ID){
             i += 2;
-            ID = graph.getNodeValue(ID_next, i);
+            ID = graph.getNodeValue(idNext, i);
         }
 
         return i/2;
@@ -131,29 +131,29 @@ public class SolutionWriterWhole {
     }
 
     private void drawingSolution(int y){
-        //ID_now
-        int length = graph.getNodeValue(ID_now, y+1);
+        //idNow
+        int length = graph.getNodeValue(idNow, y+1);
         int direction = y/2;
 
         switch (direction) {
             case 0:
                 for (int i = 0; i < length; i++){
-                    maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) - 1, graph.getNodeValue(ID_now, 9) - i, 'R');
+                    maze.setCharFromMaze(graph.getNodeValue(idNow, 8) - 1, graph.getNodeValue(idNow, 9) - i, 'R');
                 }
                 break;
             case 1:
                 for (int i = 0; i < length; i++){
-                    maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) + i - 1, graph.getNodeValue(ID_now, 9), 'R');
+                    maze.setCharFromMaze(graph.getNodeValue(idNow, 8) + i - 1, graph.getNodeValue(idNow, 9), 'R');
                 }
                 break;
             case 2:
                 for (int i = 0; i < length; i++){
-                    maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) - 1, graph.getNodeValue(ID_now, 9) + i, 'R');
+                    maze.setCharFromMaze(graph.getNodeValue(idNow, 8) - 1, graph.getNodeValue(idNow, 9) + i, 'R');
                 }
                 break;
             case 3:
                 for (int i = 0; i < length; i++){
-                    maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) - i - 1, graph.getNodeValue(ID_now, 9), 'R');
+                    maze.setCharFromMaze(graph.getNodeValue(idNow, 8) - i - 1, graph.getNodeValue(idNow, 9), 'R');
                 }
                 break;
             default:

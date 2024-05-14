@@ -37,7 +37,7 @@ public class MazePanel extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int columnMax = columns * 10;
+        int maxWidthInPixels = columns * 10;
 
         for (int y = 0; y < maze.getRows(); y++){
             for (int x = 0; x < maze.getColumns(); x++){
@@ -62,7 +62,7 @@ public class MazePanel extends JPanel{
                         break;
                 }
 
-                g.fillRect( (x % columnMax) * 10 + 5 , y * 10 + 5, 10, 10);
+                g.fillRect( (x % maxWidthInPixels) * 10 + 5 , y * 10 + 5, 10, 10);
             }
         }
     }

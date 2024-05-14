@@ -16,21 +16,21 @@ import javax.swing.JTextArea;
 
 public class CustomPanel extends JPanel {
 
-    JPanel StartPanel;
-    JLabel Start;
-    JButton PickStart = new JButton();
-    JTextArea CurrentPosStart;
+    JPanel startPanel;
+    JLabel start;
+    JButton pickStart = new JButton();
+    JTextArea currentPosStart;
 
-    Integer StartPosX = null;
-    Integer StartPosY = null;
+    Integer startPosX = null;
+    Integer startPosY = null;
 
-    JPanel EndPanel;
-    JLabel End;
-    JButton PickEnd = new JButton();
-    JTextArea CurrentPosEnd;
+    JPanel endPanel;
+    JLabel end;
+    JButton pickEnd = new JButton();
+    JTextArea currentPosEnd;
 
-    Integer EndPosX = null;
-    Integer EndPosY = null;
+    Integer endPosX = null;
+    Integer endPosY = null;
 
     JButton typeStart = new JButton();
     JButton typeEnd = new JButton();
@@ -51,7 +51,7 @@ public class CustomPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // PickEnd.setEnabled(true);
+                // pickEnd.setEnabled(true);
             }
 
         };
@@ -61,20 +61,20 @@ public class CustomPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // PickStart.setEnabled(true);
+                // pickStart.setEnabled(true);
             }
 
         };
 
-        Start = new JLabel("Start");
+        start = new JLabel("start");
 
-        CreateToolButton(PickStart, "Pick Start", font);
-        PickStart.addActionListener(
+        CreateToolButton(pickStart, "Pick Start", font);
+        pickStart.addActionListener(
 
                 (e) -> {
                     modes.setEnabled(false);
-                    PickStart.setEnabled(false);
-                    PickEnd.setEnabled(false);
+                    pickStart.setEnabled(false);
+                    pickEnd.setEnabled(false);
                     typeEnd.setEnabled(false);
                     typeStart.setEnabled(false);
                     infoLabel.setText("Kliknij na ściężkę labiryntu by wybrać nowy Start");
@@ -93,19 +93,19 @@ public class CustomPanel extends JPanel {
                         
 
                         modes.setEnabled(false);
-                        PickStart.setEnabled(false);
-                        PickEnd.setEnabled(false);
+                        pickStart.setEnabled(false);
+                        pickEnd.setEnabled(false);
                         typeEnd.setEnabled(false);
                         infoLabel.setText("Wpisz koordynaty nowego Startu");
-                        CurrentPosStart.setEditable(true);
+                        currentPosStart.setEditable(true);
                         this.typeStartOn++;
                         maze.pickCustom(1);
                     } else {
 
-                        CurrentPosStart.setEditable(false);
+                        currentPosStart.setEditable(false);
 
                         Pattern pattern = Pattern.compile("X:(\\d+)\nY:(\\d+)");
-                        Matcher matcher = pattern.matcher(CurrentPosStart.getText());
+                        Matcher matcher = pattern.matcher(currentPosStart.getText());
 
                         if (matcher.find()) {
                             Integer number1 = Integer.valueOf(matcher.group(1));
@@ -123,30 +123,30 @@ public class CustomPanel extends JPanel {
 
                 });
 
-        CurrentPosStart = new JTextArea();
-        CurrentPosStart.setText("X:" + StartPosX + "\nY:" + StartPosY);
-        CurrentPosStart.setEditable(false);
+        currentPosStart = new JTextArea();
+        currentPosStart.setText("X:" + startPosX + "\nY:" + startPosY);
+        currentPosStart.setEditable(false);
 
-        StartPanel = new JPanel();
-        StartPanel.setPreferredSize(new Dimension(140, 120));
-        StartPanel.setBackground(Color.green);
+        startPanel = new JPanel();
+        startPanel.setPreferredSize(new Dimension(140, 120));
+        startPanel.setBackground(Color.green);
 
-        StartPanel.add(Start);
-        StartPanel.add(PickStart);
-        StartPanel.add(typeStart);
-        StartPanel.add(CurrentPosStart);
+        startPanel.add(start);
+        startPanel.add(pickStart);
+        startPanel.add(typeStart);
+        startPanel.add(currentPosStart);
 
-        StartPanel.setVisible(true);
+        startPanel.setVisible(true);
 
-        End = new JLabel("End");
+        end = new JLabel("end");
 
-        CreateToolButton(PickEnd, "Pick End", font);
-        PickEnd.addActionListener(
+        CreateToolButton(pickEnd, "Pick End", font);
+        pickEnd.addActionListener(
 
                 (e) -> {
                     modes.setEnabled(false);
-                    PickStart.setEnabled(false);
-                    PickEnd.setEnabled(false);
+                    pickStart.setEnabled(false);
+                    pickEnd.setEnabled(false);
                     typeEnd.setEnabled(false);
                     typeStart.setEnabled(false);
                     infoLabel.setText("Kliknij na ściężkę labiryntu by wybrać nowy End");
@@ -162,17 +162,17 @@ public class CustomPanel extends JPanel {
                         typeEndOn++;
 
                         modes.setEnabled(false);
-                        PickStart.setEnabled(false);
-                        PickEnd.setEnabled(false);
+                        pickStart.setEnabled(false);
+                        pickEnd.setEnabled(false);
                         typeStart.setEnabled(false);
                         infoLabel.setText("Wpisz koordynaty nowego Endu");
-                        CurrentPosEnd.setEditable(true);
+                        currentPosEnd.setEditable(true);
                         maze.pickCustom(1);
                     } else {
 
-                        CurrentPosEnd.setEditable(false);
+                        currentPosEnd.setEditable(false);
                         Pattern pattern = Pattern.compile("X:(\\d+)\nY:(\\d+)");
-                        Matcher matcher = pattern.matcher(CurrentPosEnd.getText());
+                        Matcher matcher = pattern.matcher(currentPosEnd.getText());
 
                         if (matcher.find()) {
                             Integer number1 = Integer.valueOf(matcher.group(1));
@@ -191,22 +191,22 @@ public class CustomPanel extends JPanel {
 
                 });
 
-        CurrentPosEnd = new JTextArea();
-        CurrentPosEnd.setText("X:" + EndPosX + "\nY:" + EndPosY);
-        CurrentPosEnd.setEditable(false);
+        currentPosEnd = new JTextArea();
+        currentPosEnd.setText("X:" + endPosX + "\nY:" + endPosY);
+        currentPosEnd.setEditable(false);
 
-        EndPanel = new JPanel();
-        EndPanel.setPreferredSize(new Dimension(140, 120));
-        EndPanel.setBackground(Color.pink);
+        endPanel = new JPanel();
+        endPanel.setPreferredSize(new Dimension(140, 120));
+        endPanel.setBackground(Color.pink);
 
-        EndPanel.add(End);
-        EndPanel.add(PickEnd);
-        EndPanel.add(typeEnd);
-        EndPanel.add(CurrentPosEnd);
-        EndPanel.setVisible(true);
+        endPanel.add(end);
+        endPanel.add(pickEnd);
+        endPanel.add(typeEnd);
+        endPanel.add(currentPosEnd);
+        endPanel.setVisible(true);
 
-        this.add(StartPanel);
-        this.add(EndPanel);
+        this.add(startPanel);
+        this.add(endPanel);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         this.setPreferredSize(new Dimension(140, 240));
         this.setVisible(true);
@@ -222,11 +222,11 @@ public class CustomPanel extends JPanel {
     }
 
     public void setPickStartEnabled(boolean x) {
-        PickStart.setEnabled(x);
+        pickStart.setEnabled(x);
     }
 
     public void setPickEndEnabled(boolean x) {
-        PickEnd.setEnabled(x);
+        pickEnd.setEnabled(x);
     }
 
     public void setTypeStartEnabled(boolean x) {
@@ -237,24 +237,24 @@ public class CustomPanel extends JPanel {
         typeEnd.setEnabled(x);
     }
 
-    public void changeStartPos(Integer StartPosX, Integer StartPosY) {
-        this.StartPosX = StartPosX;
-        this.StartPosY = StartPosY;
-        CurrentPosStart.setText("X:" + StartPosX + "\nY:" + StartPosY);
+    public void changeStartPos(Integer startPosX, Integer startPosY) {
+        this.startPosX = startPosX;
+        this.startPosY = startPosY;
+        currentPosStart.setText("X:" + startPosX + "\nY:" + startPosY);
     }
 
-    public void changeEndPos(Integer EndPosX, Integer EndPosY) {
-        this.EndPosX = EndPosX;
-        this.EndPosY = EndPosY;
-        CurrentPosEnd.setText("X:" + EndPosX + "\nY:" + EndPosY);
+    public void changeEndPos(Integer endPosX, Integer endPosY) {
+        this.endPosX = endPosX;
+        this.endPosY = endPosY;
+        currentPosEnd.setText("X:" + endPosX + "\nY:" + endPosY);
     }
 
     public boolean[] ifNull() {
         boolean[] Null = new boolean[2];
-        if (StartPosX == null) {
+        if (startPosX == null) {
             Null[0] = true;
         }
-        if (EndPosX == null) {
+        if (endPosX == null) {
             Null[1] = true;
         }
         return Null;

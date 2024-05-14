@@ -5,7 +5,7 @@ import java.io.File;
 
 public class Main {
 
-    static MyFrame ramka;
+    static MyFrame frame;
     static MazeAnalyzer mazeAnalyzer;
     static FileReader fileReader;
     static Maze maze;
@@ -16,10 +16,10 @@ public class Main {
     static Color lastEndColor = new Color (0,0,0);
     static Integer[] oldCustomStart = new Integer[2];
     static Integer[] oldCustomEnd = new Integer[2];
-    static int StartEndSwitch = 0;
+    static int startEndSwitch = 0;
     static char[][] x;
-    static int NoStartEnd = 0;
-    static int StartEndInNoStartEnd = 0;
+    static int noStartEnd = 0;
+    static int startEndInNoStartEnd = 0;
     
 
     public static void main (String[] args){
@@ -84,29 +84,29 @@ public class Main {
             }
         };
         maze = new Maze();
-        ramka = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, 
+        frame = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, 
         customEndListener, wholeListener, customListener, maze);
-        ramka.menuBar.setexportEnabled(false);
-        ramka.infoLabel.setText("Proszę załadować labirynt Files->Load Maze.");
+        frame.menuBar.setexportEnabled(false);
+        frame.infoLabel.setText("Proszę załadować labirynt Files->Load Maze.");
         
         
     }
 
     private static void help(){
-        ramka.ContentPanel.setHelpEnabled();
+        frame.contentPanel.setHelpEnabled();
     }
 
     private static void Read(){
 
         reset();
-        ramka.infoLabel.setText("Ładowanie labiryntu...");
-        ramka.menuBar.setloadEnabled(false);
-        ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4,5});
+        frame.infoLabel.setText("Ładowanie labiryntu...");
+        frame.menuBar.setloadEnabled(false);
+        frame.toolPanel.ToolEnable(false, new int[]{0,1,2,3,4,5});
 
-        file = ramka.menuBar.file;
+        file = frame.menuBar.file;
         fileReader = new FileReader();
         
-        if (ramka.menuBar.fileType.equals("txt")){
+        if (frame.menuBar.fileType.equals("txt")){
             
             fileReader.CountRowsColumns(file);
             columns = fileReader.columns;
@@ -126,25 +126,25 @@ public class Main {
         maze.setMaze(x);
         
         //rysowanie
-        ramka.ContentPanel.addPanel(fileReader.columns, fileReader.rows, maze);
+        frame.contentPanel.addPanel(fileReader.columns, fileReader.rows, maze);
 
-        ramka.ToolPanel.ToolEnable(true, new int[]{0}); //Analyze
+        frame.toolPanel.ToolEnable(true, new int[]{0}); //Analyze
 
-        StartEndSwitch = 0;
+        startEndSwitch = 0;
 
-        ramka.infoLabel.setText("Proszę nacisnąć Analyze maze by przeanalizować labirynt.");
+        frame.infoLabel.setText("Proszę nacisnąć Analyze maze by przeanalizować labirynt.");
 
     }
 
     private static void Analyze(){
         
-        ramka.infoLabel.setText("Analizowanie w toku...");
-        ramka.ToolPanel.ToolEnable(false, new int[]{0});
+        frame.infoLabel.setText("Analizowanie w toku...");
+        frame.toolPanel.ToolEnable(false, new int[]{0});
 
         graph = new Graph();
 
         mazeAnalyzer = new MazeAnalyzer();
-        mazeAnalyzer.analyzeMaze(file, ramka.menuBar.fileType, ramka.ToolPanel.customPanel, maze, graph);
+        mazeAnalyzer.analyzeMaze(file, frame.menuBar.fileType, frame.toolPanel.customPanel, maze, graph);
 
         if (maze.getStart()[0] == null){
             oldCustomStart[0] = null;
@@ -163,40 +163,40 @@ public class Main {
         }
 
 
-        ramka.ToolPanel.ToolEnable(true, new int[]{1,2});
+        frame.toolPanel.ToolEnable(true, new int[]{1,2});
 
-        NoStartEnd = 0;
+        noStartEnd = 0;
 
-        if (ramka.ToolPanel.customPanel.ifNull()[0] == true || ramka.ToolPanel.customPanel.ifNull()[1] == true){
+        if (frame.toolPanel.customPanel.ifNull()[0] == true || frame.toolPanel.customPanel.ifNull()[1] == true){
 
-            if (ramka.ToolPanel.customPanel.ifNull()[0] == true && ramka.ToolPanel.customPanel.ifNull()[1] == true){
-                ramka.infoLabel.setText("Proszę wybrać Start i End.");
-                ramka.ToolPanel.ToolEnable(true, new int[]{3,4,5});
-                ramka.ToolPanel.ToolEnable(false, new int[]{1,2});
-                ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
-                ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
-                NoStartEnd += 2;
-            } else if (ramka.ToolPanel.customPanel.ifNull()[0] == true){
-                ramka.infoLabel.setText("Proszę wybrać Start.");
-                ramka.ToolPanel.ToolEnable(true, new int[]{3,4});
-                ramka.ToolPanel.ToolEnable(false, new int[]{1,2});
-                ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
-                ramka.ToolPanel.customPanel.setTypeEndEnabled(false);
+            if (frame.toolPanel.customPanel.ifNull()[0] == true && frame.toolPanel.customPanel.ifNull()[1] == true){
+                frame.infoLabel.setText("Proszę wybrać Start i End.");
+                frame.toolPanel.ToolEnable(true, new int[]{3,4,5});
+                frame.toolPanel.ToolEnable(false, new int[]{1,2});
+                frame.toolPanel.customPanel.setTypeStartEnabled(true);
+                frame.toolPanel.customPanel.setTypeEndEnabled(true);
+                noStartEnd += 2;
+            } else if (frame.toolPanel.customPanel.ifNull()[0] == true){
+                frame.infoLabel.setText("Proszę wybrać Start.");
+                frame.toolPanel.ToolEnable(true, new int[]{3,4});
+                frame.toolPanel.ToolEnable(false, new int[]{1,2});
+                frame.toolPanel.customPanel.setTypeStartEnabled(true);
+                frame.toolPanel.customPanel.setTypeEndEnabled(false);
 
-                NoStartEnd++;
-                StartEndInNoStartEnd = 1;
+                noStartEnd++;
+                startEndInNoStartEnd = 1;
             }
-            else if (ramka.ToolPanel.customPanel.ifNull()[1] == true){
-                ramka.infoLabel.setText("Proszę wybrać End.");
-                ramka.ToolPanel.ToolEnable(true, new int[]{3,5});
-                ramka.ToolPanel.customPanel.setTypeStartEnabled(false);
-                ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
-                NoStartEnd++;
-                StartEndInNoStartEnd = 2;
+            else if (frame.toolPanel.customPanel.ifNull()[1] == true){
+                frame.infoLabel.setText("Proszę wybrać End.");
+                frame.toolPanel.ToolEnable(true, new int[]{3,5});
+                frame.toolPanel.customPanel.setTypeStartEnabled(false);
+                frame.toolPanel.customPanel.setTypeEndEnabled(true);
+                noStartEnd++;
+                startEndInNoStartEnd = 2;
             }
 
         } else {
-            ramka.infoLabel.setText("Można wybrać tryb rozwiązywania labiryntu, a także nowy Start/End");
+            frame.infoLabel.setText("Można wybrać tryb rozwiązywania labiryntu, a także nowy Start/End");
         }
         
 
@@ -204,29 +204,29 @@ public class Main {
 
     private static void Shortest(){
 
-        ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
-        ramka.infoLabel.setText("Szukam najkrótszego rozwiązania labiryntu...");
+        frame.toolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
+        frame.infoLabel.setText("Szukam najkrótszego rozwiązania labiryntu...");
         MazeSolver mazeSolver = new MazeSolver();
-        mazeSolver.solveMaze(graph, mazeAnalyzer.Start, mazeAnalyzer.End);
+        mazeSolver.solveMaze(graph, mazeAnalyzer.start, mazeAnalyzer.end);
 
         SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.save, maze, mazeAnalyzer.Start, mazeAnalyzer.End, graph);
-        ramka.ContentPanel.mazePanel.rePaint(maze);
-        ramka.infoLabel.setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
-        ramka.menuBar.setloadEnabled(true);
-        ramka.menuBar.setexportEnabled(true);
+        solutionWriter.WriteSolution(mazeSolver.save, maze, mazeAnalyzer.start, mazeAnalyzer.end, graph);
+        frame.contentPanel.mazePanel.rePaint(maze);
+        frame.infoLabel.setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
+        frame.menuBar.setloadEnabled(true);
+        frame.menuBar.setexportEnabled(true);
     }
 
     private static void Whole(){
 
-        ramka.ToolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
+        frame.toolPanel.ToolEnable(false, new int[]{0,1,2,3,4});
 
         SolutionWriterWhole solutionWriterWhole = new SolutionWriterWhole();
-        solutionWriterWhole.solveMaze(mazeAnalyzer.Start, mazeAnalyzer.End, maze, graph);
-        ramka.ContentPanel.mazePanel.rePaint(maze);
-        ramka.infoLabel.setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
-        ramka.menuBar.setloadEnabled(true);
-        ramka.menuBar.setexportEnabled(true);
+        solutionWriterWhole.solveMaze(mazeAnalyzer.start, mazeAnalyzer.end, maze, graph);
+        frame.contentPanel.mazePanel.rePaint(maze);
+        frame.infoLabel.setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
+        frame.menuBar.setloadEnabled(true);
+        frame.menuBar.setexportEnabled(true);
 
     }
 
@@ -244,10 +244,10 @@ public class Main {
             customObject[1] = maze.getCustomEnd()[1];
         }
 
-        if(StartEndInNoStartEnd != 0){
-            if(StartEndInNoStartEnd == 2 && c == 'S'){
+        if(startEndInNoStartEnd != 0){
+            if(startEndInNoStartEnd == 2 && c == 'S'){
                 maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'X');
-            } else if (StartEndInNoStartEnd == 1 && c == 'E') {
+            } else if (startEndInNoStartEnd == 1 && c == 'E') {
                 maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'X');
             }
         }
@@ -258,24 +258,24 @@ public class Main {
 
                 colorNr = 'P';
                 switchSE = new int[]{4,5};
-                ramka.ToolPanel.customPanel.changeStartPos(customObject[0], customObject[1]);
-                ramka.infoLabel.setText("Wybrano nowy Start. Trwa jego lokalizowanie...");
+                frame.toolPanel.customPanel.changeStartPos(customObject[0], customObject[1]);
+                frame.infoLabel.setText("Wybrano nowy Start. Trwa jego lokalizowanie...");
 
             } else {
 
                 colorNr = 'K';
                 switchSE = new int[]{5,4};
-                ramka.ToolPanel.customPanel.changeEndPos(customObject[0], customObject[1]);
-                ramka.infoLabel.setText("Wybrano nowy End. Trwa jego lokalizowanie...");
+                frame.toolPanel.customPanel.changeEndPos(customObject[0], customObject[1]);
+                frame.infoLabel.setText("Wybrano nowy End. Trwa jego lokalizowanie...");
 
             }
 
-            ramka.ToolPanel.ToolEnable(false, new int[] {2});
+            frame.toolPanel.ToolEnable(false, new int[] {2});
 
             mazeAnalyzer.customAnalyzer(customObject, c);
 
             maze.setCharFromMaze(customObject[0], customObject[1], colorNr);
-            ramka.ContentPanel.mazePanel.rePaint(maze);
+            frame.contentPanel.mazePanel.rePaint(maze);
 
             if (c == 'S'){
                 maze.setStart(customObject[0], customObject[1]);
@@ -283,43 +283,43 @@ public class Main {
                 maze.setEnd(customObject[0], customObject[1]);
             }
 
-            if (NoStartEnd == 2){
-                NoStartEnd--;
+            if (noStartEnd == 2){
+                noStartEnd--;
             } else {
-                ramka.ToolPanel.ToolEnable(true, new int[]{2});
+                frame.toolPanel.ToolEnable(true, new int[]{2});
             }
             
-            StartEndSwitch++;
+            startEndSwitch++;
 
-            if (StartEndSwitch == 2){
-                ramka.ToolPanel.ToolEnable(false, switchSE);
-                ramka.ToolPanel.customPanel.setTypeStartEnabled(false);
-                ramka.ToolPanel.customPanel.setTypeEndEnabled(false);
+            if (startEndSwitch == 2){
+                frame.toolPanel.ToolEnable(false, switchSE);
+                frame.toolPanel.customPanel.setTypeStartEnabled(false);
+                frame.toolPanel.customPanel.setTypeEndEnabled(false);
             } else {
                 if (c == 'S'){
-                    ramka.ToolPanel.customPanel.setTypeStartEnabled(false);
-                    ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
+                    frame.toolPanel.customPanel.setTypeStartEnabled(false);
+                    frame.toolPanel.customPanel.setTypeEndEnabled(true);
                 } else {
-                    ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
-                    ramka.ToolPanel.customPanel.setTypeEndEnabled(false);    
+                    frame.toolPanel.customPanel.setTypeStartEnabled(true);
+                    frame.toolPanel.customPanel.setTypeEndEnabled(false);    
                 }
-                ramka.ToolPanel.ToolEnable(false, new int[]{switchSE[0]});
-                ramka.ToolPanel.ToolEnable(true, new int[]{switchSE[1]});
+                frame.toolPanel.ToolEnable(false, new int[]{switchSE[0]});
+                frame.toolPanel.ToolEnable(true, new int[]{switchSE[1]});
             }
 
             if (c == 'S'){
-                if (StartEndSwitch == 2){
-                    ramka.infoLabel.setText("Wybierz tryb rozwiązywania.");
+                if (startEndSwitch == 2){
+                    frame.infoLabel.setText("Wybierz tryb rozwiązywania.");
                 } else {
-                    ramka.infoLabel.setText("Wybór Startu zakończył się pomyślnie. Możesz teraz wybrać End (PickEnd) lub tryb rozwiązywania.");
+                    frame.infoLabel.setText("Wybór Startu zakończył się pomyślnie. Możesz teraz wybrać End (PickEnd) lub tryb rozwiązywania.");
                 }
                 
 
             } else {
-                if (StartEndSwitch == 2){
-                    ramka.infoLabel.setText("Wybierz tryb rozwiązywania.");
+                if (startEndSwitch == 2){
+                    frame.infoLabel.setText("Wybierz tryb rozwiązywania.");
                 } else {
-                    ramka.infoLabel.setText("Wybór Endu zakończył się pomyślnie. Możesz teraz wybrać Start (PickStart) lub tryb rozwiązywania.");
+                    frame.infoLabel.setText("Wybór Endu zakończył się pomyślnie. Możesz teraz wybrać Start (PickStart) lub tryb rozwiązywania.");
                 }
             }
 
@@ -328,22 +328,22 @@ public class Main {
 
             if (c == 'S'){
                 maze.setCustomStart(oldCustomStart[0], oldCustomStart[1]); 
-                ramka.customError();
+                frame.customError();
                 if (maze.whoPickedCustom() == 0){
-                    ramka.ToolPanel.ToolEnable(true, new int[]{4});
+                    frame.toolPanel.ToolEnable(true, new int[]{4});
                 } else {
-                    ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
-                    ramka.ToolPanel.customPanel.typeStartOn = 0;
+                    frame.toolPanel.customPanel.setTypeStartEnabled(true);
+                    frame.toolPanel.customPanel.typeStartOn = 0;
                 }
                 
             } else {
                 maze.setCustomEnd(oldCustomEnd[0], oldCustomEnd[1]);
-                ramka.customError();
+                frame.customError();
                 if (maze.whoPickedCustom() == 0){
-                    ramka.ToolPanel.ToolEnable(true, new int[]{5});
+                    frame.toolPanel.ToolEnable(true, new int[]{5});
                 } else {
-                    ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
-                    ramka.ToolPanel.customPanel.typeEndOn = 0;
+                    frame.toolPanel.customPanel.setTypeEndEnabled(true);
+                    frame.toolPanel.customPanel.typeEndOn = 0;
                 }
                 
             }
@@ -356,26 +356,26 @@ public class Main {
         maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'X');
         maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'X');
         
-        ramka.ContentPanel.mazePanel.rePaint(maze);
+        frame.contentPanel.mazePanel.rePaint(maze);
 /* 
-        if( StartEndSwitch == 0){
-            ramka.ToolPanel.ToolEnable(true, new int[]{2,3});
+        if( startEndSwitch == 0){
+            frame.toolPanel.ToolEnable(true, new int[]{2,3});
         }
 */
-        ramka.ToolPanel.ToolEnable(false, new int[]{1});
+        frame.toolPanel.ToolEnable(false, new int[]{1});
         
     }
 
     private static void reset(){
-        NoStartEnd = 0;
-        StartEndInNoStartEnd = 0;
-        ramka.ToolPanel.customPanel.changeStartPos(null,null);
-        ramka.ToolPanel.customPanel.changeEndPos(null,null);
-        ramka.menuBar.setexportEnabled(false);
-        ramka.ToolPanel.customPanel.reset();
-        ramka.ToolPanel.customPanel.setTypeStartEnabled(true);
-        ramka.ToolPanel.customPanel.setTypeEndEnabled(true);
-        ramka.ToolPanel.resetComboBoX();
+        noStartEnd = 0;
+        startEndInNoStartEnd = 0;
+        frame.toolPanel.customPanel.changeStartPos(null,null);
+        frame.toolPanel.customPanel.changeEndPos(null,null);
+        frame.menuBar.setexportEnabled(false);
+        frame.toolPanel.customPanel.reset();
+        frame.toolPanel.customPanel.setTypeStartEnabled(true);
+        frame.toolPanel.customPanel.setTypeEndEnabled(true);
+        frame.toolPanel.resetComboBoX();
         maze.reset();
     }
 

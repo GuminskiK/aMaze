@@ -1,53 +1,53 @@
 
 public class SolutionWriter {
 
-    int Start;
-    int End;
-    int ID_next;
-    int ID_now;
+    int start;
+    int end;
+    int idNext;
+    int idNow;
     int p = 0;
-    int length_now;
+    int lengthNow;
 
     Maze maze;
     Graph graph;
 
-    public void WriteSolution(boolean[] solution, Maze maze, int Start, int End, Graph graph){
+    public void WriteSolution(boolean[] solution, Maze maze, int start, int end, Graph graph){
 
         this.graph = graph;
         this.maze = maze;
-        this.Start = Start;
-        this.End = End;
+        this.start = start;
+        this.end = end;
 
         solve(solution);
         maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'P');
-        System.out.println("Długość: " + length_now);
+        System.out.println("Długość: " + lengthNow);
 
     }
 
     private void drawingSolution(int y){
 
-        int length = graph.getNodeValue(ID_now, y + 1);
+        int length = graph.getNodeValue(idNow, y + 1);
         int direction = y/2;
 
         switch (direction) {
             case 0:
                 for (int i = 0; i < length; i++){
-                    maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) - 1, graph.getNodeValue(ID_now, 9) - i, 'R');
+                    maze.setCharFromMaze(graph.getNodeValue(idNow, 8) - 1, graph.getNodeValue(idNow, 9) - i, 'R');
                 }
                 break;
             case 1:
                 for (int i = 0; i < length; i++){
-                    maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) + i - 1, graph.getNodeValue(ID_now, 9), 'R');
+                    maze.setCharFromMaze(graph.getNodeValue(idNow, 8) + i - 1, graph.getNodeValue(idNow, 9), 'R');
                 }
                 break;
             case 2:
                 for (int i = 0; i < length; i++){
-                    maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) - 1, graph.getNodeValue(ID_now, 9) + i , 'R');
+                    maze.setCharFromMaze(graph.getNodeValue(idNow, 8) - 1, graph.getNodeValue(idNow, 9) + i , 'R');
                 }
                 break;
             case 3:
                 for (int i = 0; i < length; i++){
-                    maze.setCharFromMaze(graph.getNodeValue(ID_now, 8) - i - 1, graph.getNodeValue(ID_now, 9), 'R');
+                    maze.setCharFromMaze(graph.getNodeValue(idNow, 8) - i - 1, graph.getNodeValue(idNow, 9), 'R');
                 }
                 break;
             default:
@@ -58,17 +58,17 @@ public class SolutionWriter {
     //mode shortest
     private int solve( boolean[] solution){
 
-        ID_next = Start;
-        length_now = 0;
+        idNext = start;
+        lengthNow = 0;
 
         while (p != 1){
             
-            ID_now = ID_next;
-            if( ID_now == End){
+            idNow = idNext;
+            if( idNow == end){
                 break;
             }
-            solution[ID_now] = false;
-            ID_next = whichNext(solution);
+            solution[idNow] = false;
+            idNext = whichNext(solution);
 
         }
         return 0;
@@ -81,7 +81,7 @@ public class SolutionWriter {
         Integer ID_n = 0;
 
         while (y != 8){
-            ID_n = graph.getNodeValue(ID_now, y);
+            ID_n = graph.getNodeValue(idNow, y);
             //następny nieodwiedzony, a długość połączenia nie równa 0;
             if ( ID_n != null){ 
                 if( solution[ID_n] == true){
@@ -91,7 +91,7 @@ public class SolutionWriter {
             y += 2;
         }
 
-        length_now += graph.getNodeValue(ID_now, y + 1);
+        lengthNow += graph.getNodeValue(idNow, y + 1);
 
         drawingSolution(y);
 
