@@ -53,24 +53,25 @@ public class MazeAnalyzer {
             System.arraycopy(maze.getMaze()[i], 0, x[i], 0, maze.getColumns());
 
         }
-        currentRows = 2;
-        ifNode(x, ID, Numbers, currentRows);
+        currentRows = 1;
+        ifNode(x, ID, Numbers);
+        currentRows++;
 
         for (int i = 0; i < maze.getRows() - 3; i++) {
 
-            currentRows++;
+            
             // Przepisanie na wyższe wiersze w x
             System.arraycopy(x[1], 0, x[0], 0, maze.getColumns());
             System.arraycopy(x[2], 0, x[1], 0, maze.getColumns());
 
             System.arraycopy(maze.getMaze()[i + 3], 0, x[2], 0, maze.getColumns());
-            ifNode(x, ID, Numbers, currentRows);
-
+            ifNode(x, ID, Numbers);
+            currentRows++;
         }
 
     }
 
-    private void ifNode(char[][] x, int[] ID, int[] Numbers, int currentRows) {
+    private void ifNode(char[][] x, int[] ID, int[] Numbers) {
 
         for (int i = 1; i < maze.getColumns() - 1; i++) {
 
@@ -90,15 +91,15 @@ public class MazeAnalyzer {
                         if (x[0][i] == 'P') {
 
                             this.start = graph.getCurrentNodes();
-                            maze.setStart(i, currentRows - 2);
-                            this.customPanel.changeStartPos(i, currentRows - 1);
+                            maze.setStart(i, currentRows - 1);
+                            this.customPanel.changeStartPos(i, currentRows);
 
                         } else {
 
                             this.end = graph.getCurrentNodes();
 
-                            maze.setEnd(i, currentRows - 2);
-                            this.customPanel.changeEndPos(i, currentRows - 1);
+                            maze.setEnd(i, currentRows - 1);
+                            this.customPanel.changeEndPos(i, currentRows);
 
                         }
 
@@ -107,8 +108,8 @@ public class MazeAnalyzer {
                         Numbers[i] = 0;
                         ID[i] = graph.getCurrentNodes();
 
-                        graph.setNodeValue(graph.getCurrentNodes(), 8, i + 1); // x
-                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 2); // y
+                        graph.setNodeValue(graph.getCurrentNodes(), 8, i); // x
+                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 1); // y
 
                         graph.addCurrentNodes();
                         graph.addNode();
@@ -126,14 +127,14 @@ public class MazeAnalyzer {
                         if (x[1][i - 1] == 'P') {
 
                             this.start = graph.getCurrentNodes();
-                            maze.setStart(i - 1, currentRows - 1);
-                            this.customPanel.changeStartPos(i, currentRows - 1);
+                            maze.setStart(i - 1, currentRows);
+                            this.customPanel.changeStartPos(i, currentRows);
 
                         } else {
 
                             this.end = graph.getCurrentNodes();
-                            maze.setEnd(i - 1, currentRows - 1);
-                            this.customPanel.changeEndPos(i, currentRows - 1);
+                            maze.setEnd(i - 1, currentRows);
+                            this.customPanel.changeEndPos(i, currentRows);
 
                         }
 
@@ -142,8 +143,8 @@ public class MazeAnalyzer {
                         Numbers[i - 1] = 0;
                         ID[i - 1] = graph.getCurrentNodes();
 
-                        graph.setNodeValue(graph.getCurrentNodes(), 8, i); // x
-                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 1); // y
+                        graph.setNodeValue(graph.getCurrentNodes(), 8, i - 1); // x
+                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows); // y
 
                         graph.addCurrentNodes();
                         graph.addNode();
@@ -162,14 +163,14 @@ public class MazeAnalyzer {
                         if (x[2][i] == 'P') {
 
                             this.start = graph.getCurrentNodes();
-                            maze.setStart(i, currentRows);
-                            this.customPanel.changeStartPos(i, currentRows - 1);
+                            maze.setStart(i, currentRows + 1);
+                            this.customPanel.changeStartPos(i, currentRows);
 
                         } else {
 
                             this.end = graph.getCurrentNodes();
-                            maze.setEnd(i, currentRows);
-                            this.customPanel.changeEndPos(i, currentRows - 1);
+                            maze.setEnd(i, currentRows + 1);
+                            this.customPanel.changeEndPos(i, currentRows);
 
                         }
 
@@ -178,8 +179,8 @@ public class MazeAnalyzer {
                         graph.setNodeValue(graph.getCurrentNodes(), 0, graph.getCurrentNodes() + 1);
                         graph.setNodeValue(graph.getCurrentNodes(), 1, 1);
 
-                        graph.setNodeValue(graph.getCurrentNodes(), 8, i + 1);
-                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows);
+                        graph.setNodeValue(graph.getCurrentNodes(), 8, i);
+                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows + 1);
 
                         graph.addCurrentNodes();
                         graph.addNode();
@@ -201,14 +202,14 @@ public class MazeAnalyzer {
                         if (x[1][i + 1] == 'P') {
 
                             this.start = graph.getCurrentNodes();
-                            maze.setStart(i + 1, currentRows - 1);
-                            this.customPanel.changeStartPos(i, currentRows - 1);
+                            maze.setStart(i + 1, currentRows);
+                            this.customPanel.changeStartPos(i, currentRows);
 
                         } else {
 
                             this.end = graph.getCurrentNodes();
-                            maze.setEnd(i + 1, currentRows - 1);
-                            this.customPanel.changeEndPos(i, currentRows - 1);
+                            maze.setEnd(i + 1, currentRows);
+                            this.customPanel.changeEndPos(i, currentRows);
 
                         }
 
@@ -221,8 +222,8 @@ public class MazeAnalyzer {
 
                         ID[i + 1] = graph.getCurrentNodes();
 
-                        graph.setNodeValue(graph.getCurrentNodes(), 8, i + 2);
-                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 1);
+                        graph.setNodeValue(graph.getCurrentNodes(), 8, i + 1 );
+                        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows);
 
                         graph.addCurrentNodes();
                         graph.addNode();
@@ -297,8 +298,8 @@ public class MazeAnalyzer {
             Numbers[i] = 0;
         }
 
-        graph.setNodeValue(graph.getCurrentNodes(), 8, i + 1);
-        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows - 1);
+        graph.setNodeValue(graph.getCurrentNodes(), 8, i);
+        graph.setNodeValue(graph.getCurrentNodes(), 9, currentRows);
 
         graph.addCurrentNodes();
 

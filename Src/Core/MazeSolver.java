@@ -11,26 +11,31 @@ public class MazeSolver {
     private int lengthMin;
     private Integer idNext;
     private int p = 0;
+
     private ArrayList<Node> nodeMap;
+    private ArrayList<SolutionBlock> solutionBlocks;
+
     private Graph graph;
 
-    private  boolean[] save;
+    private ArrayList<SolutionBlock> solution;
 
-    public int solveMaze(Graph graph, int start, int end) {
+    private int mode;
+
+    public int solveMaze(Graph graph, int start, int end, int mode) {
 
         this.graph = graph;
-
+        this.mode = mode;
         this.start = start;
         this.end = end;
+
         nodeMap = new ArrayList<>();
+        solutionBlocks = new ArrayList<>();
 
         for (int i = 0; i < graph.getNodes().size(); i++) {
 
             nodeMap.add(new Node(i));
 
         }
-
-        this.save = new boolean[nodeMap.size()];
 
         solve();
 
@@ -58,13 +63,13 @@ public class MazeSolver {
     private int whichNext() {
 
         int y = nodeMap.get(idNow).directionToMin * 2;
-        Integer ID_n = null;
+        Integer idNext = null;
 
         while (y != 8) {
-            ID_n = graph.getNodeValue(idNow, y);
+            idNext = graph.getNodeValue(idNow, y);
             // następny nieodwiedzony, a długość połączenia nie równa 0;
-            if (ID_n != null) {
-                if (nodeMap.get(ID_n).visited == false) {
+            if (idNext != null) {
+                if (nodeMap.get(idNext).visited == false) {
                     break;
                 }
             }
@@ -72,12 +77,13 @@ public class MazeSolver {
         }
 
         if (y == 8 || idNow == end) {
-            ID_n = -1;
+            idNext = -1;
         } else {
             lengthNow += graph.getNodeValue(idNow, y + 1);
-            nodeMap.get(ID_n).directionFrom = searchForDirection(ID_n);
+            nodeMap.get(idNext).directionFrom = searchForDirection(idNext, idNow);
+            solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeValue(idNow, y + 1), searchForDirection(idNow, idNext)));
         }
-        return ID_n;
+        return idNext;
 
     }
 
@@ -94,10 +100,16 @@ public class MazeSolver {
             }
             
             lengthNow -= graph.getNodeValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1);
+            solutionBlocks.remove(solutionBlocks.size() - 1);
             idNext = graph.getNodeValue(idNow, (int) nodeMap.get(idNow).directionFrom * 2);
 
-            nodeMap.get(idNext).directionToMin = searchForDirection(idNext) + 1;
-            nodeMap.get(idNow).visited = false;
+            if (mode == 0){ //shortest
+                nodeMap.get(idNext).directionToMin = searchForDirection(idNext, idNow) + 1;
+                nodeMap.get(idNow).visited = false; 
+            } else { //whole
+                nodeMap.get(idNext).directionToMin = searchForDirection(idNext, idNow);
+            }
+            
 
         } else {
 
@@ -105,7 +117,7 @@ public class MazeSolver {
         }
     }
 
-    private int searchForDirection(int idNext) {
+    private int searchForDirection(Integer idNext, Integer idNow) {
 
         int i = 0;
         Integer ID = graph.getNodeValue(idNext, i);
@@ -119,13 +131,19 @@ public class MazeSolver {
 
     public void saveSolution() {
 
-        for (int i = 0; i < nodeMap.size(); i++) {
-            this.save[i] = nodeMap.get(i).visited;
+        solution = new ArrayList<>();
+        for (SolutionBlock solutionBlock : solutionBlocks) {
+            try {
+                solution.add((SolutionBlock) solutionBlock.clone());
+            } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
-    public boolean[] getSave(){
-        return this.save;
+    public ArrayList<SolutionBlock> getSolution(){
+        return this.solution;
     }
 
 }

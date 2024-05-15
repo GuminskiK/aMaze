@@ -125,9 +125,10 @@ public class Main {
         maze.setColumns(fileReader.getColumns());
         maze.setRows(fileReader.getRows());
         maze.setMaze(x);
+        maze.MazeToMazeCells();
         
         //rysowanie
-        frame.getContentPanel().addPanel(fileReader.getColumns(), fileReader.getRows(), maze);
+        frame.getContentPanel().addPanel(fileReader.getColumns(), fileReader.getRows());
 
         frame.getToolPanel().ToolEnable(true, new int[]{0}); //Analyze
 
@@ -208,10 +209,10 @@ public class Main {
         frame.getToolPanel().ToolEnable(false, new int[]{0,1,2,3,4});
         frame.getInfoLabel().setText("Szukam najkrótszego rozwiązania labiryntu...");
         MazeSolver mazeSolver = new MazeSolver();
-        mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd());
+        mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
 
         SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.getSave(), maze, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), graph);
+        solutionWriter.WriteSolution(mazeSolver.getSolution(), maze);
         frame.getContentPanel().getMazePanel().rePaint(maze);
         frame.getInfoLabel().setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
         frame.getMenu().setloadEnabled(true);

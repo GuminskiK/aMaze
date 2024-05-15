@@ -43,7 +43,7 @@ public class ContentPanel extends JPanel {
 
     }
 
-    public void addPanel (int columns, int rows, Maze maze){
+    public void addPanel (int columns, int rows){
 
         helpPanel.setVisible(false);
         Component[] components = this.getComponents();
