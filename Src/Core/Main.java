@@ -223,8 +223,12 @@ public class Main {
 
         frame.getToolPanel().ToolEnable(false, new int[]{0,1,2,3,4});
 
-        SolutionWriterWhole solutionWriterWhole = new SolutionWriterWhole();
-        solutionWriterWhole.solveMaze(mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), maze, graph);
+        MazeSolver mazeSolver = new MazeSolver();
+        mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 1);
+
+        SolutionWriter solutionWriter = new SolutionWriter();
+        solutionWriter.WriteSolution(mazeSolver.getSolution(), maze);
+        
         frame.getContentPanel().getMazePanel().rePaint(maze);
         frame.getInfoLabel().setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
         frame.getMenu().setloadEnabled(true);

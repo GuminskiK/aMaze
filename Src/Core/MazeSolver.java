@@ -38,6 +38,9 @@ public class MazeSolver {
         }
 
         solve();
+        if(mode == 1){
+            saveSolution();
+        }
 
         return 0;
     }
@@ -94,19 +97,24 @@ public class MazeSolver {
                 if (lengthMin == 0 || lengthNow > lengthMin) {
 
                     lengthMin = lengthNow;
-                    saveSolution();
+                    if (mode == 0){
+                        saveSolution();
+                    }
+                    
 
                 }
             }
             
             lengthNow -= graph.getNodeValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1);
-            solutionBlocks.remove(solutionBlocks.size() - 1);
+            //solutionBlocks.remove(solutionBlocks.size() - 1);
             idNext = graph.getNodeValue(idNow, (int) nodeMap.get(idNow).directionFrom * 2);
 
             if (mode == 0){ //shortest
+                solutionBlocks.remove(solutionBlocks.size() - 1);
                 nodeMap.get(idNext).directionToMin = searchForDirection(idNext, idNow) + 1;
                 nodeMap.get(idNow).visited = false; 
             } else { //whole
+                solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1), searchForDirection(idNow, idNext)));
                 nodeMap.get(idNext).directionToMin = searchForDirection(idNext, idNow);
             }
             
