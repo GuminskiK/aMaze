@@ -1,11 +1,13 @@
 package Core;
+import Cells.*;
 
 public class Maze {
 
     private int columns;
     private int rows;
     private char[][] maze;
-    //private MazeCell[][] mazeCells;
+    
+    private MazeCell[][] mazeCells;
 
     private Integer startX;
     private Integer startY;
@@ -16,6 +18,8 @@ public class Maze {
     private Integer customEnd[];
 
     private int whoPickedCustom;
+
+    private int maxWidthInPixels;
 
     Maze(){
 
@@ -28,6 +32,62 @@ public class Maze {
         this.customEnd = new Integer[]{null,null};
 
     }
+
+    public void MazeToMazeCells(){
+
+        mazeCells = new MazeCell[rows][columns];
+        int xPixels = 5;
+        int yPixels = 5;
+        this.maxWidthInPixels = columns * 10;
+
+        for (int i = 0; i < rows; i++){
+            
+            for(int y = 0; y < columns; y++){
+
+                switch(getCharFromMaze(y, i)){
+                    case 'X':
+                        mazeCells[i][y] = new WallCell(xPixels, yPixels);
+                        break;
+                    case ' ':
+                        mazeCells[i][y] = new PathCell(xPixels, yPixels);
+                        break;
+                    case 'P':
+                        mazeCells[i][y] = new StartCell(xPixels, yPixels);
+                        break;
+                    case 'K':
+                        mazeCells[i][y] = new EndCell(xPixels, yPixels);
+                        break;
+                    default:
+                        break;
+                }
+
+                xPixels = (xPixels + 10) % maxWidthInPixels;
+
+            }
+            yPixels += 10;
+        }
+    }
+
+    public void changeMazeCellToStart(int row, int column){
+        mazeCells[row][column] = new StartCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10);
+    }
+
+    public void changeMazeCellToEnd(int row, int column){
+        mazeCells[row][column] = new EndCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10  );
+    }
+
+    public void changeMazeCellToSolution(int row, int column){
+        mazeCells[row][column] = new SolutionCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10  );
+    }
+
+    public void changeMazeCellToWall(int row, int column){
+        mazeCells[row][column] = new WallCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10  );
+    }
+    
+    public MazeCell[][] getMazeCells(){
+        return this.mazeCells;
+    }
+
     public void pickCustom(int who){
         this.whoPickedCustom = who;
     }
@@ -53,7 +113,6 @@ public class Maze {
         return customEnd;
     }
 
-    ///////
     public int getColumns(){
         return columns;
     }

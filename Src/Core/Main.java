@@ -125,9 +125,10 @@ public class Main {
         maze.setColumns(fileReader.getColumns());
         maze.setRows(fileReader.getRows());
         maze.setMaze(x);
+        maze.MazeToMazeCells();
         
         //rysowanie
-        frame.getContentPanel().addPanel(fileReader.getColumns(), fileReader.getRows(), maze);
+        frame.getContentPanel().addPanel(fileReader.getColumns(), fileReader.getRows());
 
         frame.getToolPanel().ToolEnable(true, new int[]{0}); //Analyze
 
@@ -208,10 +209,10 @@ public class Main {
         frame.getToolPanel().ToolEnable(false, new int[]{0,1,2,3,4});
         frame.getInfoLabel().setText("Szukam najkrótszego rozwiązania labiryntu...");
         MazeSolver mazeSolver = new MazeSolver();
-        mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd());
+        mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
 
         SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.getSave(), maze, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), graph);
+        solutionWriter.WriteSolution(mazeSolver.getSolution(), maze);
         frame.getContentPanel().getMazePanel().rePaint(maze);
         frame.getInfoLabel().setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
         frame.getMenu().setloadEnabled(true);
@@ -222,8 +223,12 @@ public class Main {
 
         frame.getToolPanel().ToolEnable(false, new int[]{0,1,2,3,4});
 
-        SolutionWriterWhole solutionWriterWhole = new SolutionWriterWhole();
-        solutionWriterWhole.solveMaze(mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), maze, graph);
+        MazeSolver mazeSolver = new MazeSolver();
+        mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 1);
+
+        SolutionWriter solutionWriter = new SolutionWriter();
+        solutionWriter.WriteSolution(mazeSolver.getSolution(), maze);
+
         frame.getContentPanel().getMazePanel().rePaint(maze);
         frame.getInfoLabel().setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
         frame.getMenu().setloadEnabled(true);
@@ -233,7 +238,6 @@ public class Main {
 
     private static void customChange( char c){
 
-        char colorNr;
         int[] switchSE;
         int[] customObject = new int[2];
 
@@ -247,24 +251,20 @@ public class Main {
 
         if(startEndInNoStartEnd != 0){
             if(startEndInNoStartEnd == 2 && c == 'S'){
-                maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'X');
+                maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
             } else if (startEndInNoStartEnd == 1 && c == 'E') {
-                maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'X');
+                maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
             }
         }
 
         if (  ifPath(customObject) ){
             
             if (c == 'S'){
-
-                colorNr = 'P';
                 switchSE = new int[]{4,5};
                 frame.getToolPanel().getCustomPanel().changeStartPos(customObject[0], customObject[1]);
                 frame.getInfoLabel().setText("Wybrano nowy Start. Trwa jego lokalizowanie...");
 
             } else {
-
-                colorNr = 'K';
                 switchSE = new int[]{5,4};
                 frame.getToolPanel().getCustomPanel().changeEndPos(customObject[0], customObject[1]);
                 frame.getInfoLabel().setText("Wybrano nowy End. Trwa jego lokalizowanie...");
@@ -275,14 +275,15 @@ public class Main {
 
             mazeAnalyzer.customAnalyzer(customObject, c);
 
-            maze.setCharFromMaze(customObject[0], customObject[1], colorNr);
-            frame.getContentPanel().getMazePanel().rePaint(maze);
-
             if (c == 'S'){
+                maze.changeMazeCellToStart(customObject[1], customObject[0]);
                 maze.setStart(customObject[0], customObject[1]);
             } else {
+                maze.changeMazeCellToEnd(customObject[1], customObject[0]);
                 maze.setEnd(customObject[0], customObject[1]);
             }
+            
+            frame.getContentPanel().getMazePanel().rePaint(maze);
 
             if (noStartEnd == 2){
                 noStartEnd--;
@@ -354,15 +355,10 @@ public class Main {
 
     static void InOutWall(){
 
-        maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'X');
-        maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'X');
+        maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
+        maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
         
         frame.getContentPanel().getMazePanel().rePaint(maze);
-/* 
-        if( startEndSwitch == 0){
-            frame.getToolPanel().ToolEnable(true, new int[]{2,3});
-        }
-*/
         frame.getToolPanel().ToolEnable(false, new int[]{1});
         
     }
