@@ -252,8 +252,11 @@ public class Main {
         if(startEndInNoStartEnd != 0){
             if(startEndInNoStartEnd == 2 && c == 'S'){
                 maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
+                maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'P');
+                
             } else if (startEndInNoStartEnd == 1 && c == 'E') {
                 maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
+                maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'K');
             }
         }
 
@@ -277,9 +280,11 @@ public class Main {
 
             if (c == 'S'){
                 maze.changeMazeCellToStart(customObject[1], customObject[0]);
+                maze.setCharFromMaze(customObject[0], customObject[1], 'X');
                 maze.setStart(customObject[0], customObject[1]);
             } else {
                 maze.changeMazeCellToEnd(customObject[1], customObject[0]);
+                maze.setCharFromMaze(customObject[0], customObject[1], 'X');
                 maze.setEnd(customObject[0], customObject[1]);
             }
             
@@ -356,7 +361,9 @@ public class Main {
     static void InOutWall(){
 
         maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
+        maze.setCharFromMaze(maze.getStart()[0] , maze.getStart()[1], 'X');
         maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
+        maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'X');
         
         frame.getContentPanel().getMazePanel().rePaint(maze);
         frame.getToolPanel().ToolEnable(false, new int[]{1});

@@ -5,6 +5,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,7 @@ public class CustomPanel extends JPanel {
     private JLabel start;
     private JButton pickStart = new JButton();
     private JTextArea currentPosStart;
+    private JTextArea XYStart;
 
     private Integer startPosX = null;
     private Integer startPosY = null;
@@ -31,6 +34,7 @@ public class CustomPanel extends JPanel {
     private JLabel end;
     private JButton pickEnd = new JButton();
     private JTextArea currentPosEnd;
+    private JTextArea XYEnd;
 
     private Integer endPosX = null;
     private Integer endPosY = null;
@@ -103,32 +107,56 @@ public class CustomPanel extends JPanel {
                         currentPosStart.setEditable(true);
                         this.typeStartOn++;
                         maze.pickCustom(1);
+                        infoLabel.setText("When you finish typing coordinates in, please click \"Done\"");
+                        typeStart.setText("Done");
+
                     } else {
 
                         currentPosStart.setEditable(false);
+                        typeStart.setText("Type Start");
 
-                        Pattern pattern = Pattern.compile("X:(\\d+)\nY:(\\d+)");
+                        Pattern pattern = Pattern.compile("\\d+");
                         Matcher matcher = pattern.matcher(currentPosStart.getText());
-
+                        int firstInt = 0;
+                        int secondInt = 0;
+                        int found = 0;
+                        
                         if (matcher.find()) {
-                            Integer number1 = Integer.valueOf(matcher.group(1));
-                            Integer number2 = Integer.valueOf(matcher.group(2));
-                            System.out.println("Number 1: " + number1);
-                            System.out.println("Number 2: " + number2);
-                            maze.setCustomStart(number1, number2);
-                            customStartListener.actionPerformed(e);
-
-                        } else {
+                            firstInt = Integer.parseInt(matcher.group());
+                            System.out.println("First integer: " + firstInt);
+                        }
+                
+                        if (matcher.find()) {
+                            secondInt = Integer.parseInt(matcher.group());
+                            System.out.println("Second integer: " + secondInt);
+                        }
+                        
+                        if( found == 2){
                             this.typeStartOn = 0;
-                            JOptionPane.showMessageDialog(contentPanel, "Nie poprawne koordynaty. Powinny być w postaci X:<liczba całkowita> Y:<liczba całkowita>", "typeError", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(contentPanel, "Incorrect coordinates. They should look like: <integer> <integer>", "typeError", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            maze.setCustomStart(firstInt, secondInt);
+                            customStartListener.actionPerformed(e);
                         }
                     }
 
                 });
 
         currentPosStart = new JTextArea();
-        currentPosStart.setText("X:" + startPosX + "\nY:" + startPosY);
         currentPosStart.setEditable(false);
+
+        currentPosStart.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    e.consume();
+                }
+            }
+        });
+
+        XYStart = new JTextArea();
+        XYStart.setText("X:\nY:");
+        XYStart.setEditable(false);
 
         startPanel = new JPanel();
         startPanel.setPreferredSize(new Dimension(140, 120));
@@ -137,7 +165,9 @@ public class CustomPanel extends JPanel {
         startPanel.add(start);
         startPanel.add(pickStart);
         startPanel.add(typeStart);
+        startPanel.add(XYStart);
         startPanel.add(currentPosStart);
+        
 
         startPanel.setVisible(true);
 
@@ -171,32 +201,56 @@ public class CustomPanel extends JPanel {
                         infoLabel.setText("Wpisz koordynaty nowego Endu");
                         currentPosEnd.setEditable(true);
                         maze.pickCustom(1);
+                        infoLabel.setText("When you finish typing coordinates in, please click \"Done\"");
+                        typeEnd.setText("Done");
                     } else {
 
                         currentPosEnd.setEditable(false);
-                        Pattern pattern = Pattern.compile("X:(\\d+)\nY:(\\d+)");
+                        typeEnd.setText("Type End");
+
+                        Pattern pattern = Pattern.compile("\\d+");
                         Matcher matcher = pattern.matcher(currentPosEnd.getText());
 
-                        if (matcher.find()) {
-                            Integer number1 = Integer.valueOf(matcher.group(1));
-                            Integer number2 = Integer.valueOf(matcher.group(2));
-                            System.out.println("Number 1: " + number1);
-                            System.out.println("Number 2: " + number2);
-                            maze.setCustomEnd(number1, number2);
-                            customEndListener.actionPerformed(e);
+                        int firstInt = 0;
+                        int secondInt = 0;
+                        int found = 0;
 
+                        if (matcher.find()) {
+                            firstInt = Integer.parseInt(matcher.group());
+                            System.out.println("First integer: " + firstInt);
+                        }
+                
+                        if (matcher.find()) {
+                            secondInt = Integer.parseInt(matcher.group());
+                            System.out.println("Second integer: " + secondInt);
+                        }
+                        
+                        if( found == 2){
+                            this.typeEndOn = 0;
+                            JOptionPane.showMessageDialog(contentPanel, "Incorrect coordinates. They should look like: <integer> <integer>", "typeError", JOptionPane.ERROR_MESSAGE);
                         } else {
-                            typeEndOn = 0;
-                            JOptionPane.showMessageDialog(contentPanel, "Nie poprawne koordynaty. Powinny być w postaci X:<liczba całkowita> Y:<liczba całkowita>", "typeError", JOptionPane.ERROR_MESSAGE);
-                            
+                            maze.setCustomEnd(firstInt, secondInt);
+                            customEndListener.actionPerformed(e);
                         }
                     }
 
                 });
 
         currentPosEnd = new JTextArea();
-        currentPosEnd.setText("X:" + endPosX + "\nY:" + endPosY);
         currentPosEnd.setEditable(false);
+        
+        currentPosEnd.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    e.consume();
+                }
+            }
+        });
+
+        XYEnd = new JTextArea();
+        XYEnd.setText("X:\nY:");
+        XYEnd.setEditable(false);
 
         endPanel = new JPanel();
         endPanel.setPreferredSize(new Dimension(140, 120));
@@ -205,6 +259,8 @@ public class CustomPanel extends JPanel {
         endPanel.add(end);
         endPanel.add(pickEnd);
         endPanel.add(typeEnd);
+        
+        endPanel.add(XYEnd);
         endPanel.add(currentPosEnd);
         endPanel.setVisible(true);
 
@@ -243,13 +299,13 @@ public class CustomPanel extends JPanel {
     public void changeStartPos(Integer startPosX, Integer startPosY) {
         this.startPosX = startPosX;
         this.startPosY = startPosY;
-        currentPosStart.setText("X:" + startPosX + "\nY:" + startPosY);
+        currentPosStart.setText(" \n ");
     }
 
     public void changeEndPos(Integer endPosX, Integer endPosY) {
         this.endPosX = endPosX;
         this.endPosY = endPosY;
-        currentPosEnd.setText("X:" + endPosX + "\nY:" + endPosY);
+        currentPosEnd.setText(" \n ");
     }
 
     public boolean[] ifNull() {
