@@ -325,7 +325,7 @@ public class MazeAnalyzer {
 
         if (h == 1 || (h == 2 && ((G == 1 || D == 1) && (L == 1 || P == 1))) || h >= 3) { // zaulek
 
-            d = SearchForNode(custom[0] + 1, custom[1]);
+            d = SearchForNode(custom[0], custom[1]);
             if (c == 'S') {
                 this.start = d;
             } else {
@@ -336,12 +336,12 @@ public class MazeAnalyzer {
 
             if (c == 'S' && start != -2) {
 
-                graph.setNodeValue(start, 8, custom[0] + 1);
+                graph.setNodeValue(start, 8, custom[0]);
                 graph.setNodeValue(start, 9, custom[1]);
                 object = start;
             } else if (c == 'E' && end != -2) {
 
-                graph.setNodeValue(end, 8, custom[0] + 1);
+                graph.setNodeValue(end, 8, custom[0]);
                 graph.setNodeValue(end, 9, custom[1]);
 
                 object = end;
@@ -375,7 +375,7 @@ public class MazeAnalyzer {
             }
 
             ID1 = searchCustom(z[4], custom, c);
-            d = SearchForNode((ID1[0]) + 1, ID1[1]);
+            d = SearchForNode((ID1[0]), ID1[1]);
 
             graph.setNodeValue(object, z[0], d);
             graph.setNodeValue(object, z[1], ID1[2]);
@@ -384,7 +384,7 @@ public class MazeAnalyzer {
             graph.setNodeValue(d, z[3], ID1[2]);
 
             ID2 = searchCustom(z[5], custom, c);
-            d = SearchForNode((ID2[0]) + 1, ID2[1]);
+            d = SearchForNode((ID2[0]), ID2[1]);
 
             graph.setNodeValue(object, z[2], d);
             graph.setNodeValue(object, z[3], ID2[2]);

@@ -79,6 +79,10 @@ public class Maze {
     public void changeMazeCellToSolution(int row, int column){
         mazeCells[row][column] = new SolutionCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10  );
     }
+
+    public void changeMazeCellToWall(int row, int column){
+        mazeCells[row][column] = new WallCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10  );
+    }
     
     public MazeCell[][] getMazeCells(){
         return this.mazeCells;
