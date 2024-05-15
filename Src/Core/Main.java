@@ -8,16 +8,24 @@ import GUI.Frame;
 
 public class Main {
 
+    static TerminalInterface terminalInterface;
     static Frame frame;
+
     static MazeAnalyzer mazeAnalyzer;
     static FileReader fileReader;
+
     static Maze maze;
     static Graph graph;
+
     static File file;
+
     static Integer[] oldStartPosition = new Integer[2];
     static Integer[] oldEndPosition = new Integer[2];
+
     static int startEndSwitch = 0;
+
     static char[][] x;
+
     static int noStartEnd = 0;
     static int startEndInNoStartEnd = 0;
     
@@ -83,12 +91,15 @@ public class Main {
                 changeStartEndIntoWall();
             }
         };
+
+        
         maze = new Maze();
-        frame = new Frame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, 
-        customEndListener, wholeListener, customListener, maze);
+        
+        frame = new Frame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener, wholeListener, customListener, maze);
         frame.getMenu().setexportEnabled(false);
         frame.getInfoLabel().setText("Proszę załadować labirynt Files->Load Maze.");
-        
+
+        terminalInterface = new TerminalInterface();
         
     }
 
