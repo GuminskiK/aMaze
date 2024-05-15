@@ -31,7 +31,7 @@ public class MazeSolver {
         nodeMap = new ArrayList<>();
         solutionBlocks = new ArrayList<>();
 
-        for (int i = 0; i < graph.getNodes().size(); i++) {
+        for (int i = 0; i < graph.getNodesConnections().size(); i++) {
 
             nodeMap.add(new Node(i));
 
@@ -69,7 +69,7 @@ public class MazeSolver {
         Integer idNext = null;
 
         while (y != 8) {
-            idNext = graph.getNodeValue(idNow, y);
+            idNext = graph.getNodeConnectionsValue(idNow, y);
             // następny nieodwiedzony, a długość połączenia nie równa 0;
             if (idNext != null) {
                 if (nodeMap.get(idNext).visited == false) {
@@ -82,9 +82,9 @@ public class MazeSolver {
         if (y == 8 || idNow == end) {
             idNext = -1;
         } else {
-            lengthNow += graph.getNodeValue(idNow, y + 1);
+            lengthNow += graph.getNodeConnectionsValue(idNow, y + 1);
             nodeMap.get(idNext).directionFrom = searchForDirection(idNext, idNow);
-            solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeValue(idNow, y + 1), searchForDirection(idNow, idNext)));
+            solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeConnectionsValue(idNow, y + 1), searchForDirection(idNow, idNext)));
         }
         return idNext;
 
@@ -105,16 +105,16 @@ public class MazeSolver {
                 }
             }
             
-            lengthNow -= graph.getNodeValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1);
+            lengthNow -= graph.getNodeConnectionsValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1);
             //solutionBlocks.remove(solutionBlocks.size() - 1);
-            idNext = graph.getNodeValue(idNow, (int) nodeMap.get(idNow).directionFrom * 2);
+            idNext = graph.getNodeConnectionsValue(idNow, (int) nodeMap.get(idNow).directionFrom * 2);
 
             if (mode == 0){ //shortest
                 solutionBlocks.remove(solutionBlocks.size() - 1);
                 nodeMap.get(idNext).directionToMin = searchForDirection(idNext, idNow) + 1;
                 nodeMap.get(idNow).visited = false; 
             } else { //whole
-                solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1), searchForDirection(idNow, idNext)));
+                solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeConnectionsValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1), searchForDirection(idNow, idNext)));
                 nodeMap.get(idNext).directionToMin = searchForDirection(idNext, idNow);
             }
             
@@ -128,10 +128,10 @@ public class MazeSolver {
     private int searchForDirection(Integer idNext, Integer idNow) {
 
         int i = 0;
-        Integer ID = graph.getNodeValue(idNext, i);
+        Integer ID = graph.getNodeConnectionsValue(idNext, i);
         while ( !idNow.equals(ID)) {
             i += 2;
-            ID = graph.getNodeValue(idNext, i);
+            ID = graph.getNodeConnectionsValue(idNext, i);
         }
 
         return i / 2;

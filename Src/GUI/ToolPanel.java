@@ -18,7 +18,7 @@ public class ToolPanel extends JPanel{
     private JButton analyze = new JButton();
     private JButton custom = new JButton();
 
-    private CustomPanel customPanel;
+    private ChooseStartEndPanel chooseStartEndPanel;
 
     private JComboBox modes;
 
@@ -32,8 +32,8 @@ public class ToolPanel extends JPanel{
         this.setPreferredSize(new Dimension(150,50));
         //this.setLayout();
         
-        CreateToolButton( analyze, "Analyze maze", font);
-        CreateToolButton( custom, "Choose Start/End", font);
+        createToolButton( analyze, "Analyze maze", font);
+        createToolButton( custom, "Choose Start/End", font);
 
         analyze.addActionListener(
 
@@ -44,8 +44,8 @@ public class ToolPanel extends JPanel{
 
         custom.addActionListener(
 
-            (e) -> {ToolEnable(true, new int[]{3,4,5});
-                    ToolEnable(false, new int[]{2});
+            (e) -> {toolEnable(true, new int[]{3,4,5});
+                    toolEnable(false, new int[]{2});
                     customListener.actionPerformed(e);
                     infoLabel.setText("By wybrać nowy Start/End naciśnij Pick Start/Pick End lub Type Start/ Type End.");}
         );
@@ -67,17 +67,17 @@ public class ToolPanel extends JPanel{
         modes.setEnabled(false);
         
 
-        customPanel = new CustomPanel(contentPanel, modes, customStartListener, customEndListener, infoLabel, customListener, maze);
-        customPanel.setVisible(false);
+        chooseStartEndPanel = new ChooseStartEndPanel(contentPanel, modes, customStartListener, customEndListener, infoLabel, customListener, maze);
+        chooseStartEndPanel.setVisible(false);
 
         this.add(analyze);
         this.add(custom);
-        this.add(customPanel);
+        this.add(chooseStartEndPanel);
         this.add(modes);
 
     }
 
-    private void CreateToolButton( JButton button ,String txt, Font font){
+    private void createToolButton( JButton button ,String txt, Font font){
 
         button.setText(txt);
         button.setFont(font);
@@ -90,7 +90,7 @@ public class ToolPanel extends JPanel{
         modes.setSelectedIndex(0);
     }
 
-    public void ToolEnable(boolean x, int[] y){
+    public void toolEnable(boolean x, int[] y){
         
         for (int i = 0; i < y.length; i++){
             
@@ -106,13 +106,13 @@ public class ToolPanel extends JPanel{
                     modes.setEnabled(x);
                     break;
                 case 3:
-                    customPanel.setVisible(x);
+                    chooseStartEndPanel.setVisible(x);
                     break;
                 case 4:
-                    customPanel.setPickStartEnabled(x);
+                    chooseStartEndPanel.setPickStartEnabled(x);
                     break;
                 case 5:
-                    customPanel.setPickEndEnabled(x);
+                    chooseStartEndPanel.setPickEndEnabled(x);
                     break;
                 default:
                     break;
@@ -120,8 +120,8 @@ public class ToolPanel extends JPanel{
         }    
     }
 
-    public CustomPanel getCustomPanel(){
-        return this.customPanel;
+    public ChooseStartEndPanel getChooseStartEndPanel(){
+        return this.chooseStartEndPanel;
     }
 
 }

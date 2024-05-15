@@ -2,13 +2,13 @@ package Core;
 
 import java.util.ArrayList;
 
-public class SolutionWriter {
+public class SolutionDrawer {
 
     private Maze maze;
     int currentColumn;
     int currentRow;
 
-    public void WriteSolution(ArrayList<SolutionBlock> solution, Maze maze){
+    public void drawSolution(ArrayList<SolutionBlock> solution, Maze maze){
 
         this.maze = maze;
         this.currentColumn = maze.getStart()[0];

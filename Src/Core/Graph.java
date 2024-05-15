@@ -3,44 +3,44 @@ import java.util.ArrayList;
 
 public class Graph {
 
-    private ArrayList<Integer[]> nodes;
-    private Integer currentNodesNumber;
+    private ArrayList<Integer[]> nodesConnections;
+    private Integer currentNodesConnectionsNumber;
 
     Graph(){
         
-        this.nodes = new ArrayList<>();
-        this.currentNodesNumber = 0;
+        this.nodesConnections = new ArrayList<>();
+        this.currentNodesConnectionsNumber = 0;
     }
 
-    public ArrayList<Integer[]> getNodes(){
-        return nodes;
+    public ArrayList<Integer[]> getNodesConnections(){
+        return nodesConnections;
     }
 
-    public void setNodeValue( int ID, int position, Integer value) {
-        nodes.get(ID)[position] = value;
+    public void setNodeConnectionsValue( int ID, int position, Integer value) {
+        nodesConnections.get(ID)[position] = value;
     }
 
-    public Integer getNodeValue( int ID, int position) {
-        return nodes.get(ID)[position];
+    public Integer getNodeConnectionsValue( int ID, int position) {
+        return nodesConnections.get(ID)[position];
     }
 
-    public void addNode(){
-        nodes.add(nullNode());
+    public void addNodeConnection(){
+        nodesConnections.add(nullNodeConnection());
     }
 
-    public Integer getCurrentNodes(){
-        return currentNodesNumber;
+    public Integer getCurrentNodesConnectionsNumber(){
+        return currentNodesConnectionsNumber;
     }
 
-    public Integer setCurrentNodes(){
-        return currentNodesNumber;
+    public void setCurrentConnectionsNodes(int currentNodesConnectionsNumber){
+        this.currentNodesConnectionsNumber = currentNodesConnectionsNumber;
     }
 
-    public void addCurrentNodes(){
-        currentNodesNumber++;
+    public void increaseCurrentNodesConnectionsNumber(){
+        currentNodesConnectionsNumber++;
     }
 
-    private Integer[] nullNode() {
+    private Integer[] nullNodeConnection() {
         Integer[] x = { null, null, null, null, null, null, null, null, null, null};
         return x;
     }

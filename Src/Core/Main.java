@@ -1,24 +1,21 @@
 package Core;
-import java.awt.Color;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import GUI.MyFrame;
+import GUI.Frame;
 
 public class Main {
 
-    static MyFrame frame;
+    static Frame frame;
     static MazeAnalyzer mazeAnalyzer;
     static FileReader fileReader;
     static Maze maze;
     static Graph graph;
     static File file;
-    static int columns;
-    static Color lastStartColor = new Color (0,0,0);
-    static Color lastEndColor = new Color (0,0,0);
-    static Integer[] oldCustomStart = new Integer[2];
-    static Integer[] oldCustomEnd = new Integer[2];
+    static Integer[] oldStartPosition = new Integer[2];
+    static Integer[] oldEndPosition = new Integer[2];
     static int startEndSwitch = 0;
     static char[][] x;
     static int noStartEnd = 0;
@@ -30,7 +27,7 @@ public class Main {
         ActionListener readListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                Read();
+                read();
             }
 
         };
@@ -38,7 +35,7 @@ public class Main {
         ActionListener analyzeListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                Analyze();
+                analyze();
             }
 
         };
@@ -46,7 +43,7 @@ public class Main {
         ActionListener shortestListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                Shortest();
+                shortest();
             }
 
         };
@@ -54,7 +51,7 @@ public class Main {
         ActionListener wholeListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                Whole();
+                whole();
             }
 
         };
@@ -69,25 +66,25 @@ public class Main {
         ActionListener customStartListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                customChange('S');
+                setStartEndNewPosition('S');
             }
         };
 
         ActionListener customEndListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                customChange('E');
+                setStartEndNewPosition('E');
             }
         };
 
         ActionListener customListener = new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                InOutWall();
+                changeStartEndIntoWall();
             }
         };
         maze = new Maze();
-        frame = new MyFrame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, 
+        frame = new Frame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, 
         customEndListener, wholeListener, customListener, maze);
         frame.getMenu().setexportEnabled(false);
         frame.getInfoLabel().setText("Proszę załadować labirynt Files->Load Maze.");
@@ -99,20 +96,20 @@ public class Main {
         frame.getContentPanel().setHelpEnabled();
     }
 
-    private static void Read(){
+    private static void read(){
 
         reset();
         frame.getInfoLabel().setText("Ładowanie labiryntu...");
         frame.getMenu().setloadEnabled(false);
-        frame.getToolPanel().ToolEnable(false, new int[]{0,1,2,3,4,5});
+        frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4,5});
 
         file = frame.getMenu().getFile();
         fileReader = new FileReader();
         
         if (frame.getMenu().getFileType().equals("txt")){
             
-            fileReader.CountRowsColumns(file);
-            x = fileReader.ReadFileTXT(file);
+            fileReader.countRowsColumns(file);
+            x = fileReader.readFileTXT(file);
             
         } else {
 
@@ -125,12 +122,12 @@ public class Main {
         maze.setColumns(fileReader.getColumns());
         maze.setRows(fileReader.getRows());
         maze.setMaze(x);
-        maze.MazeToMazeCells();
+        maze.mazeToMazeCells();
         
         //rysowanie
         frame.getContentPanel().addPanel(fileReader.getColumns(), fileReader.getRows());
 
-        frame.getToolPanel().ToolEnable(true, new int[]{0}); //Analyze
+        frame.getToolPanel().toolEnable(true, new int[]{0}); //Analyze
 
         startEndSwitch = 0;
 
@@ -138,61 +135,61 @@ public class Main {
 
     }
 
-    private static void Analyze(){
+    private static void analyze(){
         
         frame.getInfoLabel().setText("Analizowanie w toku...");
-        frame.getToolPanel().ToolEnable(false, new int[]{0});
+        frame.getToolPanel().toolEnable(false, new int[]{0});
 
         graph = new Graph();
 
         mazeAnalyzer = new MazeAnalyzer();
-        mazeAnalyzer.analyzeMaze(file, frame.getMenu().getFileType(), frame.getToolPanel().getCustomPanel(), maze, graph);
+        mazeAnalyzer.analyzeMaze(file, frame.getMenu().getFileType(), frame.getToolPanel().getChooseStartEndPanel(), maze, graph);
 
         if (maze.getStart()[0] == null){
-            oldCustomStart[0] = null;
-            oldCustomStart[1] = null;
+            oldStartPosition[0] = null;
+            oldStartPosition[1] = null;
         } else {
-            oldCustomStart[0] = maze.getStart()[0];
-            oldCustomStart[1] = maze.getStart()[1];
+            oldStartPosition[0] = maze.getStart()[0];
+            oldStartPosition[1] = maze.getStart()[1];
         }
         
         if (maze.getEnd()[0] == null){
-            oldCustomEnd[0] = null;
-            oldCustomEnd[1] = null;
+            oldEndPosition[0] = null;
+            oldEndPosition[1] = null;
         } else{
-            oldCustomEnd[0] = maze.getEnd()[0];
-            oldCustomEnd[1] = maze.getEnd()[1];
+            oldEndPosition[0] = maze.getEnd()[0];
+            oldEndPosition[1] = maze.getEnd()[1];
         }
 
 
-        frame.getToolPanel().ToolEnable(true, new int[]{1,2});
+        frame.getToolPanel().toolEnable(true, new int[]{1,2});
 
         noStartEnd = 0;
 
-        if (frame.getToolPanel().getCustomPanel().ifNull()[0] == true || frame.getToolPanel().getCustomPanel().ifNull()[1] == true){
+        if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true || frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
 
-            if (frame.getToolPanel().getCustomPanel().ifNull()[0] == true && frame.getToolPanel().getCustomPanel().ifNull()[1] == true){
+            if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true && frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
                 frame.getInfoLabel().setText("Proszę wybrać Start i End.");
-                frame.getToolPanel().ToolEnable(true, new int[]{3,4,5});
-                frame.getToolPanel().ToolEnable(false, new int[]{1,2});
-                frame.getToolPanel().getCustomPanel().setTypeStartEnabled(true);
-                frame.getToolPanel().getCustomPanel().setTypeEndEnabled(true);
+                frame.getToolPanel().toolEnable(true, new int[]{3,4,5});
+                frame.getToolPanel().toolEnable(false, new int[]{1,2});
+                frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
+                frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
                 noStartEnd += 2;
-            } else if (frame.getToolPanel().getCustomPanel().ifNull()[0] == true){
+            } else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true){
                 frame.getInfoLabel().setText("Proszę wybrać Start.");
-                frame.getToolPanel().ToolEnable(true, new int[]{3,4});
-                frame.getToolPanel().ToolEnable(false, new int[]{1,2});
-                frame.getToolPanel().getCustomPanel().setTypeStartEnabled(true);
-                frame.getToolPanel().getCustomPanel().setTypeEndEnabled(false);
+                frame.getToolPanel().toolEnable(true, new int[]{3,4});
+                frame.getToolPanel().toolEnable(false, new int[]{1,2});
+                frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
+                frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(false);
 
                 noStartEnd++;
                 startEndInNoStartEnd = 1;
             }
-            else if (frame.getToolPanel().getCustomPanel().ifNull()[1] == true){
+            else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
                 frame.getInfoLabel().setText("Proszę wybrać End.");
-                frame.getToolPanel().ToolEnable(true, new int[]{3,5});
-                frame.getToolPanel().getCustomPanel().setTypeStartEnabled(false);
-                frame.getToolPanel().getCustomPanel().setTypeEndEnabled(true);
+                frame.getToolPanel().toolEnable(true, new int[]{3,5});
+                frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(false);
+                frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
                 noStartEnd++;
                 startEndInNoStartEnd = 2;
             }
@@ -204,30 +201,30 @@ public class Main {
 
     }
 
-    private static void Shortest(){
+    private static void shortest(){
 
-        frame.getToolPanel().ToolEnable(false, new int[]{0,1,2,3,4});
+        frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
         frame.getInfoLabel().setText("Szukam najkrótszego rozwiązania labiryntu...");
         MazeSolver mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
 
-        SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.getSolution(), maze);
+        SolutionDrawer solutionWriter = new SolutionDrawer();
+        solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
         frame.getContentPanel().getMazePanel().rePaint(maze);
         frame.getInfoLabel().setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
         frame.getMenu().setloadEnabled(true);
         frame.getMenu().setexportEnabled(true);
     }
 
-    private static void Whole(){
+    private static void whole(){
 
-        frame.getToolPanel().ToolEnable(false, new int[]{0,1,2,3,4});
+        frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
 
         MazeSolver mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 1);
 
-        SolutionWriter solutionWriter = new SolutionWriter();
-        solutionWriter.WriteSolution(mazeSolver.getSolution(), maze);
+        SolutionDrawer solutionWriter = new SolutionDrawer();
+        solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
 
         frame.getContentPanel().getMazePanel().rePaint(maze);
         frame.getInfoLabel().setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
@@ -236,27 +233,27 @@ public class Main {
 
     }
 
-    private static void customChange( char c){
+    private static void setStartEndNewPosition( char c){
 
         int[] switchSE;
         int[] customObject = new int[2];
 
         if (c == 'S'){
-            customObject[0] = maze.getCustomStart()[0];
-            customObject[1] = maze.getCustomStart()[1];
+            customObject[0] = maze.getnewStartPosition()[0];
+            customObject[1] = maze.getnewStartPosition()[1];
         } else {
-            customObject[0] = maze.getCustomEnd()[0];
-            customObject[1] = maze.getCustomEnd()[1];
+            customObject[0] = maze.getNewEndPosition()[0];
+            customObject[1] = maze.getNewEndPosition()[1];
         }
 
         if(startEndInNoStartEnd != 0){
             if(startEndInNoStartEnd == 2 && c == 'S'){
                 maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
-                maze.setCharFromMaze(maze.getStart()[0], maze.getStart()[1], 'P');
+                maze.setCharFromMazeInChar2DArray(maze.getStart()[0], maze.getStart()[1], 'P');
                 
             } else if (startEndInNoStartEnd == 1 && c == 'E') {
                 maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
-                maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'K');
+                maze.setCharFromMazeInChar2DArray(maze.getEnd()[0], maze.getEnd()[1], 'K');
             }
         }
 
@@ -264,27 +261,27 @@ public class Main {
             
             if (c == 'S'){
                 switchSE = new int[]{4,5};
-                frame.getToolPanel().getCustomPanel().changeStartPos(customObject[0], customObject[1]);
+                frame.getToolPanel().getChooseStartEndPanel().changeStartPos(customObject[0], customObject[1]);
                 frame.getInfoLabel().setText("Wybrano nowy Start. Trwa jego lokalizowanie...");
 
             } else {
                 switchSE = new int[]{5,4};
-                frame.getToolPanel().getCustomPanel().changeEndPos(customObject[0], customObject[1]);
+                frame.getToolPanel().getChooseStartEndPanel().changeEndPos(customObject[0], customObject[1]);
                 frame.getInfoLabel().setText("Wybrano nowy End. Trwa jego lokalizowanie...");
 
             }
 
-            frame.getToolPanel().ToolEnable(false, new int[] {2});
+            frame.getToolPanel().toolEnable(false, new int[] {2});
 
             mazeAnalyzer.customAnalyzer(customObject, c);
 
             if (c == 'S'){
                 maze.changeMazeCellToStart(customObject[1], customObject[0]);
-                maze.setCharFromMaze(customObject[0], customObject[1], 'X');
+                maze.setCharFromMazeInChar2DArray(customObject[0], customObject[1], 'X');
                 maze.setStart(customObject[0], customObject[1]);
             } else {
                 maze.changeMazeCellToEnd(customObject[1], customObject[0]);
-                maze.setCharFromMaze(customObject[0], customObject[1], 'X');
+                maze.setCharFromMazeInChar2DArray(customObject[0], customObject[1], 'X');
                 maze.setEnd(customObject[0], customObject[1]);
             }
             
@@ -293,25 +290,25 @@ public class Main {
             if (noStartEnd == 2){
                 noStartEnd--;
             } else {
-                frame.getToolPanel().ToolEnable(true, new int[]{2});
+                frame.getToolPanel().toolEnable(true, new int[]{2});
             }
             
             startEndSwitch++;
 
             if (startEndSwitch == 2){
-                frame.getToolPanel().ToolEnable(false, switchSE);
-                frame.getToolPanel().getCustomPanel().setTypeStartEnabled(false);
-                frame.getToolPanel().getCustomPanel().setTypeEndEnabled(false);
+                frame.getToolPanel().toolEnable(false, switchSE);
+                frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(false);
+                frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(false);
             } else {
                 if (c == 'S'){
-                    frame.getToolPanel().getCustomPanel().setTypeStartEnabled(false);
-                    frame.getToolPanel().getCustomPanel().setTypeEndEnabled(true);
+                    frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(false);
+                    frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
                 } else {
-                    frame.getToolPanel().getCustomPanel().setTypeStartEnabled(true);
-                    frame.getToolPanel().getCustomPanel().setTypeEndEnabled(false);    
+                    frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
+                    frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(false);    
                 }
-                frame.getToolPanel().ToolEnable(false, new int[]{switchSE[0]});
-                frame.getToolPanel().ToolEnable(true, new int[]{switchSE[1]});
+                frame.getToolPanel().toolEnable(false, new int[]{switchSE[0]});
+                frame.getToolPanel().toolEnable(true, new int[]{switchSE[1]});
             }
 
             if (c == 'S'){
@@ -334,23 +331,23 @@ public class Main {
         } else {
 
             if (c == 'S'){
-                maze.setCustomStart(oldCustomStart[0], oldCustomStart[1]); 
+                maze.setNewStartPosition(oldStartPosition[0], oldStartPosition[1]); 
                 frame.customError();
                 if (maze.whoPickedCustom() == 0){
-                    frame.getToolPanel().ToolEnable(true, new int[]{4});
+                    frame.getToolPanel().toolEnable(true, new int[]{4});
                 } else {
-                    frame.getToolPanel().getCustomPanel().setTypeStartEnabled(true);
-                    frame.getToolPanel().getCustomPanel().setTypeStartOn(0);
+                    frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
+                    frame.getToolPanel().getChooseStartEndPanel().setTypeStartOn(0);
                 }
                 
             } else {
-                maze.setCustomEnd(oldCustomEnd[0], oldCustomEnd[1]);
+                maze.setNewEndPosition(oldEndPosition[0], oldEndPosition[1]);
                 frame.customError();
                 if (maze.whoPickedCustom() == 0){
-                    frame.getToolPanel().ToolEnable(true, new int[]{5});
+                    frame.getToolPanel().toolEnable(true, new int[]{5});
                 } else {
-                    frame.getToolPanel().getCustomPanel().setTypeEndEnabled(true);
-                    frame.getToolPanel().getCustomPanel().setTypeEndOn(0);
+                    frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
+                    frame.getToolPanel().getChooseStartEndPanel().setTypeEndOn(0);
                 }
                 
             }
@@ -358,27 +355,27 @@ public class Main {
         }
     }
 
-    static void InOutWall(){
+    static void changeStartEndIntoWall(){
 
         maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
-        maze.setCharFromMaze(maze.getStart()[0] , maze.getStart()[1], 'X');
+        maze.setCharFromMazeInChar2DArray(maze.getStart()[0] , maze.getStart()[1], 'X');
         maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
-        maze.setCharFromMaze(maze.getEnd()[0], maze.getEnd()[1], 'X');
+        maze.setCharFromMazeInChar2DArray(maze.getEnd()[0], maze.getEnd()[1], 'X');
         
         frame.getContentPanel().getMazePanel().rePaint(maze);
-        frame.getToolPanel().ToolEnable(false, new int[]{1});
+        frame.getToolPanel().toolEnable(false, new int[]{1});
         
     }
 
     private static void reset(){
         noStartEnd = 0;
         startEndInNoStartEnd = 0;
-        frame.getToolPanel().getCustomPanel().changeStartPos(null,null);
-        frame.getToolPanel().getCustomPanel().changeEndPos(null,null);
+        frame.getToolPanel().getChooseStartEndPanel().changeStartPos(null,null);
+        frame.getToolPanel().getChooseStartEndPanel().changeEndPos(null,null);
         frame.getMenu().setexportEnabled(false);
-        frame.getToolPanel().getCustomPanel().reset();
-        frame.getToolPanel().getCustomPanel().setTypeStartEnabled(true);
-        frame.getToolPanel().getCustomPanel().setTypeEndEnabled(true);
+        frame.getToolPanel().getChooseStartEndPanel().reset();
+        frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
+        frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
         frame.getToolPanel().resetComboBoX();
         maze.reset();
     }
@@ -387,7 +384,7 @@ public class Main {
 
         boolean x = false;
         if (customObject[0] < maze.getColumns() && customObject[1] < maze.getColumns()){
-            if (maze.getCharFromMaze(customObject[0], customObject[1]) == ' '){
+            if (maze.getCharFromMazeInChar2DArray(customObject[0], customObject[1]) == ' '){
                 x = true;
             }
         }

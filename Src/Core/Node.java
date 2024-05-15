@@ -7,6 +7,7 @@ public class Node {
     public boolean visited;
 
     Node(int id){
+        
         this.id = id;
         this.directionToMin = 0;
         this.visited = false;

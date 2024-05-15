@@ -14,7 +14,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
 
-public class MyFrame extends JFrame{
+public class Frame extends JFrame{
 
     private  Menu menuBar;
     private  ContentPanel contentPanel;
@@ -23,7 +23,7 @@ public class MyFrame extends JFrame{
     private  JLabel infoLabel = new JLabel();
 
 
-    public MyFrame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, 
+    public Frame(ActionListener readListener, ActionListener analyzeListener, ActionListener shortestListener, 
     ActionListener helpListener, ActionListener customStartListener, ActionListener customEndListener,
     ActionListener wholeListener, ActionListener customListener, Maze maze){
 

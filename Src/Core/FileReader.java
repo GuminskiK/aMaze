@@ -9,7 +9,7 @@ public class FileReader {
     private int columns;
     private int rows;
     
-    public void CountRowsColumns(File file) {
+    public void countRowsColumns(File file) {
 
         columns = 0;
         rows = 0;
@@ -34,16 +34,16 @@ public class FileReader {
 
     }
 
-    public char[][] ReadFileTXT(File file) {
+    public char[][] readFileTXT(File file) {
 
-        char[][] x = new char[rows][columns];
+        char[][] mazeInChar2DArray = new char[rows][columns];
 
         try {
             Scanner scanner = new Scanner(file);
             for (int i = 0; i < this.rows; i++) {
 
                 String line = scanner.nextLine();
-                System.arraycopy(line.toCharArray(), 0, x[i], 0, line.length());
+                System.arraycopy(line.toCharArray(), 0, mazeInChar2DArray[i], 0, line.length());
 
             }
             scanner.close();
@@ -52,7 +52,7 @@ public class FileReader {
             e.printStackTrace();
         }
 
-        return x;
+        return mazeInChar2DArray;
     }
 
 

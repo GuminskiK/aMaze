@@ -117,9 +117,9 @@ public class ContentPanel extends JPanel {
                 int x = e.getX();
                 int y = e.getY();
                 if ( c == 'S'){
-                    maze.setCustomStart((x-5)/10, (y-5)/10);
+                    maze.setNewStartPosition((x-5)/10, (y-5)/10);
                 } else {
-                    maze.setCustomEnd((x-5)/10, (y-5)/10);
+                    maze.setNewEndPosition((x-5)/10, (y-5)/10);
                 }
                 mazePanel.removeMouseListener(mazePanel.getMouseListeners()[0]);
                 listener.actionPerformed(null);

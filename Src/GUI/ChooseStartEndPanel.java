@@ -19,13 +19,13 @@ import javax.swing.JTextArea;
 
 import Core.Maze;
 
-public class CustomPanel extends JPanel {
+public class ChooseStartEndPanel extends JPanel {
 
     private JPanel startPanel;
     private JLabel start;
     private JButton pickStart = new JButton();
     private JTextArea currentPosStart;
-    private JTextArea XYStart;
+    private JTextArea xYStart;
 
     private Integer startPosX = null;
     private Integer startPosY = null;
@@ -34,7 +34,7 @@ public class CustomPanel extends JPanel {
     private JLabel end;
     private JButton pickEnd = new JButton();
     private JTextArea currentPosEnd;
-    private JTextArea XYEnd;
+    private JTextArea xYEnd;
 
     private Integer endPosX = null;
     private Integer endPosY = null;
@@ -47,7 +47,7 @@ public class CustomPanel extends JPanel {
 
     private Font font = new Font("Dialog", Font.BOLD, 10);
 
-    CustomPanel(ContentPanel contentPanel, JComboBox modes, ActionListener customStartListener,
+    ChooseStartEndPanel(ContentPanel contentPanel, JComboBox modes, ActionListener customStartListener,
             ActionListener customEndListener, JLabel infoLabel, ActionListener customListener, Maze maze) {
 
         this.typeStartOn = 0;
@@ -75,7 +75,7 @@ public class CustomPanel extends JPanel {
 
         start = new JLabel("start");
 
-        CreateToolButton(pickStart, "Pick Start", font);
+        createToolButton(pickStart, "Pick Start", font);
         pickStart.addActionListener(
 
                 (e) -> {
@@ -89,7 +89,7 @@ public class CustomPanel extends JPanel {
                     maze.pickCustom(0);
                 });
 
-        CreateToolButton(typeStart, "Type Start", font);
+        createToolButton(typeStart, "Type Start", font);
         typeStart.setVisible(true);
 
         typeStart.addActionListener(
@@ -135,7 +135,7 @@ public class CustomPanel extends JPanel {
                             this.typeStartOn = 0;
                             JOptionPane.showMessageDialog(contentPanel, "Incorrect coordinates. They should look like: <integer> <integer>", "typeError", JOptionPane.ERROR_MESSAGE);
                         } else {
-                            maze.setCustomStart(firstInt, secondInt);
+                            maze.setNewStartPosition(firstInt, secondInt);
                             customStartListener.actionPerformed(e);
                         }
                     }
@@ -154,9 +154,9 @@ public class CustomPanel extends JPanel {
             }
         });
 
-        XYStart = new JTextArea();
-        XYStart.setText("X:\nY:");
-        XYStart.setEditable(false);
+        xYStart = new JTextArea();
+        xYStart.setText("X:\nY:");
+        xYStart.setEditable(false);
 
         startPanel = new JPanel();
         startPanel.setPreferredSize(new Dimension(140, 120));
@@ -165,7 +165,7 @@ public class CustomPanel extends JPanel {
         startPanel.add(start);
         startPanel.add(pickStart);
         startPanel.add(typeStart);
-        startPanel.add(XYStart);
+        startPanel.add(xYStart);
         startPanel.add(currentPosStart);
         
 
@@ -173,7 +173,7 @@ public class CustomPanel extends JPanel {
 
         end = new JLabel("end");
 
-        CreateToolButton(pickEnd, "Pick End", font);
+        createToolButton(pickEnd, "Pick End", font);
         pickEnd.addActionListener(
 
                 (e) -> {
@@ -186,7 +186,7 @@ public class CustomPanel extends JPanel {
                     contentPanel.start(EndAL, 'E', contentPanel, customEndListener);
                     maze.pickCustom(0);
                 });
-        CreateToolButton(typeEnd, "Type End", font);
+        createToolButton(typeEnd, "Type End", font);
         typeEnd.setVisible(true);
         typeEnd.addActionListener(
 
@@ -229,7 +229,7 @@ public class CustomPanel extends JPanel {
                             this.typeEndOn = 0;
                             JOptionPane.showMessageDialog(contentPanel, "Incorrect coordinates. They should look like: <integer> <integer>", "typeError", JOptionPane.ERROR_MESSAGE);
                         } else {
-                            maze.setCustomEnd(firstInt, secondInt);
+                            maze.setNewEndPosition(firstInt, secondInt);
                             customEndListener.actionPerformed(e);
                         }
                     }
@@ -248,9 +248,9 @@ public class CustomPanel extends JPanel {
             }
         });
 
-        XYEnd = new JTextArea();
-        XYEnd.setText("X:\nY:");
-        XYEnd.setEditable(false);
+        xYEnd = new JTextArea();
+        xYEnd.setText("X:\nY:");
+        xYEnd.setEditable(false);
 
         endPanel = new JPanel();
         endPanel.setPreferredSize(new Dimension(140, 120));
@@ -260,7 +260,7 @@ public class CustomPanel extends JPanel {
         endPanel.add(pickEnd);
         endPanel.add(typeEnd);
         
-        endPanel.add(XYEnd);
+        endPanel.add(xYEnd);
         endPanel.add(currentPosEnd);
         endPanel.setVisible(true);
 
@@ -271,7 +271,7 @@ public class CustomPanel extends JPanel {
         this.setVisible(true);
     }
 
-    private void CreateToolButton(JButton button, String txt, Font font) {
+    private void createToolButton(JButton button, String txt, Font font) {
 
         button.setText(txt);
         button.setFont(font);

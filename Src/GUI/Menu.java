@@ -17,7 +17,7 @@ public class Menu extends JMenuBar implements ActionListener {
 
     private JMenu fileMenu;
     private JMenu helpMenu;
-    private MyFrame frame;
+    private Frame frame;
 
     private JMenuItem loadItem;
     private JMenuItem exportItem;
@@ -32,7 +32,7 @@ public class Menu extends JMenuBar implements ActionListener {
 
     private String fileType;
 
-    Menu(ActionListener listener, ActionListener helpListener, MyFrame frame) {
+    Menu(ActionListener listener, ActionListener helpListener, Frame frame) {
 
         done = 0;
         this.frame = frame;
