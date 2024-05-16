@@ -31,10 +31,10 @@ public class Watched implements Observable {
 
     public void setMessage(String message) {
         this.message = message;
-        //System.out.println();
-        //System.out.println("MESSAGE: " + message);
+        System.out.println();
+        System.out.println("MESSAGE: " + message);
         notifyObservers();
-        //System.out.println("Done");
+        System.out.println("Done");
 
     }
 

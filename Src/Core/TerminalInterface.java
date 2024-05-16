@@ -18,6 +18,8 @@ public class TerminalInterface implements Observer {
     Thread threadInput;
     boolean isFileLoaded = false;
 
+    boolean TerminalWasUsed = false;
+
     TerminalInterface(Watched watched){
 
         this.watched = watched;
@@ -57,9 +59,29 @@ public class TerminalInterface implements Observer {
         System.out.println("Loading the maze had been succesful");
     }
 
+    private void wasRead(){
+        if ( TerminalWasUsed){
+            watched.setMessage("analyze");
+        }
+    }
+
+    private void analyzed(){
+        if ( TerminalWasUsed){
+            watched.setMessage("shortest");
+        }
+    }
+
+    private void solved(){
+        System.out.println("The maze has been successfully solved");
+        if (TerminalWasUsed){
+            writeSolution(Main.mazeSolver.getSolution(), Main.maze);
+        }
+    }
+
     private void writeSolution(ArrayList<SolutionBlock> solution, Maze maze) {
         currentColumn = maze.getStart()[0];
         currentRow = maze.getStart()[1];
+        lastDirection = 5;
 
         for (SolutionBlock solutionBlock : solution) {
             writeSolutionBlock(solutionBlock.getDirection(), solutionBlock.getSteps());
@@ -91,10 +113,11 @@ public class TerminalInterface implements Observer {
         }
 
         if (lastDirection == direction) {
-            System.out.println("Go another" + length + " steps.");
+            System.out.println("Go another " + length + " steps.");
         } else {
             System.out.println("Go " + directionString + " " + length + " steps.");
         }
+        lastDirection = direction;
     }
 
     @Override
@@ -111,6 +134,15 @@ public class TerminalInterface implements Observer {
                 break;
             case "gotFile":
                 gotFile();
+                break;
+            case "wasRead":
+                wasRead();
+            case "analyzed":
+                analyzed();
+                break;
+            case "solved":
+                solved();
+                break;
             default:
                 break;
         }

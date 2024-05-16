@@ -32,7 +32,7 @@ public class Main{
     static int startEndInNoStartEnd = 0;
 
     static Watched watched;
-    
+    static MazeSolver mazeSolver;
 
     public static void main (String[] args){
 
@@ -133,6 +133,8 @@ public class Main{
 
         frame.getOuterContentPanel().getInfoLabel().setText("Please click Analyze maze button to analyze the maze.");
 
+        watched.setMessage("wasRead");
+
     }
 
     private static void analyze(){
@@ -143,7 +145,7 @@ public class Main{
         graph = new Graph();
 
         mazeAnalyzer = new MazeAnalyzer();
-        mazeAnalyzer.analyzeMaze(file, frame.getMenu().getFileType(), frame.getToolPanel().getChooseStartEndPanel(), maze, graph);
+        mazeAnalyzer.analyzeMaze(file, fileType, frame.getToolPanel().getChooseStartEndPanel(), maze, graph);
 
         if (maze.getStart()[0] == null){
             oldStartPosition[0] = null;
@@ -198,14 +200,14 @@ public class Main{
             frame.getOuterContentPanel().getInfoLabel().setText("Ypu can choose solving alghorithm or change position of Start and End");
         }
         
-
+        watched.setMessage("analyzed");
     }
 
     private static void shortest(){
 
         frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
         frame.getOuterContentPanel().getInfoLabel().setText("Searching for the shortest solution to the maze.");
-        MazeSolver mazeSolver = new MazeSolver();
+        mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
 
         SolutionDrawer solutionWriter = new SolutionDrawer();
@@ -214,13 +216,15 @@ public class Main{
         frame.getOuterContentPanel().getInfoLabel().setText("<html>The shortest solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
         frame.getMenu().setloadEnabled(true);
         frame.getMenu().setexportEnabled(true);
+
+        watched.setMessage("solved");
     }
 
     private static void whole(){
 
         frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
 
-        MazeSolver mazeSolver = new MazeSolver();
+        mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 1);
 
         SolutionDrawer solutionWriter = new SolutionDrawer();
