@@ -84,7 +84,7 @@ public class ChooseStartEndPanel extends JPanel {
                     pickEnd.setEnabled(false);
                     typeEnd.setEnabled(false);
                     typeStart.setEnabled(false);
-                    infoLabel.setText("Kliknij na ściężkę labiryntu by wybrać nowy Start");
+                    infoLabel.setText("Click on Path on the maze to choose new Start");
                     contentPanel.start(StartAL, 'S', contentPanel, customStartListener);
                     maze.pickCustom(0);
                 });
@@ -103,7 +103,7 @@ public class ChooseStartEndPanel extends JPanel {
                         pickStart.setEnabled(false);
                         pickEnd.setEnabled(false);
                         typeEnd.setEnabled(false);
-                        infoLabel.setText("Wpisz koordynaty nowego Startu");
+                        infoLabel.setText("Type new Start coordinates in");
                         currentPosStart.setEditable(true);
                         this.typeStartOn++;
                         maze.pickCustom(1);
@@ -182,7 +182,7 @@ public class ChooseStartEndPanel extends JPanel {
                     pickEnd.setEnabled(false);
                     typeEnd.setEnabled(false);
                     typeStart.setEnabled(false);
-                    infoLabel.setText("Kliknij na ściężkę labiryntu by wybrać nowy End");
+                    infoLabel.setText("Click on Path on the maze to choose new End");
                     contentPanel.start(EndAL, 'E', contentPanel, customEndListener);
                     maze.pickCustom(0);
                 });
@@ -198,7 +198,7 @@ public class ChooseStartEndPanel extends JPanel {
                         pickStart.setEnabled(false);
                         pickEnd.setEnabled(false);
                         typeStart.setEnabled(false);
-                        infoLabel.setText("Wpisz koordynaty nowego Endu");
+                        infoLabel.setText("Type new End coordinates in");
                         currentPosEnd.setEditable(true);
                         maze.pickCustom(1);
                         infoLabel.setText("When you finish typing coordinates in, please click \"Done\"");

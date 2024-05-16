@@ -47,7 +47,7 @@ public class ToolPanel extends JPanel{
             (e) -> {toolEnable(true, new int[]{3,4,5});
                     toolEnable(false, new int[]{2});
                     customListener.actionPerformed(e);
-                    infoLabel.setText("By wybrać nowy Start/End naciśnij Pick Start/Pick End lub Type Start/ Type End.");}
+                    infoLabel.setText("To choose new Start/End click Pick Start/End or Type Start/End.");}
         );
         
         String[] modesList = new String[]{"-Choose algorithm-","Shortest", "Whole"}; 

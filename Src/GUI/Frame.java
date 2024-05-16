@@ -66,7 +66,7 @@ public class Frame extends JFrame{
     }
 
     public void customError(){
-        JOptionPane.showMessageDialog(this, "Można wybrać tylko miejsce na ścieżce! Spróbuj ponownie!", "customError", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "You can pick new location only on the maze's path! Try again!", "customError", JOptionPane.ERROR_MESSAGE);
     }
 
 

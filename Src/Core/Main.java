@@ -97,7 +97,7 @@ public class Main {
         
         frame = new Frame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener, wholeListener, customListener, maze);
         frame.getMenu().setexportEnabled(false);
-        frame.getInfoLabel().setText("Proszę załadować labirynt Files->Load Maze.");
+        frame.getInfoLabel().setText("Please choose a maze to load (File-> Load Maze)");
 
         terminalInterface = new TerminalInterface();
         
@@ -110,7 +110,7 @@ public class Main {
     private static void read(){
 
         reset();
-        frame.getInfoLabel().setText("Ładowanie labiryntu...");
+        frame.getInfoLabel().setText("Loading maze...");
         frame.getMenu().setloadEnabled(false);
         frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4,5});
 
@@ -142,13 +142,13 @@ public class Main {
 
         startEndSwitch = 0;
 
-        frame.getInfoLabel().setText("Proszę nacisnąć Analyze maze by przeanalizować labirynt.");
+        frame.getInfoLabel().setText("Please click Analyze maze button to analyze the maze.");
 
     }
 
     private static void analyze(){
         
-        frame.getInfoLabel().setText("Analizowanie w toku...");
+        frame.getInfoLabel().setText("Analysis in progress.");
         frame.getToolPanel().toolEnable(false, new int[]{0});
 
         graph = new Graph();
@@ -180,14 +180,14 @@ public class Main {
         if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true || frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
 
             if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true && frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
-                frame.getInfoLabel().setText("Proszę wybrać Start i End.");
+                frame.getInfoLabel().setText("Please choose Start and End");
                 frame.getToolPanel().toolEnable(true, new int[]{3,4,5});
                 frame.getToolPanel().toolEnable(false, new int[]{1,2});
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
                 frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
                 noStartEnd += 2;
             } else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true){
-                frame.getInfoLabel().setText("Proszę wybrać Start.");
+                frame.getInfoLabel().setText("Please choose Start.");
                 frame.getToolPanel().toolEnable(true, new int[]{3,4});
                 frame.getToolPanel().toolEnable(false, new int[]{1,2});
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
@@ -197,7 +197,7 @@ public class Main {
                 startEndInNoStartEnd = 1;
             }
             else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
-                frame.getInfoLabel().setText("Proszę wybrać End.");
+                frame.getInfoLabel().setText("Please choose End.");
                 frame.getToolPanel().toolEnable(true, new int[]{3,5});
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(false);
                 frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
@@ -206,7 +206,7 @@ public class Main {
             }
 
         } else {
-            frame.getInfoLabel().setText("Można wybrać tryb rozwiązywania labiryntu, a także nowy Start/End");
+            frame.getInfoLabel().setText("Ypu can choose solving alghorithm or change position of Start and End");
         }
         
 
@@ -215,14 +215,14 @@ public class Main {
     private static void shortest(){
 
         frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
-        frame.getInfoLabel().setText("Szukam najkrótszego rozwiązania labiryntu...");
+        frame.getInfoLabel().setText("Searching for the shortest solution to the maze.");
         MazeSolver mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
 
         SolutionDrawer solutionWriter = new SolutionDrawer();
         solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
         frame.getContentPanel().getMazePanel().rePaint(maze);
-        frame.getInfoLabel().setText("<html>Znaleziono najkrótsze rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution.</html>");
+        frame.getInfoLabel().setText("<html>The shortest solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
         frame.getMenu().setloadEnabled(true);
         frame.getMenu().setexportEnabled(true);
     }
@@ -238,7 +238,7 @@ public class Main {
         solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
 
         frame.getContentPanel().getMazePanel().rePaint(maze);
-        frame.getInfoLabel().setText("<html> Znaleziono rozwiązanie labiryntu, by załadować inny labirynt wybierz Files->Load Maze, by wyeskportować rozwiązanie wybierz Files-> Export Solution. </html>");
+        frame.getInfoLabel().setText("<html> The solution to the maze has been found. You can now load another maze ( File ->Load Maze ) or export solution (File-> Export Solution) </html>");
         frame.getMenu().setloadEnabled(true);
         frame.getMenu().setexportEnabled(true);
 
@@ -273,12 +273,12 @@ public class Main {
             if (c == 'S'){
                 switchSE = new int[]{4,5};
                 frame.getToolPanel().getChooseStartEndPanel().changeStartPos(customObject[0], customObject[1]);
-                frame.getInfoLabel().setText("Wybrano nowy Start. Trwa jego lokalizowanie...");
+                frame.getInfoLabel().setText(" You have chosen a new Start location. Wybrano nowy Start. Locating in the progress...");
 
             } else {
                 switchSE = new int[]{5,4};
                 frame.getToolPanel().getChooseStartEndPanel().changeEndPos(customObject[0], customObject[1]);
-                frame.getInfoLabel().setText("Wybrano nowy End. Trwa jego lokalizowanie...");
+                frame.getInfoLabel().setText("You have chosen a new End location. Wybrano nowy Start. Locating in the progress...");
 
             }
 
@@ -324,17 +324,17 @@ public class Main {
 
             if (c == 'S'){
                 if (startEndSwitch == 2){
-                    frame.getInfoLabel().setText("Wybierz tryb rozwiązywania.");
+                    frame.getInfoLabel().setText("Choose solving mode.");
                 } else {
-                    frame.getInfoLabel().setText("Wybór Startu zakończył się pomyślnie. Możesz teraz wybrać End (PickEnd) lub tryb rozwiązywania.");
+                    frame.getInfoLabel().setText("The choice of a new Start was successful. Now you can choose new End location or choose solving mode.");
                 }
                 
 
             } else {
                 if (startEndSwitch == 2){
-                    frame.getInfoLabel().setText("Wybierz tryb rozwiązywania.");
+                    frame.getInfoLabel().setText("Choose solving mode.");
                 } else {
-                    frame.getInfoLabel().setText("Wybór Endu zakończył się pomyślnie. Możesz teraz wybrać Start (PickStart) lub tryb rozwiązywania.");
+                    frame.getInfoLabel().setText("The choice of a new End was successful. Now ypu can choose new Start location or choose solving mode.");
                 }
             }
 

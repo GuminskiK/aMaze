@@ -108,12 +108,12 @@ public class Menu extends JMenuBar implements ActionListener {
                 this.fileToSave = fileToSave;
                 try {
                     FileWriter writer = new FileWriter(fileToSave);
-                    writer.write("Piszę w pliku");
+                    writer.write("I can write in this file!");
                     writer.close();
-                    JOptionPane.showMessageDialog(frame, "Plik wyeksportowany pomyślnie!");
+                    JOptionPane.showMessageDialog(frame, "File export completed successfully!");
 
                 } catch (IOException z) {
-                    JOptionPane.showMessageDialog(frame, "Wystąpił błąd podczas próby eksportowania pliku: " + z.getMessage());
+                    JOptionPane.showMessageDialog(frame, "An error occured while trying to export the solution: " + z.getMessage());
                 }
             }
         }
