@@ -6,7 +6,7 @@ import java.io.File;
 
 import GUI.Frame;
 
-public class Main {
+public class Main{
 
     static TerminalInterface terminalInterface;
     static Frame frame;
@@ -18,6 +18,8 @@ public class Main {
     static Graph graph;
 
     static File file;
+    static String fileType;
+    static String filePath;
 
     static Integer[] oldStartPosition = new Integer[2];
     static Integer[] oldEndPosition = new Integer[2];
@@ -28,62 +30,11 @@ public class Main {
 
     static int noStartEnd = 0;
     static int startEndInNoStartEnd = 0;
+
+    static Watched watched;
     
 
     public static void main (String[] args){
-
-        ActionListener readListener = new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e) {
-                read();
-            }
-
-        };
-
-        ActionListener analyzeListener = new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e) {
-                analyze();
-            }
-
-        };
-
-        ActionListener shortestListener = new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e) {
-                shortest();
-            }
-
-        };
-
-        ActionListener wholeListener = new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e) {
-                whole();
-            }
-
-        };
-
-        ActionListener helpListener = new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e) {
-                help();
-            }
-        };
-
-        ActionListener customStartListener = new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e) {
-                setStartEndNewPosition('S');
-            }
-        };
-
-        ActionListener customEndListener = new ActionListener() {
-            
-            public void actionPerformed(ActionEvent e) {
-                setStartEndNewPosition('E');
-            }
-        };
 
         ActionListener customListener = new ActionListener() {
             
@@ -92,32 +43,70 @@ public class Main {
             }
         };
 
-        
+        watched = new Watched();
+
         maze = new Maze();
         
-        frame = new Frame(readListener, analyzeListener, shortestListener, helpListener, customStartListener, customEndListener, wholeListener, customListener, maze);
-        frame.getMenu().setexportEnabled(false);
-        frame.getInfoLabel().setText("Please choose a maze to load (File-> Load Maze)");
+        frame = new Frame(maze, watched);
 
-        terminalInterface = new TerminalInterface();
-        
+        terminalInterface = new TerminalInterface(watched);
+
+
+        watched.registerObserver(terminalInterface);
+        watched.registerObserver(frame);
+
+        watched.registerObserver( new Observer() {
+
+            @Override
+            public void update(String message) {
+                System.out.println("Main: "  + message);
+                switch(message){
+                    case "started":
+                        watched.setMessage("getFile");
+                        break;
+                    case "gotFile":
+                        read();
+                        break;
+                    case "analyze":
+                        analyze();
+                        break;
+                    case "shortest":
+                        shortest();
+                        break;
+                    case "whole":
+                        whole();
+                        break;
+                    case "StartEndNewPositionS":
+                        setStartEndNewPosition('S');
+                        break;
+                    case "StartEndNewPositionE":
+                        setStartEndNewPosition('E');
+                        break;
+                    case "StartEndNewPosition":
+                        changeStartEndIntoWall();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+        });
+
+        watched.setMessage("start");
     }
 
-    private static void help(){
-        frame.getContentPanel().setHelpEnabled();
-    }
 
     private static void read(){
 
         reset();
-        frame.getInfoLabel().setText("Loading maze...");
+        frame.getOuterContentPanel().getInfoLabel().setText("Loading maze...");
         frame.getMenu().setloadEnabled(false);
         frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4,5});
 
-        file = frame.getMenu().getFile();
+        file = new File(filePath);
         fileReader = new FileReader();
         
-        if (frame.getMenu().getFileType().equals("txt")){
+        if (fileType.equals("txt")){
             
             fileReader.countRowsColumns(file);
             x = fileReader.readFileTXT(file);
@@ -136,19 +125,19 @@ public class Main {
         maze.mazeToMazeCells();
         
         //rysowanie
-        frame.getContentPanel().addPanel(fileReader.getColumns(), fileReader.getRows());
+        frame.getOuterContentPanel().getContentPanel().addPanel(fileReader.getColumns(), fileReader.getRows());
 
         frame.getToolPanel().toolEnable(true, new int[]{0}); //Analyze
 
         startEndSwitch = 0;
 
-        frame.getInfoLabel().setText("Please click Analyze maze button to analyze the maze.");
+        frame.getOuterContentPanel().getInfoLabel().setText("Please click Analyze maze button to analyze the maze.");
 
     }
 
     private static void analyze(){
         
-        frame.getInfoLabel().setText("Analysis in progress.");
+        frame.getOuterContentPanel().getInfoLabel().setText("Analysis in progress.");
         frame.getToolPanel().toolEnable(false, new int[]{0});
 
         graph = new Graph();
@@ -180,14 +169,14 @@ public class Main {
         if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true || frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
 
             if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true && frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
-                frame.getInfoLabel().setText("Please choose Start and End");
+                frame.getOuterContentPanel().getInfoLabel().setText("Please choose Start and End");
                 frame.getToolPanel().toolEnable(true, new int[]{3,4,5});
                 frame.getToolPanel().toolEnable(false, new int[]{1,2});
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
                 frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
                 noStartEnd += 2;
             } else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true){
-                frame.getInfoLabel().setText("Please choose Start.");
+                frame.getOuterContentPanel().getInfoLabel().setText("Please choose Start.");
                 frame.getToolPanel().toolEnable(true, new int[]{3,4});
                 frame.getToolPanel().toolEnable(false, new int[]{1,2});
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
@@ -197,7 +186,7 @@ public class Main {
                 startEndInNoStartEnd = 1;
             }
             else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
-                frame.getInfoLabel().setText("Please choose End.");
+                frame.getOuterContentPanel().getInfoLabel().setText("Please choose End.");
                 frame.getToolPanel().toolEnable(true, new int[]{3,5});
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(false);
                 frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
@@ -206,7 +195,7 @@ public class Main {
             }
 
         } else {
-            frame.getInfoLabel().setText("Ypu can choose solving alghorithm or change position of Start and End");
+            frame.getOuterContentPanel().getInfoLabel().setText("Ypu can choose solving alghorithm or change position of Start and End");
         }
         
 
@@ -215,14 +204,14 @@ public class Main {
     private static void shortest(){
 
         frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
-        frame.getInfoLabel().setText("Searching for the shortest solution to the maze.");
+        frame.getOuterContentPanel().getInfoLabel().setText("Searching for the shortest solution to the maze.");
         MazeSolver mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
 
         SolutionDrawer solutionWriter = new SolutionDrawer();
         solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
-        frame.getContentPanel().getMazePanel().rePaint(maze);
-        frame.getInfoLabel().setText("<html>The shortest solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
+        frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
+        frame.getOuterContentPanel().getInfoLabel().setText("<html>The shortest solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
         frame.getMenu().setloadEnabled(true);
         frame.getMenu().setexportEnabled(true);
     }
@@ -237,8 +226,8 @@ public class Main {
         SolutionDrawer solutionWriter = new SolutionDrawer();
         solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
 
-        frame.getContentPanel().getMazePanel().rePaint(maze);
-        frame.getInfoLabel().setText("<html> The solution to the maze has been found. You can now load another maze ( File ->Load Maze ) or export solution (File-> Export Solution) </html>");
+        frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
+        frame.getOuterContentPanel().getInfoLabel().setText("<html> The solution to the maze has been found. You can now load another maze ( File ->Load Maze ) or export solution (File-> Export Solution) </html>");
         frame.getMenu().setloadEnabled(true);
         frame.getMenu().setexportEnabled(true);
 
@@ -273,12 +262,12 @@ public class Main {
             if (c == 'S'){
                 switchSE = new int[]{4,5};
                 frame.getToolPanel().getChooseStartEndPanel().changeStartPos(customObject[0], customObject[1]);
-                frame.getInfoLabel().setText(" You have chosen a new Start location. Wybrano nowy Start. Locating in the progress...");
+                frame.getOuterContentPanel().getInfoLabel().setText(" You have chosen a new Start location. Wybrano nowy Start. Locating in the progress...");
 
             } else {
                 switchSE = new int[]{5,4};
                 frame.getToolPanel().getChooseStartEndPanel().changeEndPos(customObject[0], customObject[1]);
-                frame.getInfoLabel().setText("You have chosen a new End location. Wybrano nowy Start. Locating in the progress...");
+                frame.getOuterContentPanel().getInfoLabel().setText("You have chosen a new End location. Wybrano nowy Start. Locating in the progress...");
 
             }
 
@@ -296,7 +285,7 @@ public class Main {
                 maze.setEnd(customObject[0], customObject[1]);
             }
             
-            frame.getContentPanel().getMazePanel().rePaint(maze);
+            frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
 
             if (noStartEnd == 2){
                 noStartEnd--;
@@ -324,17 +313,17 @@ public class Main {
 
             if (c == 'S'){
                 if (startEndSwitch == 2){
-                    frame.getInfoLabel().setText("Choose solving mode.");
+                    frame.getOuterContentPanel().getInfoLabel().setText("Choose solving mode.");
                 } else {
-                    frame.getInfoLabel().setText("The choice of a new Start was successful. Now you can choose new End location or choose solving mode.");
+                    frame.getOuterContentPanel().getInfoLabel().setText("The choice of a new Start was successful. Now you can choose new End location or choose solving mode.");
                 }
                 
 
             } else {
                 if (startEndSwitch == 2){
-                    frame.getInfoLabel().setText("Choose solving mode.");
+                    frame.getOuterContentPanel().getInfoLabel().setText("Choose solving mode.");
                 } else {
-                    frame.getInfoLabel().setText("The choice of a new End was successful. Now ypu can choose new Start location or choose solving mode.");
+                    frame.getOuterContentPanel().getInfoLabel().setText("The choice of a new End was successful. Now ypu can choose new Start location or choose solving mode.");
                 }
             }
 
@@ -373,7 +362,7 @@ public class Main {
         maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
         maze.setCharFromMazeInChar2DArray(maze.getEnd()[0], maze.getEnd()[1], 'X');
         
-        frame.getContentPanel().getMazePanel().rePaint(maze);
+        frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
         frame.getToolPanel().toolEnable(false, new int[]{1});
         
     }
@@ -402,4 +391,13 @@ public class Main {
 
         return x;
     }
+
+    public static void setFileType(String fileType2){
+        fileType = fileType2;
+    }
+
+    public static void setFilePath(String filePath2){
+        filePath = filePath2;
+    }
+
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class TerminalInterface {
+public class TerminalInterface implements Observer {
 
     Scanner scanner;
     boolean isFileOk = false;
@@ -14,43 +14,59 @@ public class TerminalInterface {
     int currentColumn;
     int lastDirection;
 
-    TerminalInterface() {
+    Watched watched;
+    Thread threadInput;
+    boolean isFileLoaded = false;
 
-        Welcome();
+    TerminalInterface(Watched watched){
+
+        this.watched = watched;
     }
 
-    private void Welcome() {
+    private void welcome() {
         System.out.println("Welcome to the aMaze app, where you can solve your maze!");
         System.out.println("Please give me a filePath to your maze that you would like me to solve.");
-        getFilePath();
     }
 
     private void getFilePath() {
 
-        scanner = new Scanner(System.in);
-        filePath = scanner.nextLine();
-        File file = new File(filePath);
+        threadInput = new Thread(() -> {
+            scanner = new Scanner(System.in);
+            while (!isFileLoaded) {
+                filePath = scanner.nextLine();
+                File file = new File(filePath);
 
-        if (file.exists()) {
-            isFileOk = true;
-            //start solving
-            
-        }else{
-            System.out.println("Something wrong with this filePath. Can you give me a proper one?");
-            getFilePath();
-        }
+                if (file.exists()) {
+                    isFileLoaded = true;
+                    Main.setFilePath(filePath);
+                    Main.setFileType(file.getAbsolutePath().substring(file.getAbsolutePath().length() - 3));
+                    watched.setMessage("gotFile");
+                } else {
+                    System.out.println("Something wrong with this filePath. Can you give me a proper one?");
+                }
+            }
+        });
+
+        threadInput.start();
     }
 
-    private void writeSolution(ArrayList<SolutionBlock> solution, Maze maze){
+    
+
+    private void gotFile(){
+        isFileLoaded = true;
+        System.out.println("Loading the maze had been succesful");
+    }
+
+    private void writeSolution(ArrayList<SolutionBlock> solution, Maze maze) {
         currentColumn = maze.getStart()[0];
         currentRow = maze.getStart()[1];
 
-        for ( SolutionBlock solutionBlock: solution){
+        for (SolutionBlock solutionBlock : solution) {
             writeSolutionBlock(solutionBlock.getDirection(), solutionBlock.getSteps());
         }
     }
 
-    private void writeSolutionBlock(int direction, int length){
+    private void writeSolutionBlock(int direction, int length) {
         String directionString = "";
         switch (direction) {
             case 0:
@@ -71,14 +87,32 @@ public class TerminalInterface {
                 break;
             default:
                 break;
-            
 
-        }           
-        
-        if (lastDirection == direction){
+        }
+
+        if (lastDirection == direction) {
             System.out.println("Go another" + length + " steps.");
-        } else{
+        } else {
             System.out.println("Go " + directionString + " " + length + " steps.");
+        }
+    }
+
+    @Override
+    public void update(String message) {
+
+        System.out.println("Terminal: " + message);
+
+        switch (message) {
+            case "start":
+                welcome();
+                break;
+            case "getFile":
+                getFilePath();
+                break;
+            case "gotFile":
+                gotFile();
+            default:
+                break;
         }
     }
 }

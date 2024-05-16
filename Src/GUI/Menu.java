@@ -13,11 +13,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import Core.Main;
+import Core.Watched;
+
 public class Menu extends JMenuBar implements ActionListener {
 
     private JMenu fileMenu;
     private JMenu helpMenu;
     private Frame frame;
+    private OuterContentPanel outerContentPanel;
+    private Watched watched;
 
     private JMenuItem loadItem;
     private JMenuItem exportItem;
@@ -27,17 +32,14 @@ public class Menu extends JMenuBar implements ActionListener {
     private File fileToSave;
     private Integer done;
 
-    private ActionListener listener;
-    private ActionListener helpListener;
-
     private String fileType;
 
-    Menu(ActionListener listener, ActionListener helpListener, Frame frame) {
+    Menu(Frame frame, Watched watched, OuterContentPanel outerContentPanel) {
 
         done = 0;
+        this.watched = watched;
         this.frame = frame;
-        this.listener = listener;
-        this.helpListener = helpListener;
+        this.outerContentPanel = outerContentPanel;
 
         fileMenu = new JMenu("File");
         helpMenu = new JMenu("Help");
@@ -77,10 +79,11 @@ public class Menu extends JMenuBar implements ActionListener {
 
             if (response == JFileChooser.APPROVE_OPTION) {
                 File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
-                this.fileType = file.getAbsolutePath().substring(file.getAbsolutePath().length() - 3);
+                Main.setFilePath(file.getAbsolutePath());
+                Main.setFileType(file.getAbsolutePath().substring(file.getAbsolutePath().length() - 3));
                 this.file = file;
                 this.done = 1;
-                this.listener.actionPerformed(e);
+                this.watched.setMessage("gotFile");
             }
 
         }
@@ -120,7 +123,7 @@ public class Menu extends JMenuBar implements ActionListener {
 
         if (e.getSource() == helpItem) {
 
-            helpListener.actionPerformed(e);
+            outerContentPanel.getContentPanel().setHelpEnabled();
         }
     }
 

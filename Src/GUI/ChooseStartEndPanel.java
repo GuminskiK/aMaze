@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import Core.Maze;
+import Core.Watched;
 
 public class ChooseStartEndPanel extends JPanel {
 
@@ -47,31 +48,10 @@ public class ChooseStartEndPanel extends JPanel {
 
     private Font font = new Font("Dialog", Font.BOLD, 10);
 
-    ChooseStartEndPanel(ContentPanel contentPanel, JComboBox modes, ActionListener customStartListener,
-            ActionListener customEndListener, JLabel infoLabel, ActionListener customListener, Maze maze) {
+    ChooseStartEndPanel(ContentPanel contentPanel, JComboBox modes, JLabel infoLabel, Maze maze, Watched watched) {
 
         this.typeStartOn = 0;
         this.typeEndOn = 0;
-
-        ActionListener StartAL = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                // pickEnd.setEnabled(true);
-            }
-
-        };
-
-        ActionListener EndAL = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                // pickStart.setEnabled(true);
-            }
-
-        };
 
         start = new JLabel("start");
 
@@ -85,7 +65,7 @@ public class ChooseStartEndPanel extends JPanel {
                     typeEnd.setEnabled(false);
                     typeStart.setEnabled(false);
                     infoLabel.setText("Click on Path on the maze to choose new Start");
-                    contentPanel.start(StartAL, 'S', contentPanel, customStartListener);
+                    contentPanel.start('S', watched);
                     maze.pickCustom(0);
                 });
 
@@ -136,7 +116,7 @@ public class ChooseStartEndPanel extends JPanel {
                             JOptionPane.showMessageDialog(contentPanel, "Incorrect coordinates. They should look like: <integer> <integer>", "typeError", JOptionPane.ERROR_MESSAGE);
                         } else {
                             maze.setNewStartPosition(firstInt, secondInt);
-                            customStartListener.actionPerformed(e);
+                            watched.setMessage("StartEndNewPositionS");
                         }
                     }
 
@@ -183,7 +163,7 @@ public class ChooseStartEndPanel extends JPanel {
                     typeEnd.setEnabled(false);
                     typeStart.setEnabled(false);
                     infoLabel.setText("Click on Path on the maze to choose new End");
-                    contentPanel.start(EndAL, 'E', contentPanel, customEndListener);
+                    contentPanel.start('E', watched);
                     maze.pickCustom(0);
                 });
         createToolButton(typeEnd, "Type End", font);
@@ -230,7 +210,7 @@ public class ChooseStartEndPanel extends JPanel {
                             JOptionPane.showMessageDialog(contentPanel, "Incorrect coordinates. They should look like: <integer> <integer>", "typeError", JOptionPane.ERROR_MESSAGE);
                         } else {
                             maze.setNewEndPosition(firstInt, secondInt);
-                            customEndListener.actionPerformed(e);
+                            watched.setMessage("StartEndNewPositionE");
                         }
                     }
 

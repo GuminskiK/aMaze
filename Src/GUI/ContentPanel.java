@@ -13,6 +13,7 @@ import javax.swing.border.Border;
 import javax.swing.plaf.FontUIResource;
 
 import Core.Maze;
+import Core.Watched;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -150,7 +151,7 @@ public class ContentPanel extends JPanel {
         this.helpPanel.setVisible(true);
     }
 
-    public void start(ActionListener listener, char c, ContentPanel contentPanel, ActionListener customListener){
+    public void start(char c, Watched watched){
 
         mazePanel.addMouseListener(new MouseAdapter() {
             @Override
@@ -163,8 +164,12 @@ public class ContentPanel extends JPanel {
                     maze.setNewEndPosition((x-5)/10, (y-5)/10);
                 }
                 mazePanel.removeMouseListener(mazePanel.getMouseListeners()[0]);
-                listener.actionPerformed(null);
-                customListener.actionPerformed(null);
+                if (c == 'S'){
+                    watched.setMessage("StartEndNewPositionS");
+                } else {
+                    watched.setMessage("StartEndNewPositionE");
+                }
+                
             }
         });
         

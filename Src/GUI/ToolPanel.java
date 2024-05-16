@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Core.Maze;
+import Core.Watched;
 
 
 public class ToolPanel extends JPanel{
@@ -25,8 +26,7 @@ public class ToolPanel extends JPanel{
 
     private Font font = new Font( "Dialog", Font.BOLD, 10);
 
-    ToolPanel(ContentPanel contentPanel, ActionListener analyzeListener,ActionListener shortestListener,
-     ActionListener customStartListener, ActionListener customEndListener, ActionListener wholeListener, ActionListener customListener, JLabel infoLabel, Maze maze){
+    ToolPanel( Watched watched ,OuterContentPanel outerContentPanel,  Maze maze){
 
         this.setBackground(Color.DARK_GRAY);
         this.setPreferredSize(new Dimension(150,50));
@@ -38,7 +38,7 @@ public class ToolPanel extends JPanel{
         analyze.addActionListener(
 
             (e) -> {    analyze.setEnabled(false);
-                        analyzeListener.actionPerformed(e);}
+                        watched.setMessage("analyze");}
 
         );
 
@@ -46,8 +46,8 @@ public class ToolPanel extends JPanel{
 
             (e) -> {toolEnable(true, new int[]{3,4,5});
                     toolEnable(false, new int[]{2});
-                    customListener.actionPerformed(e);
-                    infoLabel.setText("To choose new Start/End click Pick Start/End or Type Start/End.");}
+                    watched.setMessage("StartEndNewPosition");
+                    outerContentPanel.getInfoLabel().setText("To choose new Start/End click Pick Start/End or Type Start/End.");}
         );
         
         String[] modesList = new String[]{"-Choose algorithm-","Shortest", "Whole"}; 
@@ -58,16 +58,16 @@ public class ToolPanel extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (modes.getSelectedItem() == "Shortest"){
-                    shortestListener.actionPerformed(e);
+                    watched.setMessage("shortest");
                 } else if (modes.getSelectedItem() == "Whole"){
-                    wholeListener.actionPerformed(e);
+                    watched.setMessage("whole");
                 }
             }
         });
         modes.setEnabled(false);
         
 
-        chooseStartEndPanel = new ChooseStartEndPanel(contentPanel, modes, customStartListener, customEndListener, infoLabel, customListener, maze);
+        chooseStartEndPanel = new ChooseStartEndPanel(outerContentPanel.getContentPanel(), modes, outerContentPanel.getInfoLabel(), maze, watched);
         chooseStartEndPanel.setVisible(false);
 
         this.add(analyze);
