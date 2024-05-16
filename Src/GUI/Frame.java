@@ -74,6 +74,52 @@ public class Frame extends JFrame implements Observer{
         
     }
 
+    private void reset(){
+
+        getToolPanel().getChooseStartEndPanel().changeStartPos(null,null);
+        getToolPanel().getChooseStartEndPanel().changeEndPos(null,null);
+        getMenu().setexportEnabled(false);
+        getToolPanel().getChooseStartEndPanel().reset();
+        getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
+        getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
+        getToolPanel().resetComboBoX();
+
+        watched.setMessage("read");
+
+    }
+
+    private void toDraw(){
+
+        getOuterContentPanel().getContentPanel().addPanel(maze.getColumns(), maze.getRows());
+        getToolPanel().toolEnable(true, new int[]{0});
+    }
+
+    private void wasRead(){
+
+        getMenu().setloadEnabled(false);
+        getToolPanel().toolEnable(false, new int[]{0,1,2,3,4,5});
+        getToolPanel().toolEnable(true, new int[]{0});
+    }
+
+    private void analyze(){
+
+        getToolPanel().toolEnable(false, new int[]{0});
+    }
+    
+    private void solving(){
+
+        getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
+    }
+
+    private void solved(){
+
+        getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
+        getMenu().setloadEnabled(true);
+        getMenu().setexportEnabled(true);
+
+    }
+
+
     @Override
     public void update(String message) {
         System.out.println("Frame: "  + message);
@@ -84,6 +130,27 @@ public class Frame extends JFrame implements Observer{
                 break;
             case "getFile":
                 getFile();
+                break;
+            case "reset":
+                reset();
+                break;
+            case "toDraw":
+                toDraw();
+                break;
+            case "wasRead":
+                wasRead();
+                break;
+            case "analyze":
+                analyze();
+                break;
+            case "shortest":
+                solving();
+                break;
+            case "whole":
+                solving();
+                break;
+            case "solved":
+                solved();
                 break;
             default:
                 break;

@@ -65,7 +65,16 @@ public class Main{
                         watched.setMessage("getFile");
                         break;
                     case "gotFile":
+                        reset();
+                        break;
+                    case "read":
                         read();
+                        break;
+                    case "reseted":
+                        read();
+                        break;
+                    case "wasDrawn":
+                        wasDrawn();
                         break;
                     case "analyze":
                         analyze();
@@ -95,13 +104,17 @@ public class Main{
         watched.setMessage("start");
     }
 
+    private static void reset(){
+
+        noStartEnd = 0;
+        startEndInNoStartEnd = 0;
+        maze.reset();
+
+        watched.setMessage("reset");
+    }
+
 
     private static void read(){
-
-        reset();
-        frame.getOuterContentPanel().getInfoLabel().setText("Loading maze...");
-        frame.getMenu().setloadEnabled(false);
-        frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4,5});
 
         file = new File(filePath);
         fileReader = new FileReader();
@@ -124,23 +137,16 @@ public class Main{
         maze.setMaze(x);
         maze.mazeToMazeCells();
         
-        //rysowanie
-        frame.getOuterContentPanel().getContentPanel().addPanel(fileReader.getColumns(), fileReader.getRows());
-
-        frame.getToolPanel().toolEnable(true, new int[]{0}); //Analyze
-
-        startEndSwitch = 0;
-
-        frame.getOuterContentPanel().getInfoLabel().setText("Please click Analyze maze button to analyze the maze.");
-
-        watched.setMessage("wasRead");
+        watched.setMessage("toDraw");
 
     }
 
+    private static void wasDrawn(){
+        startEndSwitch = 0;
+        watched.setMessage("wasRead");
+    }
+
     private static void analyze(){
-        
-        frame.getOuterContentPanel().getInfoLabel().setText("Analysis in progress.");
-        frame.getToolPanel().toolEnable(false, new int[]{0});
 
         graph = new Graph();
 
@@ -205,24 +211,16 @@ public class Main{
 
     private static void shortest(){
 
-        frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
-        frame.getOuterContentPanel().getInfoLabel().setText("Searching for the shortest solution to the maze.");
         mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
 
         SolutionDrawer solutionWriter = new SolutionDrawer();
         solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
-        frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
-        frame.getOuterContentPanel().getInfoLabel().setText("<html>The shortest solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
-        frame.getMenu().setloadEnabled(true);
-        frame.getMenu().setexportEnabled(true);
 
         watched.setMessage("solved");
     }
 
     private static void whole(){
-
-        frame.getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
 
         mazeSolver = new MazeSolver();
         mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 1);
@@ -230,11 +228,7 @@ public class Main{
         SolutionDrawer solutionWriter = new SolutionDrawer();
         solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
 
-        frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
-        frame.getOuterContentPanel().getInfoLabel().setText("<html> The solution to the maze has been found. You can now load another maze ( File ->Load Maze ) or export solution (File-> Export Solution) </html>");
-        frame.getMenu().setloadEnabled(true);
-        frame.getMenu().setexportEnabled(true);
-
+        watched.setMessage("solved");
     }
 
     private static void setStartEndNewPosition( char c){
@@ -371,18 +365,7 @@ public class Main{
         
     }
 
-    private static void reset(){
-        noStartEnd = 0;
-        startEndInNoStartEnd = 0;
-        frame.getToolPanel().getChooseStartEndPanel().changeStartPos(null,null);
-        frame.getToolPanel().getChooseStartEndPanel().changeEndPos(null,null);
-        frame.getMenu().setexportEnabled(false);
-        frame.getToolPanel().getChooseStartEndPanel().reset();
-        frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
-        frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
-        frame.getToolPanel().resetComboBoX();
-        maze.reset();
-    }
+
 
     private static boolean ifPath(int[] customObject){
 
