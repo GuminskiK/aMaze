@@ -14,6 +14,11 @@ public class TerminalInterface implements Observer {
     int currentColumn;
     int lastDirection;
 
+    int startX;
+    int startY;
+    int endX;
+    int endY;
+
     Watched watched;
     Thread threadInput;
     Thread threadInS;
@@ -27,7 +32,6 @@ public class TerminalInterface implements Observer {
 
     String scanned = "";
     Watched lineScanned;
-    int whatAreWeScanningFor = 0;
 
     boolean filePathScanned = false;
 
@@ -49,18 +53,13 @@ public class TerminalInterface implements Observer {
 
     private void getFilePath() {
 
-        whatAreWeScanningFor = 1;
-
         Thread threadGetFilePath = new Thread(() -> {
             while (!isFileLoaded) {
 
                 try {
-                    System.out.println("waiting");
                     synchronized (this) {
                         wait();
                     }
-
-                    System.out.println("let s go");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -72,7 +71,9 @@ public class TerminalInterface implements Observer {
                     isFileLoaded = true;
                     Main.setFilePath(filePath);
                     Main.setFileType(file.getAbsolutePath().substring(file.getAbsolutePath().length() - 3));
+                    TerminalWasUsed = true;
                     watched.setMessage("gotFile");
+
                     break;
                 } else {
                     if (isFileLoaded) {
@@ -83,7 +84,6 @@ public class TerminalInterface implements Observer {
 
                 }
             }
-            System.out.println("ENDED");
         });
 
         threadGetFilePath.start();
@@ -91,22 +91,12 @@ public class TerminalInterface implements Observer {
     }
 
     private void scannerManager() {
-        switch (whatAreWeScanningFor) {
-            case 1:
-                synchronized (this) {
-                    this.notifyAll();
-                }
-                System.out.println("Notified");
-                break;
-            case 2:
-                synchronized (this) {
-                    this.notifyAll();
-                }
-                System.out.println("Notified");
-                break;
-            default:
-                break;
+
+        synchronized (this) {
+            this.notifyAll();
         }
+        System.out.println("Notified");
+
     }
 
     private void scanningNextLine() {
@@ -116,7 +106,7 @@ public class TerminalInterface implements Observer {
         threadInput = new Thread(() -> {
             while (!endScanning) {
                 scanned = scanner.nextLine();
-                System.out.println("Wczytano: " + scanned);
+                System.out.println("Loaded: " + scanned);
                 lineScanned.setMessage("lineScanned");
             }
         });
@@ -140,10 +130,16 @@ public class TerminalInterface implements Observer {
     }
 
     private void solved() {
+
+        
+
         System.out.println("The maze has been successfully solved");
         if (TerminalWasUsed) {
             writeSolution(Main.mazeSolver.getSolution(), Main.maze);
         }
+        System.out.println("Please give me a filePath to your maze that you would like me to solve.");
+        reset();
+        getFilePath();
     }
 
     private void writeSolution(ArrayList<SolutionBlock> solution, Maze maze) {
@@ -154,6 +150,7 @@ public class TerminalInterface implements Observer {
         for (SolutionBlock solutionBlock : solution) {
             writeSolutionBlock(solutionBlock.getDirection(), solutionBlock.getSteps());
         }
+
     }
 
     private void writeSolutionBlock(int direction, int length) {
@@ -188,9 +185,23 @@ public class TerminalInterface implements Observer {
         lastDirection = direction;
     }
 
+    private void reset() {
+        isFileOk = false;
+        isFileLoaded = false;
+        isStartCorrectlyChosen = false;
+        isEndCorrectlyChosen = false;
+        endScanning = false;
+        startInputBlock = false;
+        endInputBlock = false;
+        scanned = "";
+
+        filePathScanned = false;
+        TerminalWasUsed = false;
+
+    }
+
     private void noS(char c) {
 
-        whatAreWeScanningFor = 2;
         threadInS = new Thread(() -> {
             while (!isStartCorrectlyChosen) {
                 System.out.println("Please type in coordinates for a new Start:");
@@ -202,8 +213,15 @@ public class TerminalInterface implements Observer {
                     e.printStackTrace();
                 }
 
-                int startX = Integer.parseInt(scanned);
-                System.out.println("StartX " + startX);
+                try {
+                    if(Main.startChanged){
+                        break;
+                    }
+                    startX = Integer.parseInt(scanned);
+                    
+                } catch (NumberFormatException e) {
+                }
+
                 try {
                     synchronized (this) {
                         wait();
@@ -212,22 +230,33 @@ public class TerminalInterface implements Observer {
                     e.printStackTrace();
                 }
 
-                int startY = Integer.parseInt(scanned);
-                System.out.println("StartY " + startY);
+                try {
+                    if(Main.startChanged){
+                        break;
+                    }
+                    startY = Integer.parseInt(scanned);
+                } catch (NumberFormatException e) {
+                }
 
                 if (Main.ifPath(new int[] { startX, startY }) && !startInputBlock) {
                     isStartCorrectlyChosen = true;
-                    System.out.println(startX + " " + startY);
                     maze.setNewStartPosition(startX, startY);
                     watched.setMessage("StartEndNewPositionS");
                     if (c == 'B') {
                         noE();
                     }
-                } else if(startInputBlock){
+
+                } else if (startInputBlock) {
                     System.out.println("Start has already been chosen");
                     break;
                 }
+
+                if (Main.startLocated && Main.endLocated) {
+                    watched.setMessage("shortest");
+                    break;
+                }
             }
+            System.out.println("ENDED");
         });
 
         threadInS.start();
@@ -247,8 +276,14 @@ public class TerminalInterface implements Observer {
                     e.printStackTrace();
                 }
 
-                int endX = Integer.parseInt(scanned);
-                System.out.println("EndX " + endX);
+                try {
+                    if(Main.endChanged){
+                        break;
+                    }
+                    endX = Integer.parseInt(scanned);
+                } catch (NumberFormatException e) {
+                }
+
                 try {
                     synchronized (this) {
                         wait();
@@ -257,16 +292,25 @@ public class TerminalInterface implements Observer {
                     e.printStackTrace();
                 }
 
-                int endY = Integer.parseInt(scanned);
-                System.out.println("EndY " + endY);
+                try {
+                    if(Main.endChanged){
+                        break;
+                    }
+                    endY = Integer.parseInt(scanned);
+                } catch (NumberFormatException e) {
+                }
 
                 if (Main.ifPath(new int[] { endX, endY }) && !endInputBlock) {
                     isEndCorrectlyChosen = true;
-                    System.out.println(endX + " " + endY);
                     maze.setNewEndPosition(endX, endY);
                     watched.setMessage("StartEndNewPositionE");
-                } else if( endInputBlock){
+                } else if (endInputBlock) {
                     System.out.println("End had already been chosen");
+                    break;
+                }
+
+                if (Main.startLocated && Main.endLocated) {
+                    watched.setMessage("shortest");
                     break;
                 }
             }
@@ -276,18 +320,18 @@ public class TerminalInterface implements Observer {
 
     }
 
-    private void blockStartInputs(){
+    private void blockStartInputs() {
         startInputBlock = true;
     }
 
-    private void blockEndIputs(){
+    private void blockEndIputs() {
         endInputBlock = true;
     }
 
     @Override
     public void update(String message) {
 
-        System.out.println("Terminal: " + message);
+        // System.out.println("Terminal: " + message);
 
         switch (message) {
             case "start":

@@ -4,6 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import Core.Main;
 import Core.Maze;
 import Core.Observer;
 import Core.Watched;
@@ -98,6 +99,7 @@ public class Frame extends JFrame implements Observer{
 
         getOuterContentPanel().getContentPanel().addPanel(maze.getColumns(), maze.getRows());
         getToolPanel().toolEnable(true, new int[]{0});
+        watched.setMessage("wasDrawn");
     }
 
     private void wasRead(){
@@ -124,22 +126,101 @@ public class Frame extends JFrame implements Observer{
 
     }
 
-    private void blockStartInputs(){
+    private void EnableStartInputs( boolean x){
 
-        toolPanel.getChooseStartEndPanel().setPickStartEnabled(false);
-        toolPanel.getChooseStartEndPanel().setTypeStartEnabled(false);
+        toolPanel.getChooseStartEndPanel().setPickStartEnabled(x);
+        toolPanel.getChooseStartEndPanel().setTypeStartEnabled(x);
 
     }
 
-    private void blockEndIputs(){
+    private void EnableEndInputs( boolean x){
 
-        toolPanel.getChooseStartEndPanel().setPickEndEnabled(false);
-        toolPanel.getChooseStartEndPanel().setTypeEndEnabled(false);
+        toolPanel.getChooseStartEndPanel().setPickEndEnabled(x);
+        toolPanel.getChooseStartEndPanel().setTypeEndEnabled(x);
     }
+
+    private void startChanged(){
+        
+        EnableStartInputs(false);
+
+        if( Main.startLocated && Main.endLocated){
+            toolPanel.toolEnable(true, new int[]{2});
+            outerContentPanel.getInfoLabel().setText("The choice of a new Start was successful. Now you can choose new End location or choose solving mode.");
+        } else {
+            toolPanel.toolEnable(true, new int[]{2});
+            outerContentPanel.getInfoLabel().setText("The choice of a new Start was successful. Now you can choose new End location..");
+        }
+
+        if( Main.startChanged && Main.endChanged){
+            outerContentPanel.getInfoLabel().setText("Choose solving mode.");
+        }
+
+        if ( !Main.endChanged){
+            EnableEndInputs(true);
+        }
+    }
+
+    private void endChanged(){
+
+        
+        EnableEndInputs(false);
+
+        if( Main.startLocated && Main.endLocated){
+            toolPanel.toolEnable(true, new int[]{2});
+            outerContentPanel.getInfoLabel().setText("The choice of a new End was successful. Now you can choose new Start location or choose solving mode.");
+        } else{
+            outerContentPanel.getInfoLabel().setText("The choice of a new End was successful. Now you can choose new Start location.");
+        }
+
+        if( Main.startChanged && Main.endChanged){
+            outerContentPanel.getInfoLabel().setText("Choose solving mode.");
+        }
+
+        if ( !Main.startChanged){
+            EnableStartInputs(true);
+        }
+    }
+
+    private void changeStartError(){
+        customError();
+        if (maze.whoPickedCustom() == 0) {
+            toolPanel.toolEnable(true, new int[] { 4 });
+        } else {
+            toolPanel.getChooseStartEndPanel().setTypeStartEnabled(true);
+            toolPanel.getChooseStartEndPanel().setTypeStartOn(0);
+        }
+    }
+
+    private void changeEndError(){
+        customError();
+        if (maze.whoPickedCustom() == 0) {
+            toolPanel.toolEnable(true, new int[] {5});
+        } else {
+            toolPanel.getChooseStartEndPanel().setTypeEndEnabled(true);
+            toolPanel.getChooseStartEndPanel().setTypeEndOn(0);
+        }
+    }
+
+    private void noStartEnd(){
+        toolPanel.getChooseStartEndPanel().setVisible(true);
+        outerContentPanel.getInfoLabel().setText("Choose Start and End");
+
+    }
+
+    private void noStart(){
+        toolPanel.getChooseStartEndPanel().setVisible(true);
+        outerContentPanel.getInfoLabel().setText("Choose Start");
+    }
+
+    private void noEnd(){
+        toolPanel.getChooseStartEndPanel().setVisible(true);
+        outerContentPanel.getInfoLabel().setText("Choose End");
+    }
+
 
     @Override
     public void update(String message) {
-        System.out.println("Frame: "  + message);
+        //System.out.println("Frame: "  + message);
 
         switch(message){
             case "start":
@@ -170,10 +251,31 @@ public class Frame extends JFrame implements Observer{
                 solved();
                 break;
             case "StartEndNewPositionS":
-                blockStartInputs();
+                EnableStartInputs(false);
                 break;
             case "StartEndNewPositionE":
-                blockEndIputs();
+                EnableEndInputs(false);
+                break;
+            case "StartChanged":
+                startChanged();
+                break;
+            case "EndChanged":
+                endChanged();
+                break;
+            case "changeStartError":
+                changeStartError();
+                break;
+            case "changeEndError":
+                changeEndError();
+                break;
+            case "noStartEnd":
+                noStartEnd();
+                break;
+            case "noStart":
+                noEnd();
+                break;
+            case "noEnd":
+                noStart();
                 break;
             default:
                 break;

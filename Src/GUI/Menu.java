@@ -36,7 +36,6 @@ public class Menu extends JMenuBar implements ActionListener {
 
     Menu(Frame frame, Watched watched, OuterContentPanel outerContentPanel) {
 
-        System.out.println("wchodzę");
         done = 0;
         this.frame = frame;
         this.watched = watched;
