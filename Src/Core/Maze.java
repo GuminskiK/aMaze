@@ -100,7 +100,7 @@ public class Maze {
         this.newStartPosition[1] = newStartPosition1;
     }
 
-    public Integer[] getnewStartPosition (){
+    public Integer[] getNewStartPosition (){
         return newStartPosition;
     }
 

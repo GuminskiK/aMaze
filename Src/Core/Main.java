@@ -49,7 +49,7 @@ public class Main{
         
         frame = new Frame(maze, watched);
 
-        terminalInterface = new TerminalInterface(watched);
+        terminalInterface = new TerminalInterface(watched,maze);
 
 
         watched.registerObserver(terminalInterface);
@@ -183,6 +183,7 @@ public class Main{
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
                 frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
                 noStartEnd += 2;
+                watched.setMessage("noStartEnd");
             } else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[0] == true){
                 frame.getOuterContentPanel().getInfoLabel().setText("Please choose Start.");
                 frame.getToolPanel().toolEnable(true, new int[]{3,4});
@@ -192,6 +193,7 @@ public class Main{
 
                 noStartEnd++;
                 startEndInNoStartEnd = 1;
+                watched.setMessage("noStart");
             }
             else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true){
                 frame.getOuterContentPanel().getInfoLabel().setText("Please choose End.");
@@ -200,13 +202,16 @@ public class Main{
                 frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
                 noStartEnd++;
                 startEndInNoStartEnd = 2;
+                watched.setMessage("noEnd");
             }
 
         } else {
-            frame.getOuterContentPanel().getInfoLabel().setText("Ypu can choose solving alghorithm or change position of Start and End");
+            frame.getOuterContentPanel().getInfoLabel().setText("You can choose solving alghorithm or change position of Start and End");
         }
-        
-        watched.setMessage("analyzed");
+        if (startEndInNoStartEnd == 0){
+            watched.setMessage("analyzed");
+        }
+
     }
 
     private static void shortest(){
@@ -235,10 +240,10 @@ public class Main{
 
         int[] switchSE;
         int[] customObject = new int[2];
-
+ 
         if (c == 'S'){
-            customObject[0] = maze.getnewStartPosition()[0];
-            customObject[1] = maze.getnewStartPosition()[1];
+            customObject[0] = maze.getNewStartPosition()[0];
+            customObject[1] = maze.getNewStartPosition()[1];
         } else {
             customObject[0] = maze.getNewEndPosition()[0];
             customObject[1] = maze.getNewEndPosition()[1];
@@ -367,7 +372,7 @@ public class Main{
 
 
 
-    private static boolean ifPath(int[] customObject){
+    public static boolean ifPath(int[] customObject){
 
         boolean x = false;
         if (customObject[0] < maze.getColumns() && customObject[1] < maze.getColumns()){

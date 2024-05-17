@@ -13,7 +13,7 @@ import java.awt.Dimension;
 
 public class Frame extends JFrame implements Observer{
 
-    private  Menu menuBar;
+    private  Menu menu;
     private  ToolPanel toolPanel;
     private  OuterContentPanel outerContentPanel;
 
@@ -32,7 +32,7 @@ public class Frame extends JFrame implements Observer{
     //gettery i settery
 
     public Menu getMenu(){
-        return this.menuBar;
+        return this.menu;
     }
 
     public ToolPanel getToolPanel(){
@@ -49,9 +49,12 @@ public class Frame extends JFrame implements Observer{
         ImageIcon logo = new ImageIcon("Files/logo.jpeg");
         this.setIconImage(logo.getImage());
 
-        this.menuBar = new Menu(this, watched, outerContentPanel);
+        
+
         this.outerContentPanel = new OuterContentPanel(maze, watched);
+
         this.toolPanel = new ToolPanel( watched, outerContentPanel, maze);
+        menu = new Menu(this, watched, outerContentPanel);
 
         this.setTitle("aMaze");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,17 +63,20 @@ public class Frame extends JFrame implements Observer{
         this.setMinimumSize(new Dimension(900, 480));
         this.setLayout(new BorderLayout());
 
-        this.setJMenuBar(menuBar);
+        this.setJMenuBar(menu);
         this.add(toolPanel, BorderLayout.WEST);
         this.add(outerContentPanel);
         this.setVisible(true);
+
+        watched.registerObserver(this.outerContentPanel.getInfoLabel());
+        watched.setMessage("started");
         
     }
 
     private void getFile(){
         
-        menuBar.setloadEnabled(true);
-        menuBar.setexportEnabled(false);
+        this.menu.setloadEnabled(true);
+        this.menu.setexportEnabled(false);
         
     }
 
@@ -102,7 +108,6 @@ public class Frame extends JFrame implements Observer{
     }
 
     private void analyze(){
-
         getToolPanel().toolEnable(false, new int[]{0});
     }
     
@@ -119,6 +124,18 @@ public class Frame extends JFrame implements Observer{
 
     }
 
+    private void blockStartInputs(){
+
+        toolPanel.getChooseStartEndPanel().setPickStartEnabled(false);
+        toolPanel.getChooseStartEndPanel().setTypeStartEnabled(false);
+
+    }
+
+    private void blockEndIputs(){
+
+        toolPanel.getChooseStartEndPanel().setPickEndEnabled(false);
+        toolPanel.getChooseStartEndPanel().setTypeEndEnabled(false);
+    }
 
     @Override
     public void update(String message) {
@@ -151,6 +168,12 @@ public class Frame extends JFrame implements Observer{
                 break;
             case "solved":
                 solved();
+                break;
+            case "StartEndNewPositionS":
+                blockStartInputs();
+                break;
+            case "StartEndNewPositionE":
+                blockEndIputs();
                 break;
             default:
                 break;

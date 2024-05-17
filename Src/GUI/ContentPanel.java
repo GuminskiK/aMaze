@@ -15,7 +15,6 @@ import javax.swing.plaf.FontUIResource;
 import Core.Maze;
 import Core.Watched;
 
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -50,6 +49,7 @@ public class ContentPanel extends JPanel {
         Component[] components = this.getComponents();
         if ( components.length != 0 && on){
             this.remove(components[1]);
+            this.mazePanel.rePaint(maze);
         }
         x++;
 

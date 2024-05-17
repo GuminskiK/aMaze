@@ -24,12 +24,9 @@ public class OuterContentPanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(scrollPane);
         this.add(infoLabel, BorderLayout.SOUTH);
-        
-        watched.registerObserver(infoLabel);
-        watched.setMessage("started");
     }
 
-    public JLabel getInfoLabel(){
+    public InfoLabel getInfoLabel(){
         return this.infoLabel;
     }
 

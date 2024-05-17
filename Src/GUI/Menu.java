@@ -36,9 +36,10 @@ public class Menu extends JMenuBar implements ActionListener {
 
     Menu(Frame frame, Watched watched, OuterContentPanel outerContentPanel) {
 
+        System.out.println("wchodzę");
         done = 0;
-        this.watched = watched;
         this.frame = frame;
+        this.watched = watched;
         this.outerContentPanel = outerContentPanel;
 
         fileMenu = new JMenu("File");
@@ -58,7 +59,6 @@ public class Menu extends JMenuBar implements ActionListener {
 
         this.add(fileMenu);
         this.add(helpMenu);
-
     }
 
     @Override
