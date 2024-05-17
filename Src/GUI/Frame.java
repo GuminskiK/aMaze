@@ -203,18 +203,14 @@ public class Frame extends JFrame implements Observer{
 
     private void noStartEnd(){
         toolPanel.getChooseStartEndPanel().setVisible(true);
-        outerContentPanel.getInfoLabel().setText("Choose Start and End");
-
     }
 
     private void noStart(){
         toolPanel.getChooseStartEndPanel().setVisible(true);
-        outerContentPanel.getInfoLabel().setText("Choose Start");
     }
 
     private void noEnd(){
         toolPanel.getChooseStartEndPanel().setVisible(true);
-        outerContentPanel.getInfoLabel().setText("Choose End");
     }
 
 

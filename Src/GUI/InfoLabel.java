@@ -47,6 +47,14 @@ public class InfoLabel extends JLabel implements Observer {
             case "solved":
                 this.setText("<html>The solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
                 break;
+            case "noStartEnd":
+                this.setText("Choose Start and End");
+                break;
+            case "noStart":
+                this.setText("Choose Start");
+                break;
+            case "noEnd":
+                this.setText("Choose End");
             default:
                 break;
         }
