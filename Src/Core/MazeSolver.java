@@ -87,7 +87,7 @@ public class MazeSolver {
         } else {
             lengthNow += graph.getNodeConnectionsValue(idNow, y + 1);
             nodeMap.get(idNext).setDirectionFrom(searchForDirection(idNext, idNow));
-            solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeConnectionsValue(idNow, y + 1), searchForDirection(idNow, idNext)));
+            solutionBlocks.add(new SolutionBlock(graph.getNodeConnectionsValue(idNow, y + 1), searchForDirection(idNow, idNext)));
         }
         return idNext;
 
@@ -117,7 +117,7 @@ public class MazeSolver {
                 nodeMap.get(idNext).setDirectionToMin(searchForDirection(idNext, idNow) + 1);
                 nodeMap.get(idNow).setVisited(false);
             } else { //whole
-                solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeConnectionsValue(idNow, ((int) nodeMap.get(idNow).getDirectionFrom()) * 2 + 1), searchForDirection(idNow, idNext)));
+                solutionBlocks.add(new SolutionBlock(graph.getNodeConnectionsValue(idNow, ((int) nodeMap.get(idNow).getDirectionFrom()) * 2 + 1), searchForDirection(idNow, idNext)));
                 nodeMap.get(idNext).setDirectionToMin(searchForDirection(idNext, idNow));;
             }
             

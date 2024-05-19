@@ -2,16 +2,11 @@ package Core;
 
 public class SolutionBlock implements Cloneable {
 
-    private int fromWhichNode;
-    private int toWhichNode;
-
     private int steps;
     private int direction;
 
-    SolutionBlock(int fromWhichNode, int toWhichNode, int steps, int direction){
+    SolutionBlock( int steps, int direction){
 
-        this.fromWhichNode = fromWhichNode;
-        this.toWhichNode = toWhichNode;
         this.steps = steps;
         this.direction = direction;
     }

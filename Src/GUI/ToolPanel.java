@@ -20,7 +20,7 @@ public class ToolPanel extends JPanel{
 
     private ChooseStartEndPanel chooseStartEndPanel;
 
-    private JComboBox modes;
+    private JComboBox<String> modes;
 
 
     private Font font = new Font( "Dialog", Font.BOLD, 10);
@@ -50,7 +50,7 @@ public class ToolPanel extends JPanel{
         );
         
         String[] modesList = new String[]{"-Choose algorithm-","Shortest", "Whole"}; 
-        modes = new JComboBox(modesList);
+        modes = new JComboBox<String>(modesList);
         modes.setPreferredSize(new Dimension(140, 30));
         modes.addActionListener( new ActionListener() {
 

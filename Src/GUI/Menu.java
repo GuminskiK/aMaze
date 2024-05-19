@@ -30,13 +30,11 @@ public class Menu extends JMenuBar implements ActionListener {
 
     private File file;
     private File fileToSave;
-    private Integer done;
 
     private String fileType;
 
     Menu(Frame frame, Watched watched, OuterContentPanel outerContentPanel) {
 
-        done = 0;
         this.frame = frame;
         this.watched = watched;
         this.outerContentPanel = outerContentPanel;
@@ -81,7 +79,6 @@ public class Menu extends JMenuBar implements ActionListener {
                 Main.setFilePath(file.getAbsolutePath());
                 Main.setFileType(file.getAbsolutePath().substring(file.getAbsolutePath().length() - 3));
                 this.file = file;
-                this.done = 1;
                 this.watched.setMessage("gotFile");
             }
 
@@ -102,12 +99,11 @@ public class Menu extends JMenuBar implements ActionListener {
             int response = fileChooser.showSaveDialog(null);
 
             if (response == JFileChooser.APPROVE_OPTION) {
-                File fileToSave = fileChooser.getSelectedFile();
+                fileToSave = fileChooser.getSelectedFile();
                 if (!fileToSave.getAbsolutePath().toLowerCase().endsWith(".bin")) {
                     fileToSave = new File(fileToSave.getAbsolutePath() + ".bin");
                 }
 
-                this.fileToSave = fileToSave;
                 try {
                     FileWriter writer = new FileWriter(fileToSave);
                     writer.write("I can write in this file!");

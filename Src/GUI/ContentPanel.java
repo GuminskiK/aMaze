@@ -4,12 +4,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
 import javax.swing.plaf.FontUIResource;
 
 import Core.Maze;
@@ -23,8 +21,6 @@ public class ContentPanel extends JPanel {
 
     private MazePanel mazePanel;
     private JPanel helpPanel;
-    private int x;
-    private Border border = BorderFactory.createLineBorder(Color.GRAY, 5);
     private boolean on;
     private Maze maze;
 
@@ -51,7 +47,6 @@ public class ContentPanel extends JPanel {
             this.remove(components[1]);
             this.mazePanel.rePaint(maze);
         }
-        x++;
 
         this.mazePanel = new MazePanel(columns, rows, maze);
         this.add(mazePanel);

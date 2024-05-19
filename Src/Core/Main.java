@@ -129,7 +129,7 @@ public class Main {
 
         graph = new Graph();
 
-        mazeAnalyzer = new MazeAnalyzer(file, frame.getToolPanel().getChooseStartEndPanel(), maze, graph);
+        mazeAnalyzer = new MazeAnalyzer(frame.getToolPanel().getChooseStartEndPanel(), maze, graph);
         mazeAnalyzer.analyze();
 
         if (maze.getStart()[0] == null) {

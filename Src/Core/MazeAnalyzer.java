@@ -1,5 +1,4 @@
 package Core;
-import java.io.File;
 
 import GUI.ChooseStartEndPanel;
 
@@ -20,19 +19,15 @@ public class MazeAnalyzer {
 
     private int currentRows;
 
-    private File file;
-
     private char[][] x;
     private int[] ID;
     private int[] Numbers;
 
-    MazeAnalyzer( File file, ChooseStartEndPanel chooseStartEndPanel, Maze maze, Graph graph){
+    MazeAnalyzer( ChooseStartEndPanel chooseStartEndPanel, Maze maze, Graph graph){
 
         this.maze = maze;
         this.graph = graph;
         this.chooseStartEndPanel = chooseStartEndPanel;
-        this.file = file;
-
         this.start = -2;
         this.end = -2;
 

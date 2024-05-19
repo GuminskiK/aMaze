@@ -7,11 +7,9 @@ import java.util.Scanner;
 public class TerminalInterface implements Observer {
 
     private Scanner scanner = new Scanner(System.in);
-    private boolean isFileOk = false;
+
     private String filePath;
 
-    private int currentRow;
-    private int currentColumn;
     private int lastDirection;
 
     private int startX;
@@ -32,8 +30,6 @@ public class TerminalInterface implements Observer {
 
     private String scanned = "";
     private Watched lineScanned;
-
-    private boolean filePathScanned = false;
 
     private boolean terminalWasUsed = false;
 
@@ -141,8 +137,6 @@ public class TerminalInterface implements Observer {
     }
 
     private void writeSolution(ArrayList<SolutionBlock> solution) {
-        currentColumn = maze.getStart()[0];
-        currentRow = maze.getStart()[1];
         lastDirection = 5;
 
         for (SolutionBlock solutionBlock : solution) {
@@ -155,19 +149,15 @@ public class TerminalInterface implements Observer {
         String directionString = "";
         switch (direction) {
             case 0:
-                currentRow -= length;
                 directionString = "North";
                 break;
             case 1:
-                currentColumn += length;
                 directionString = "East";
                 break;
             case 2:
-                currentRow += length;
                 directionString = "South";
                 break;
             case 3:
-                currentColumn -= length;
                 directionString = "West";
                 break;
             default:
@@ -184,7 +174,6 @@ public class TerminalInterface implements Observer {
     }
 
     private void reset() {
-        isFileOk = false;
         isFileLoaded = false;
         isStartCorrectlyChosen = false;
         isEndCorrectlyChosen = false;
@@ -193,7 +182,6 @@ public class TerminalInterface implements Observer {
         endInputBlock = false;
         scanned = "";
 
-        filePathScanned = false;
         terminalWasUsed = false;
 
     }

@@ -46,7 +46,7 @@ public class ChooseStartEndPanel extends JPanel {
 
     private Font font = new Font("Dialog", Font.BOLD, 10);
 
-    ChooseStartEndPanel(ContentPanel contentPanel, JComboBox modes, JLabel infoLabel, Maze maze, Watched watched) {
+    ChooseStartEndPanel(ContentPanel contentPanel, JComboBox<String> modes, JLabel infoLabel, Maze maze, Watched watched) {
 
         this.typeStartOn = 0;
         this.typeEndOn = 0;
@@ -311,10 +311,10 @@ public class ChooseStartEndPanel extends JPanel {
 
     public boolean[] ifNull() {
         boolean[] Null = new boolean[2];
-        if (startPosX == null) {
+        if (startPosX == null || startPosY == null) {
             Null[0] = true;
         }
-        if (endPosX == null) {
+        if (endPosX == null || endPosY == null) {
             Null[1] = true;
         }
         return Null;
