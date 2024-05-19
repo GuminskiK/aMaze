@@ -242,7 +242,6 @@ public class TerminalInterface implements Observer {
                     watched.setMessage("StartEndNewPositionS");
                     if (c == 'B') {
                         noE();
-                        System.out.println("Both");
                     }
 
                 } else if (startInputBlock) {
