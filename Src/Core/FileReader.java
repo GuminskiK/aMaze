@@ -8,8 +8,13 @@ public class FileReader {
 
     private int columns;
     private int rows;
+    private File file;
     
-    public void countRowsColumns(File file) {
+    FileReader( File file){
+        this.file = file;
+    }
+
+    public void countRowsColumns() {
 
         columns = 0;
         rows = 0;
@@ -31,7 +36,7 @@ public class FileReader {
 
     }
 
-    public char[][] readFileTXT(File file) {
+    public char[][] readFileTXT() {
 
         char[][] mazeInChar2DArray = new char[rows][columns];
 

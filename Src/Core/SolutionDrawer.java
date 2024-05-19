@@ -5,12 +5,17 @@ import java.util.ArrayList;
 public class SolutionDrawer {
 
     private Maze maze;
-    int currentColumn;
-    int currentRow;
+    private int currentColumn;
+    private int currentRow;
 
-    public void drawSolution(ArrayList<SolutionBlock> solution, Maze maze){
+    SolutionDrawer(Maze maze){
 
         this.maze = maze;
+        
+    }
+
+    public void drawSolution(ArrayList<SolutionBlock> solution){
+        
         this.currentColumn = maze.getStart()[0];
         this.currentRow = maze.getStart()[1];
 

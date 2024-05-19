@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Core.Maze;
@@ -32,8 +31,8 @@ public class ToolPanel extends JPanel{
         this.setPreferredSize(new Dimension(150,50));
         //this.setLayout();
         
-        createToolButton( analyze, "Analyze maze", font);
-        createToolButton( custom, "Choose Start/End", font);
+        createToolButton( analyze, "Analyze maze");
+        createToolButton( custom, "Choose Start/End");
 
         analyze.addActionListener(
 
@@ -77,7 +76,7 @@ public class ToolPanel extends JPanel{
 
     }
 
-    private void createToolButton( JButton button ,String txt, Font font){
+    private void createToolButton( JButton button, String txt){
 
         button.setText(txt);
         button.setFont(font);
@@ -86,7 +85,7 @@ public class ToolPanel extends JPanel{
         button.setEnabled(false);
     }
 
-    public void resetComboBoX(){
+    public void resetComboBox(){
         modes.setSelectedIndex(0);
     }
 

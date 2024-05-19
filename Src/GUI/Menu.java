@@ -126,11 +126,11 @@ public class Menu extends JMenuBar implements ActionListener {
         }
     }
 
-    public void setloadEnabled(boolean x) {
+    public void setLoadEnabled(boolean x) {
         loadItem.setEnabled(x);
     }
 
-    public void setexportEnabled(boolean x){
+    public void setExportEnabled(boolean x){
         exportItem.setEnabled(x);
     }
 

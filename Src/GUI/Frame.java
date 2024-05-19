@@ -72,8 +72,8 @@ public class Frame extends JFrame implements Observer{
 
     private void getFile(){
         
-        this.menu.setloadEnabled(true);
-        this.menu.setexportEnabled(false);
+        this.menu.setLoadEnabled(true);
+        this.menu.setExportEnabled(false);
         
     }
 
@@ -81,11 +81,11 @@ public class Frame extends JFrame implements Observer{
 
         getToolPanel().getChooseStartEndPanel().changeStartPos(null,null);
         getToolPanel().getChooseStartEndPanel().changeEndPos(null,null);
-        getMenu().setexportEnabled(false);
+        getMenu().setExportEnabled(false);
         getToolPanel().getChooseStartEndPanel().reset();
         getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
         getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
-        getToolPanel().resetComboBoX();
+        getToolPanel().resetComboBox();
 
         watched.setMessage("read");
 
@@ -102,7 +102,7 @@ public class Frame extends JFrame implements Observer{
 
     private void wasRead(){
 
-        getMenu().setloadEnabled(false);
+        getMenu().setLoadEnabled(false);
         getToolPanel().toolEnable(false, new int[]{0,1,2,3,4,5});
         getToolPanel().toolEnable(true, new int[]{0});
     }
@@ -119,31 +119,31 @@ public class Frame extends JFrame implements Observer{
     private void solved(){
 
         getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
-        getMenu().setloadEnabled(true);
-        getMenu().setexportEnabled(true);
+        getMenu().setLoadEnabled(true);
+        getMenu().setExportEnabled(true);
 
     }
 
     private void startChanged(){
         
-        toolPanel.getChooseStartEndPanel().EnableStartInputs(false);
+        toolPanel.getChooseStartEndPanel().enableStartInputs(false);
 
         toolPanel.toolEnable(true, new int[]{2});
 
         if ( !maze.getEndChanged()){
-            toolPanel.getChooseStartEndPanel().EnableEndInputs(true);
+            toolPanel.getChooseStartEndPanel().enableEndInputs(true);
         }
     }
 
     private void endChanged(){
 
         
-        toolPanel.getChooseStartEndPanel().EnableEndInputs(false);
+        toolPanel.getChooseStartEndPanel().enableEndInputs(false);
 
         toolPanel.toolEnable(true, new int[]{2});
 
         if ( !maze.getStartChanged()){
-            toolPanel.getChooseStartEndPanel().EnableStartInputs(true);
+            toolPanel.getChooseStartEndPanel().enableStartInputs(true);
         }
     }
 
@@ -213,10 +213,10 @@ public class Frame extends JFrame implements Observer{
                 solved();
                 break;
             case "StartEndNewPositionS":
-                toolPanel.getChooseStartEndPanel().EnableStartInputs(false);
+                toolPanel.getChooseStartEndPanel().enableStartInputs(false);
                 break;
             case "StartEndNewPositionE":
-                toolPanel.getChooseStartEndPanel().EnableEndInputs(false);
+                toolPanel.getChooseStartEndPanel().enableEndInputs(false);
                 break;
             case "StartChanged":
                 startChanged();

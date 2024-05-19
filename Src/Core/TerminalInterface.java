@@ -6,38 +6,38 @@ import java.util.Scanner;
 
 public class TerminalInterface implements Observer {
 
-    Scanner scanner = new Scanner(System.in);
-    boolean isFileOk = false;
-    String filePath;
+    private Scanner scanner = new Scanner(System.in);
+    private boolean isFileOk = false;
+    private String filePath;
 
-    int currentRow;
-    int currentColumn;
-    int lastDirection;
+    private int currentRow;
+    private int currentColumn;
+    private int lastDirection;
 
-    int startX;
-    int startY;
-    int endX;
-    int endY;
+    private int startX;
+    private int startY;
+    private int endX;
+    private int endY;
 
-    Watched watched;
-    Thread threadInput;
-    Thread threadInS;
-    Thread threadInE;
-    boolean isFileLoaded = false;
-    boolean isStartCorrectlyChosen = false;
-    boolean isEndCorrectlyChosen = false;
-    boolean endScanning = false;
-    boolean startInputBlock = false;
-    boolean endInputBlock = false;
+    private Watched watched;
+    private Thread threadInput;
+    private Thread threadInS;
+    private Thread threadInE;
+    private boolean isFileLoaded = false;
+    private boolean isStartCorrectlyChosen = false;
+    private boolean isEndCorrectlyChosen = false;
+    private boolean endScanning = false;
+    private boolean startInputBlock = false;
+    private boolean endInputBlock = false;
 
-    String scanned = "";
-    Watched lineScanned;
+    private String scanned = "";
+    private Watched lineScanned;
 
-    boolean filePathScanned = false;
+    private boolean filePathScanned = false;
 
-    boolean TerminalWasUsed = false;
+    private boolean terminalWasUsed = false;
 
-    Maze maze;
+    private Maze maze;
 
     TerminalInterface(Watched watched, Maze maze) {
 
@@ -71,7 +71,7 @@ public class TerminalInterface implements Observer {
                     isFileLoaded = true;
                     Main.setFilePath(filePath);
                     Main.setFileType(file.getAbsolutePath().substring(file.getAbsolutePath().length() - 3));
-                    TerminalWasUsed = true;
+                    terminalWasUsed = true;
                     watched.setMessage("gotFile");
 
                     break;
@@ -90,7 +90,7 @@ public class TerminalInterface implements Observer {
 
     }
 
-    private void scannerManager() {
+    private void notifier() {
 
         synchronized (this) {
             this.notifyAll();
@@ -116,13 +116,13 @@ public class TerminalInterface implements Observer {
     }
 
     private void wasRead() {
-        if (TerminalWasUsed) {
+        if (terminalWasUsed) {
             watched.setMessage("analyze");
         }
     }
 
     private void analyzed() {
-        if (TerminalWasUsed) {
+        if (terminalWasUsed) {
             watched.setMessage("shortest");
         }
     }
@@ -132,15 +132,15 @@ public class TerminalInterface implements Observer {
         
 
         System.out.println("The maze has been successfully solved");
-        if (TerminalWasUsed) {
-            writeSolution(Main.mazeSolver.getSolution(), Main.maze);
+        if (terminalWasUsed) {
+            writeSolution(Main.getMazeSolver().getSolution());
         }
         System.out.println("Please give me a filePath to your maze that you would like me to solve.");
         reset();
         getFilePath();
     }
 
-    private void writeSolution(ArrayList<SolutionBlock> solution, Maze maze) {
+    private void writeSolution(ArrayList<SolutionBlock> solution) {
         currentColumn = maze.getStart()[0];
         currentRow = maze.getStart()[1];
         lastDirection = 5;
@@ -194,7 +194,7 @@ public class TerminalInterface implements Observer {
         scanned = "";
 
         filePathScanned = false;
-        TerminalWasUsed = false;
+        terminalWasUsed = false;
 
     }
 
@@ -341,7 +341,7 @@ public class TerminalInterface implements Observer {
                 break;
             case "gotFile":
                 gotFile();
-                scannerManager();
+                notifier();
                 break;
             case "wasRead":
                 wasRead();
@@ -354,18 +354,18 @@ public class TerminalInterface implements Observer {
                 break;
             case "noStartEnd":
                 noS('B');
-                scannerManager();
+                notifier();
                 break;
             case "noStart":
                 noS('S');
-                scannerManager();
+                notifier();
                 break;
             case "noEnd":
                 noE();
-                scannerManager();
+                notifier();
                 break;
             case "lineScanned":
-                scannerManager();
+                notifier();
                 break;
             case "StartEndNewPositionS":
                 blockStartInputs();

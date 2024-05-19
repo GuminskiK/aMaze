@@ -5,26 +5,26 @@ import GUI.Frame;
 
 public class Main {
 
-    static TerminalInterface terminalInterface;
-    static Frame frame;
+    private static TerminalInterface terminalInterface;
+    private static Frame frame;
 
-    static MazeAnalyzer mazeAnalyzer;
-    static FileReader fileReader;
+    private static MazeAnalyzer mazeAnalyzer;
+    private static FileReader fileReader;
 
-    static Maze maze;
-    static Graph graph;
+    private static Maze maze;
+    private static Graph graph;
 
-    static File file;
-    static String fileType;
-    static String filePath;
+    private static File file;
+    private static String fileType;
+    private static String filePath;
 
-    static Integer[] oldStartPosition = new Integer[2];
-    static Integer[] oldEndPosition = new Integer[2];
+    private static Integer[] oldStartPosition = new Integer[2];
+    private static Integer[] oldEndPosition = new Integer[2];
 
-    static char[][] x;
+    private static char[][] x;
 
-    static Watched watched;
-    static MazeSolver mazeSolver;
+    private static Watched watched;
+    private static MazeSolver mazeSolver;
 
     public static void main(String[] args) {
 
@@ -97,12 +97,12 @@ public class Main {
     private static void read() {
 
         file = new File(filePath);
-        fileReader = new FileReader();
+        fileReader = new FileReader(file);
 
         if (fileType.equals("txt")) {
 
-            fileReader.countRowsColumns(file);
-            x = fileReader.readFileTXT(file);
+            fileReader.countRowsColumns();
+            x = fileReader.readFileTXT();
 
         } else {
 
@@ -129,8 +129,8 @@ public class Main {
 
         graph = new Graph();
 
-        mazeAnalyzer = new MazeAnalyzer();
-        mazeAnalyzer.analyzeMaze(file, fileType, frame.getToolPanel().getChooseStartEndPanel(), maze, graph);
+        mazeAnalyzer = new MazeAnalyzer(file, frame.getToolPanel().getChooseStartEndPanel(), maze, graph);
+        mazeAnalyzer.analyze();
 
         if (maze.getStart()[0] == null) {
             oldStartPosition[0] = null;
@@ -193,22 +193,22 @@ public class Main {
 
     private static void shortest() {
 
-        mazeSolver = new MazeSolver();
-        mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
+        mazeSolver = new MazeSolver(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
+        mazeSolver.solveMaze();
 
-        SolutionDrawer solutionWriter = new SolutionDrawer();
-        solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
+        SolutionDrawer solutionWriter = new SolutionDrawer(maze);
+        solutionWriter.drawSolution(mazeSolver.getSolution());
 
         watched.setMessage("solved");
     }
 
     private static void whole() {
 
-        mazeSolver = new MazeSolver();
-        mazeSolver.solveMaze(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 1);
+        mazeSolver = new MazeSolver(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 1);
+        mazeSolver.solveMaze();
 
-        SolutionDrawer solutionWriter = new SolutionDrawer();
-        solutionWriter.drawSolution(mazeSolver.getSolution(), maze);
+        SolutionDrawer solutionWriter = new SolutionDrawer(maze);
+        solutionWriter.drawSolution(mazeSolver.getSolution());
 
         watched.setMessage("solved");
     }
@@ -256,7 +256,7 @@ public class Main {
                 watched.setMessage("EndChanged");
             }
 
-            mazeAnalyzer.customAnalyzer(customObject, c);
+            mazeAnalyzer.newStartEndAnalyzer(customObject, c);
             maze.setCharFromMazeInChar2DArray(customObject[1], customObject[0], 'X');
 
             frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
@@ -273,7 +273,7 @@ public class Main {
         }
     }
 
-    static void changeStartEndIntoWall() {
+    private static void changeStartEndIntoWall() {
 
         maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
         maze.setCharFromMazeInChar2DArray(maze.getStart()[0], maze.getStart()[1], 'X');
@@ -305,4 +305,7 @@ public class Main {
         filePath = filePath2;
     }
 
+    public static MazeSolver getMazeSolver(){
+        return mazeSolver;
+    }
 }

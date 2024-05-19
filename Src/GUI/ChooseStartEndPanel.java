@@ -53,7 +53,7 @@ public class ChooseStartEndPanel extends JPanel {
 
         start = new JLabel("start");
 
-        createToolButton(pickStart, "Pick Start", font);
+        createToolButton(pickStart, "Pick Start");
         pickStart.addActionListener(
 
                 (e) -> {
@@ -67,7 +67,7 @@ public class ChooseStartEndPanel extends JPanel {
                     maze.pickCustom(0);
                 });
 
-        createToolButton(typeStart, "Type Start", font);
+        createToolButton(typeStart, "Type Start");
         typeStart.setVisible(true);
 
         typeStart.addActionListener(
@@ -151,7 +151,7 @@ public class ChooseStartEndPanel extends JPanel {
 
         end = new JLabel("end");
 
-        createToolButton(pickEnd, "Pick End", font);
+        createToolButton(pickEnd, "Pick End");
         pickEnd.addActionListener(
 
                 (e) -> {
@@ -164,7 +164,7 @@ public class ChooseStartEndPanel extends JPanel {
                     contentPanel.start('E', watched);
                     maze.pickCustom(0);
                 });
-        createToolButton(typeEnd, "Type End", font);
+        createToolButton(typeEnd, "Type End");
         typeEnd.setVisible(true);
         typeEnd.addActionListener(
 
@@ -249,7 +249,7 @@ public class ChooseStartEndPanel extends JPanel {
         this.setVisible(true);
     }
 
-    private void createToolButton(JButton button, String txt, Font font) {
+    private void createToolButton(JButton button, String txt) {
 
         button.setText(txt);
         button.setFont(font);
@@ -258,14 +258,14 @@ public class ChooseStartEndPanel extends JPanel {
         button.setEnabled(true);
     }
 
-    public void EnableStartInputs( boolean x){
+    public void enableStartInputs( boolean x){
 
         pickStart.setEnabled(x);
         typeStart.setEnabled(x);
 
     }
 
-    public void EnableEndInputs( boolean x){
+    public void enableEndInputs( boolean x){
 
         pickEnd.setEnabled(x);
         typeEnd.setEnabled(x);

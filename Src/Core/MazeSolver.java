@@ -21,8 +21,8 @@ public class MazeSolver {
 
     private int mode;
 
-    public int solveMaze(Graph graph, int start, int end, int mode) {
-
+    MazeSolver(Graph graph, int start, int end, int mode){
+        
         this.graph = graph;
         this.mode = mode;
         this.start = start;
@@ -30,19 +30,22 @@ public class MazeSolver {
 
         nodeMap = new ArrayList<>();
         solutionBlocks = new ArrayList<>();
+    }
 
+    public void solveMaze() {
+
+        
         for (int i = 0; i < graph.getNodesConnections().size(); i++) {
 
-            nodeMap.add(new Node(i));
+            nodeMap.add(new Node());
 
         }
 
         solve();
+        
         if(mode == 1){
             saveSolution();
         }
-
-        return 0;
     }
 
     private void solve() {
@@ -52,7 +55,7 @@ public class MazeSolver {
         while (p != 1) {
 
             idNow = idNext;
-            nodeMap.get(idNow).visited = true;
+            nodeMap.get(idNow).setVisited(true);
 
             idNext = whichNext();
             if (idNext == -1) {
@@ -65,14 +68,14 @@ public class MazeSolver {
 
     private int whichNext() {
 
-        int y = nodeMap.get(idNow).directionToMin * 2;
+        int y = nodeMap.get(idNow).getDirectionToMin() * 2;
         Integer idNext = null;
 
         while (y != 8) {
             idNext = graph.getNodeConnectionsValue(idNow, y);
             // następny nieodwiedzony, a długość połączenia nie równa 0;
             if (idNext != null) {
-                if (nodeMap.get(idNext).visited == false) {
+                if (nodeMap.get(idNext).getVisited() == false) {
                     break;
                 }
             }
@@ -83,7 +86,7 @@ public class MazeSolver {
             idNext = -1;
         } else {
             lengthNow += graph.getNodeConnectionsValue(idNow, y + 1);
-            nodeMap.get(idNext).directionFrom = searchForDirection(idNext, idNow);
+            nodeMap.get(idNext).setDirectionFrom(searchForDirection(idNext, idNow));
             solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeConnectionsValue(idNow, y + 1), searchForDirection(idNow, idNext)));
         }
         return idNext;
@@ -105,17 +108,17 @@ public class MazeSolver {
                 }
             }
             
-            lengthNow -= graph.getNodeConnectionsValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1);
+            lengthNow -= graph.getNodeConnectionsValue(idNow, ((int) nodeMap.get(idNow).getDirectionFrom()) * 2 + 1);
             //solutionBlocks.remove(solutionBlocks.size() - 1);
-            idNext = graph.getNodeConnectionsValue(idNow, (int) nodeMap.get(idNow).directionFrom * 2);
+            idNext = graph.getNodeConnectionsValue(idNow, (int) nodeMap.get(idNow).getDirectionFrom() * 2);
 
             if (mode == 0){ //shortest
                 solutionBlocks.remove(solutionBlocks.size() - 1);
-                nodeMap.get(idNext).directionToMin = searchForDirection(idNext, idNow) + 1;
-                nodeMap.get(idNow).visited = false; 
+                nodeMap.get(idNext).setDirectionToMin(searchForDirection(idNext, idNow) + 1);
+                nodeMap.get(idNow).setVisited(false);
             } else { //whole
-                solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeConnectionsValue(idNow, ((int) nodeMap.get(idNow).directionFrom) * 2 + 1), searchForDirection(idNow, idNext)));
-                nodeMap.get(idNext).directionToMin = searchForDirection(idNext, idNow);
+                solutionBlocks.add(new SolutionBlock(idNow, idNext, graph.getNodeConnectionsValue(idNow, ((int) nodeMap.get(idNow).getDirectionFrom()) * 2 + 1), searchForDirection(idNow, idNext)));
+                nodeMap.get(idNext).setDirectionToMin(searchForDirection(idNext, idNow));;
             }
             
 
@@ -125,19 +128,19 @@ public class MazeSolver {
         }
     }
 
-    private int searchForDirection(Integer idNext, Integer idNow) {
+    private int searchForDirection(Integer id1, Integer id2) {
 
         int i = 0;
-        Integer ID = graph.getNodeConnectionsValue(idNext, i);
-        while ( !idNow.equals(ID)) {
+        Integer ID = graph.getNodeConnectionsValue(id1, i);
+        while ( !id2.equals(ID)) {
             i += 2;
-            ID = graph.getNodeConnectionsValue(idNext, i);
+            ID = graph.getNodeConnectionsValue(id1, i);
         }
 
         return i / 2;
     }
 
-    public void saveSolution() {
+    private void saveSolution() {
 
         solution = new ArrayList<>();
         for (SolutionBlock solutionBlock : solutionBlocks) {
