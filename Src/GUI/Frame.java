@@ -48,8 +48,6 @@ public class Frame extends JFrame implements Observer{
         ImageIcon logo = new ImageIcon("Files/logo.jpeg");
         this.setIconImage(logo.getImage());
 
-        
-
         this.outerContentPanel = new OuterContentPanel(maze, watched);
 
         this.toolPanel = new ToolPanel( watched, outerContentPanel, maze);
@@ -97,6 +95,8 @@ public class Frame extends JFrame implements Observer{
 
         getOuterContentPanel().getContentPanel().addPanel(maze.getColumns(), maze.getRows());
         getToolPanel().toolEnable(true, new int[]{0});
+        getOuterContentPanel().getContentPanel().repaint();
+
         watched.setMessage("wasDrawn");
     }
 

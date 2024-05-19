@@ -24,9 +24,9 @@ public class InfoLabel extends JLabel implements Observer {
     private void startChanged(){
         
         if( maze.getStartLocated() && maze.getEndLocated()){
-            this.setText("The choice of a new Start was successful. Now you can choose new End location or choose solving mode.");
+            this.setText("<html> The choice of a new Start was successful. Now you can choose new End location or choose solving mode (the old End location will be used).<html>");
         } else {
-            this.setText("The choice of a new Start was successful. Now you can choose new End location..");
+            this.setText("The choice of a new Start was successful. Now you can choose new End location.");
         }
 
         if( maze.getStartChanged() && maze.getEndChanged()){
@@ -37,7 +37,7 @@ public class InfoLabel extends JLabel implements Observer {
     private void endChanged() {
         
         if( maze.getStartLocated() && maze.getEndLocated()){
-            this.setText("The choice of a new End was successful. Now you can choose new Start location or choose solving mode.");
+            this.setText("<html>The choice of a new End was successful. Now you can choose new Start location or choose solving mode (the old Start location will be used).<html>");
         } else{
             this.setText("The choice of a new End was successful. Now you can choose new Start location.");
         }
@@ -65,7 +65,7 @@ public class InfoLabel extends JLabel implements Observer {
                 this.setText("Drawing maze...");
                 break;
             case "wasRead":
-                this.setText("Please click Analyze maze button to analyze the maze.");
+                this.setText("<html> The maze has been loaded. It has " + maze.getColumns() + " columns and " + maze.getRows() + " rows. Please click Analyze maze button to analyze the maze.<html>");
                 break;
             case "analyze":
                 this.setText("Analysis in progress.");
@@ -77,7 +77,7 @@ public class InfoLabel extends JLabel implements Observer {
                 this.setText("Searching for the shortest solution to the maze.");
                 break;
             case "solved":
-                this.setText("<html>The solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
+                this.setText("<html> The solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
                 break;
             case "noStartEnd":
                 this.setText("Choose Start and End");
