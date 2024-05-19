@@ -124,39 +124,26 @@ public class Frame extends JFrame implements Observer{
 
     }
 
-    private void EnableStartInputs( boolean x){
-
-        toolPanel.getChooseStartEndPanel().setPickStartEnabled(x);
-        toolPanel.getChooseStartEndPanel().setTypeStartEnabled(x);
-
-    }
-
-    private void EnableEndInputs( boolean x){
-
-        toolPanel.getChooseStartEndPanel().setPickEndEnabled(x);
-        toolPanel.getChooseStartEndPanel().setTypeEndEnabled(x);
-    }
-
     private void startChanged(){
         
-        EnableStartInputs(false);
+        toolPanel.getChooseStartEndPanel().EnableStartInputs(false);
 
         toolPanel.toolEnable(true, new int[]{2});
 
         if ( !maze.getEndChanged()){
-            EnableEndInputs(true);
+            toolPanel.getChooseStartEndPanel().EnableEndInputs(true);
         }
     }
 
     private void endChanged(){
 
         
-        EnableEndInputs(false);
+        toolPanel.getChooseStartEndPanel().EnableEndInputs(false);
 
         toolPanel.toolEnable(true, new int[]{2});
 
         if ( !maze.getStartChanged()){
-            EnableStartInputs(true);
+            toolPanel.getChooseStartEndPanel().EnableStartInputs(true);
         }
     }
 
@@ -226,10 +213,10 @@ public class Frame extends JFrame implements Observer{
                 solved();
                 break;
             case "StartEndNewPositionS":
-                EnableStartInputs(false);
+                toolPanel.getChooseStartEndPanel().EnableStartInputs(false);
                 break;
             case "StartEndNewPositionE":
-                EnableEndInputs(false);
+                toolPanel.getChooseStartEndPanel().EnableEndInputs(false);
                 break;
             case "StartChanged":
                 startChanged();

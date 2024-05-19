@@ -170,11 +170,11 @@ public class Maze {
     }
 
     public boolean getEndLocated(){
-        return this.getEndLocated();
+        return this.endLocated;
     }
 
     public boolean getEndChanged(){
-        return this.getEndChanged();
+        return this.endChanged;
     }
 
 
