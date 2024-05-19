@@ -21,12 +21,22 @@ public class Maze {
 
     private int maxWidthInPixels;
 
+    private boolean startLocated;
+    private boolean startChanged;
+    private boolean endLocated;
+    private boolean endChanged;
+
     Maze(){
 
         this.startX = null;
         this.startY = null;
         this.endX = null;
         this.endY = null;
+
+        this.startLocated = false;
+        this.startChanged = false;
+        this.endLocated = false;
+        this.endLocated = false;
 
         this.newStartPosition = new Integer[]{null,null};
         this.newEndPosition = new Integer[]{null,null};
@@ -68,6 +78,27 @@ public class Maze {
         }
     }
 
+    public void reset(){
+        this.columns = 0;
+        this.rows = 0;
+        this.mazeInChar2DArray = null;
+    
+        this.startX = null;
+        this.startY = null;
+        this.endX = null;
+        this.endY = null;
+
+        this.startLocated = false;
+        this.startChanged = false;
+        this.endLocated = false;
+        this.endLocated = false;
+    
+        this.newStartPosition = new Integer[]{null,null};
+        this.newEndPosition = new Integer[]{null,null};
+    
+        whoPickedCustom = 0;
+    }
+
     public void changeMazeCellToStart(int row, int column){
         mazeCells[row][column] = new StartCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10);
     }
@@ -84,10 +115,7 @@ public class Maze {
         mazeCells[row][column] = new WallCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10  );
     }
     
-    public MazeCell[][] getMazeCells(){
-        return this.mazeCells;
-    }
-
+    // type czy pick?
     public void pickCustom(int who){
         this.whoPickedCustom = who;
     }
@@ -95,18 +123,22 @@ public class Maze {
     public int whoPickedCustom(){
         return this.whoPickedCustom;
     }
-    public void setNewStartPosition ( Integer newStartPosition0, Integer newStartPosition1){
-        this.newStartPosition[0] = newStartPosition0;
-        this.newStartPosition[1] = newStartPosition1;
+
+    //gettery i settery
+    public char[][] getMaze(){
+        return mazeInChar2DArray;
+    }
+
+    public char getCharFromMazeInChar2DArray(int columns, int rows){
+        return mazeInChar2DArray[rows][columns];
+    }
+
+    public MazeCell[][] getMazeCells(){
+        return this.mazeCells;
     }
 
     public Integer[] getNewStartPosition (){
         return newStartPosition;
-    }
-
-    public void setNewEndPosition ( Integer newEndPosition0, Integer newEndPosition1){
-        this.newEndPosition[0] = newEndPosition0;
-        this.newEndPosition[1] = newEndPosition1;
     }
 
     public Integer[] getNewEndPosition (){
@@ -116,29 +148,40 @@ public class Maze {
     public int getColumns(){
         return columns;
     }
-
-    public void setColumns(int columns){
-        this.columns = columns;
-    }
-
+    
     public int getRows(){
         return rows;
     }
 
-    public void setRows(int rows){
-        this.rows = rows;
+    public Integer[] getStart (){
+        return new Integer[]{startX, startY};
     }
 
-    public char[][] getMaze(){
-        return mazeInChar2DArray;
+    public Integer[] getEnd (){
+        return new Integer[]{endX, endY};
     }
+
+    public boolean getStartLocated(){
+        return this.startLocated;
+    }
+
+    public boolean getStartChanged(){
+        return this.startChanged;
+    }
+
+    public boolean getEndLocated(){
+        return this.getEndLocated();
+    }
+
+    public boolean getEndChanged(){
+        return this.getEndChanged();
+    }
+
+
+
 
     public void setMaze( char[][] maze){
         this.mazeInChar2DArray = maze;
-    }
-
-    public char getCharFromMazeInChar2DArray(int columns, int rows){
-        return mazeInChar2DArray[rows][columns];
     }
 
     public void setCharFromMazeInChar2DArray(int columns, int rows, char x){
@@ -146,7 +189,27 @@ public class Maze {
 
     }
 
-    // settery
+    public void setNewStartPosition ( Integer newStartPosition0, Integer newStartPosition1){
+        this.newStartPosition[0] = newStartPosition0;
+        this.newStartPosition[1] = newStartPosition1;
+    }
+
+
+    public void setNewEndPosition ( Integer newEndPosition0, Integer newEndPosition1){
+        this.newEndPosition[0] = newEndPosition0;
+        this.newEndPosition[1] = newEndPosition1;
+    }
+
+    
+    public void setColumns(int columns){
+        this.columns = columns;
+    }
+
+
+    public void setRows(int rows){
+        this.rows = rows;
+    }
+
     public void setStart (Integer startX, Integer startY){
         this.startX = startX;
         this.startY = startY;
@@ -157,28 +220,20 @@ public class Maze {
         this.endY = endY;
     }
 
-    //gettery
-    public Integer[] getStart (){
-        return new Integer[]{startX, startY};
+    public void setStartLocated( boolean x){
+        this.startLocated = x;
     }
 
-    public Integer[] getEnd (){
-        return new Integer[]{endX, endY};
+    public void setStartChanged( boolean x){
+        this.startLocated = x;
     }
 
-    public void reset(){
-        this.columns = 0;
-        this.rows = 0;
-        this.mazeInChar2DArray = null;
-    
-        this.startX = null;
-        this.startY = null;
-        this.endX = null;
-        this.endY = null;
-    
-        this.newStartPosition = new Integer[]{null,null};
-        this.newEndPosition = new Integer[]{null,null};
-    
-        whoPickedCustom = 0;
+    public void setEndLocated( boolean x){
+        this.endLocated = x;
     }
+
+    public void setEndChanged( boolean x){
+        this.endChanged = x;
+    }
+
 }

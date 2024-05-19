@@ -26,11 +26,6 @@ public class Main {
     static Watched watched;
     static MazeSolver mazeSolver;
 
-    public static boolean startLocated;
-    public static boolean endLocated;
-    public static boolean startChanged;
-    public static boolean endChanged;
-
     public static void main(String[] args) {
 
         watched = new Watched();
@@ -96,12 +91,6 @@ public class Main {
     private static void reset() {
 
         maze.reset();
-
-        startLocated = false;
-        endLocated = false;
-        startChanged = false;
-        endChanged = false;
-
         watched.setMessage("reset");
     }
 
@@ -179,7 +168,7 @@ public class Main {
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(true);
                 frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(false);
 
-                endLocated = true;
+                maze.setEndLocated(true);
                 watched.setMessage("noStart");
             } else if (frame.getToolPanel().getChooseStartEndPanel().ifNull()[1] == true) {
                 frame.getOuterContentPanel().getInfoLabel().setText("Please choose End.");
@@ -187,16 +176,16 @@ public class Main {
                 frame.getToolPanel().getChooseStartEndPanel().setTypeStartEnabled(false);
                 frame.getToolPanel().getChooseStartEndPanel().setTypeEndEnabled(true);
 
-                startLocated = true;
+                maze.setStartLocated(true);
                 watched.setMessage("noEnd");
             }
 
         } else {
             frame.getOuterContentPanel().getInfoLabel().setText("You can choose solving alghorithm or change position of Start and End");
-            startLocated = true;
-            endLocated = true;
+            maze.setStartLocated(true);
+            maze.setEndLocated(true);
         }
-        if (startLocated == true && endLocated == true) {
+        if (maze.getStartLocated() && maze.getEndLocated()) {
             watched.setMessage("analyzed");
         }
 
@@ -236,12 +225,12 @@ public class Main {
             customObject[1] = maze.getNewEndPosition()[1];
         }
 
-        if (startLocated == true && c == 'S') {
+        if (maze.getStartLocated() && c == 'S') {
             maze.setCharFromMazeInChar2DArray(maze.getStart()[0], maze.getStart()[1], 'P');
             maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
         }
 
-        if (endLocated == true && c == 'E') {
+        if (maze.getEndLocated() && c == 'E') {
             maze.setCharFromMazeInChar2DArray(maze.getEnd()[0], maze.getEnd()[1], 'K');
             maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
         }
@@ -249,8 +238,8 @@ public class Main {
         if (ifPath(customObject)) {
 
             if (c == 'S') {
-                startLocated = true;
-                startChanged = true;
+                maze.setStartLocated(true);
+                maze.setStartChanged(true);
 
                 maze.changeMazeCellToStart(customObject[1], customObject[0]);
                 maze.setStart(customObject[0], customObject[1]);
@@ -258,8 +247,8 @@ public class Main {
                 watched.setMessage("StartChanged");
 
             } else {
-                endLocated = true;
-                endChanged = true;
+                maze.setEndLocated(true);
+                maze.setEndChanged(true);
 
                 maze.changeMazeCellToEnd(customObject[1], customObject[0]);
                 maze.setEnd(customObject[0], customObject[1]);

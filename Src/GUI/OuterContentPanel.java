@@ -1,7 +1,5 @@
 package GUI;
 import java.awt.BorderLayout;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -17,7 +15,7 @@ public class OuterContentPanel extends JPanel {
     OuterContentPanel(Maze maze, Watched watched){
 
         contentPanel = new ContentPanel(maze);
-        infoLabel = new InfoLabel();
+        infoLabel = new InfoLabel(maze);
         scrollPane = new JScrollPane(contentPanel);
         
 

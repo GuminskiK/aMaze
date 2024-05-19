@@ -3,8 +3,6 @@ package GUI;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
-import Core.Main;
 import Core.Maze;
 import Core.Observer;
 import Core.Watched;
@@ -143,19 +141,9 @@ public class Frame extends JFrame implements Observer{
         
         EnableStartInputs(false);
 
-        if( Main.startLocated && Main.endLocated){
-            toolPanel.toolEnable(true, new int[]{2});
-            outerContentPanel.getInfoLabel().setText("The choice of a new Start was successful. Now you can choose new End location or choose solving mode.");
-        } else {
-            toolPanel.toolEnable(true, new int[]{2});
-            outerContentPanel.getInfoLabel().setText("The choice of a new Start was successful. Now you can choose new End location..");
-        }
+        toolPanel.toolEnable(true, new int[]{2});
 
-        if( Main.startChanged && Main.endChanged){
-            outerContentPanel.getInfoLabel().setText("Choose solving mode.");
-        }
-
-        if ( !Main.endChanged){
+        if ( !maze.getEndChanged()){
             EnableEndInputs(true);
         }
     }
@@ -165,18 +153,9 @@ public class Frame extends JFrame implements Observer{
         
         EnableEndInputs(false);
 
-        if( Main.startLocated && Main.endLocated){
-            toolPanel.toolEnable(true, new int[]{2});
-            outerContentPanel.getInfoLabel().setText("The choice of a new End was successful. Now you can choose new Start location or choose solving mode.");
-        } else{
-            outerContentPanel.getInfoLabel().setText("The choice of a new End was successful. Now you can choose new Start location.");
-        }
+        toolPanel.toolEnable(true, new int[]{2});
 
-        if( Main.startChanged && Main.endChanged){
-            outerContentPanel.getInfoLabel().setText("Choose solving mode.");
-        }
-
-        if ( !Main.startChanged){
+        if ( !maze.getStartChanged()){
             EnableStartInputs(true);
         }
     }

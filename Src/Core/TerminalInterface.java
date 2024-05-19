@@ -214,7 +214,7 @@ public class TerminalInterface implements Observer {
                 }
 
                 try {
-                    if(Main.startChanged){
+                    if(maze.getStartChanged()){
                         break;
                     }
                     startX = Integer.parseInt(scanned);
@@ -231,7 +231,7 @@ public class TerminalInterface implements Observer {
                 }
 
                 try {
-                    if(Main.startChanged){
+                    if(maze.getStartChanged()){
                         break;
                     }
                     startY = Integer.parseInt(scanned);
@@ -251,7 +251,7 @@ public class TerminalInterface implements Observer {
                     break;
                 }
 
-                if (Main.startLocated && Main.endLocated) {
+                if (maze.getStartLocated() && maze.getEndLocated()) {
                     watched.setMessage("shortest");
                     break;
                 }
@@ -277,7 +277,7 @@ public class TerminalInterface implements Observer {
                 }
 
                 try {
-                    if(Main.endChanged){
+                    if(maze.getEndChanged()){
                         break;
                     }
                     endX = Integer.parseInt(scanned);
@@ -293,7 +293,7 @@ public class TerminalInterface implements Observer {
                 }
 
                 try {
-                    if(Main.endChanged){
+                    if(maze.getEndChanged()){
                         break;
                     }
                     endY = Integer.parseInt(scanned);
@@ -309,7 +309,7 @@ public class TerminalInterface implements Observer {
                     break;
                 }
 
-                if (Main.startLocated && Main.endLocated) {
+                if (maze.getStartLocated() && maze.getEndLocated()) {
                     watched.setMessage("shortest");
                     break;
                 }
