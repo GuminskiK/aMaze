@@ -290,13 +290,23 @@ public class ChooseStartEndPanel extends JPanel {
     public void changeStartPos(Integer startPosX, Integer startPosY) {
         this.startPosX = startPosX;
         this.startPosY = startPosY;
-        currentPosStart.setText(" \n ");
+        if ( startPosX != null && startPosY != null){
+            currentPosStart.setText(startPosX + "\n" + startPosY);
+        } else {
+            currentPosStart.setText(" \n ");
+        }
+        
     }
 
     public void changeEndPos(Integer endPosX, Integer endPosY) {
         this.endPosX = endPosX;
         this.endPosY = endPosY;
-        currentPosEnd.setText(" \n ");
+        if ( endPosX != null && endPosY != null){
+            currentPosEnd.setText(endPosX + "\n" + endPosY);
+        } else {
+            currentPosEnd.setText(" \n ");
+        }
+        
     }
 
     public boolean[] ifNull() {
