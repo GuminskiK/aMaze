@@ -91,7 +91,7 @@ public class Maze {
         this.startLocated = false;
         this.startChanged = false;
         this.endLocated = false;
-        this.endLocated = false;
+        this.endChanged = false;
     
         this.newStartPosition = new Integer[]{null,null};
         this.newEndPosition = new Integer[]{null,null};
@@ -225,7 +225,7 @@ public class Maze {
     }
 
     public void setStartChanged( boolean x){
-        this.startLocated = x;
+        this.startChanged= x;
     }
 
     public void setEndLocated( boolean x){

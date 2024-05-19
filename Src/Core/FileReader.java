@@ -29,9 +29,6 @@ public class FileReader {
             e.printStackTrace();
         }
 
-        System.out.println(rows);
-        System.out.println(columns);
-
     }
 
     public char[][] readFileTXT(File file) {

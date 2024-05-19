@@ -95,7 +95,6 @@ public class TerminalInterface implements Observer {
         synchronized (this) {
             this.notifyAll();
         }
-        System.out.println("Notified");
 
     }
 
@@ -106,7 +105,6 @@ public class TerminalInterface implements Observer {
         threadInput = new Thread(() -> {
             while (!endScanning) {
                 scanned = scanner.nextLine();
-                System.out.println("Loaded: " + scanned);
                 lineScanned.setMessage("lineScanned");
             }
         });
@@ -244,6 +242,7 @@ public class TerminalInterface implements Observer {
                     watched.setMessage("StartEndNewPositionS");
                     if (c == 'B') {
                         noE();
+                        System.out.println("Both");
                     }
 
                 } else if (startInputBlock) {
@@ -256,7 +255,6 @@ public class TerminalInterface implements Observer {
                     break;
                 }
             }
-            System.out.println("ENDED");
         });
 
         threadInS.start();
@@ -281,6 +279,7 @@ public class TerminalInterface implements Observer {
                         break;
                     }
                     endX = Integer.parseInt(scanned);
+
                 } catch (NumberFormatException e) {
                 }
 
