@@ -108,7 +108,8 @@ public class Menu extends JMenuBar implements ActionListener {
                     FileWriter writer = new FileWriter(fileToSave);
                     writer.write("I can write in this file!");
                     writer.close();
-                    JOptionPane.showMessageDialog(frame, "File export completed successfully!");
+                    Main.setFilePathToExport(fileToSave.getAbsolutePath());
+                    watched.setMessage("export");
 
                 } catch (IOException z) {
                     JOptionPane.showMessageDialog(frame, "An error occured while trying to export the solution: " + z.getMessage());

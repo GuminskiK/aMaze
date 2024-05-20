@@ -18,6 +18,8 @@ public class Main {
     private static String fileType;
     private static String filePath;
 
+    private static String filePathToExport;
+
     private static Integer[] oldStartPosition = new Integer[2];
     private static Integer[] oldEndPosition = new Integer[2];
 
@@ -78,6 +80,9 @@ public class Main {
                     case "StartEndNewPosition":
                         changeStartEndIntoWall();
                         break;
+                    case "export":
+                        export();
+                        break;
                     default:
                         break;
                 }
@@ -106,10 +111,10 @@ public class Main {
 
         } else {
 
-            /*
-             * fileReader.readNumberOfRowsColumns(file);
-             * x = fileReader.ReadFileBIN(file);
-             */
+            /* 
+            fileReader.readNumberOfRowsColumns();
+            x = fileReader.ReadFileBIN();
+            */
         }
 
         maze.setColumns(fileReader.getColumns());
@@ -297,6 +302,11 @@ public class Main {
         return x;
     }
 
+    private static void export(){
+        SolutionExporter solutionExporter = new SolutionExporter(mazeSolver.getSolution(), maze, filePathToExport, mazeSolver.getLengthMin(), watched);
+        solutionExporter.exportSolution();
+    }
+
     public static void setFileType(String fileType2) {
         fileType = fileType2;
     }
@@ -307,5 +317,9 @@ public class Main {
 
     public static MazeSolver getMazeSolver(){
         return mazeSolver;
+    }
+
+    public static void setFilePathToExport( String filePath){
+        filePathToExport = filePath;
     }
 }

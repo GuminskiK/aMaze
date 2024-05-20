@@ -157,4 +157,8 @@ public class MazeSolver {
         return this.solution;
     }
 
+    public int getLengthMin(){
+        return this.lengthMin;
+    }
+
 }

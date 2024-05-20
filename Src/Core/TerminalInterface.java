@@ -34,6 +34,7 @@ public class TerminalInterface implements Observer {
     private boolean terminalWasUsed = false;
 
     private Maze maze;
+    private boolean exportable;
 
     TerminalInterface(Watched watched, Maze maze) {
 
@@ -48,6 +49,7 @@ public class TerminalInterface implements Observer {
     }
 
     private void getFilePath() {
+        exportable = false;
 
         Thread threadGetFilePath = new Thread(() -> {
             while (!isFileLoaded) {
@@ -125,15 +127,12 @@ public class TerminalInterface implements Observer {
 
     private void solved() {
 
-        
-
         System.out.println("The maze has been successfully solved");
         if (terminalWasUsed) {
             writeSolution(Main.getMazeSolver().getSolution());
         }
-        System.out.println("Please give me a filePath to your maze that you would like me to solve.");
-        reset();
-        getFilePath();
+        exportable = true;
+        export();
     }
 
     private void writeSolution(ArrayList<SolutionBlock> solution) {
@@ -143,6 +142,54 @@ public class TerminalInterface implements Observer {
             writeSolutionBlock(solutionBlock.getDirection(), solutionBlock.getSteps());
         }
 
+    }
+
+    private void export() {
+        System.out.println("Do you want to export solution? If yes type \"yes\".");
+        Thread exportThread = new Thread(() -> {
+            while (true) {
+
+                try {
+                    synchronized (this) {
+                        wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (scanned.equals("yes") && exportable == true) {
+
+                    System.out.println("Please type in the name for the file.");
+                    try {
+                        synchronized (this) {
+                            wait();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (exportable == true){
+                        Main.setFilePathToExport(scanned + ".bin");
+                        watched.setMessage("export");
+                    }
+            
+                    break;
+                } else {
+                    break;
+                }
+            }
+
+            System.out.println("Please give me a filePath to your maze that you would like me to solve.");
+            reset();
+            getFilePath();
+
+        });
+
+        exportThread.start();
+    }
+
+    private void exported(){
+        exportable = false;
     }
 
     private void writeSolutionBlock(int direction, int length) {
@@ -200,11 +247,11 @@ public class TerminalInterface implements Observer {
                 }
 
                 try {
-                    if(maze.getStartChanged()){
+                    if (maze.getStartChanged()) {
                         break;
                     }
                     startX = Integer.parseInt(scanned);
-                    
+
                 } catch (NumberFormatException e) {
                 }
 
@@ -217,7 +264,7 @@ public class TerminalInterface implements Observer {
                 }
 
                 try {
-                    if(maze.getStartChanged()){
+                    if (maze.getStartChanged()) {
                         break;
                     }
                     startY = Integer.parseInt(scanned);
@@ -262,7 +309,7 @@ public class TerminalInterface implements Observer {
                 }
 
                 try {
-                    if(maze.getEndChanged()){
+                    if (maze.getEndChanged()) {
                         break;
                     }
                     endX = Integer.parseInt(scanned);
@@ -279,7 +326,7 @@ public class TerminalInterface implements Observer {
                 }
 
                 try {
-                    if(maze.getEndChanged()){
+                    if (maze.getEndChanged()) {
                         break;
                     }
                     endY = Integer.parseInt(scanned);
@@ -359,6 +406,10 @@ public class TerminalInterface implements Observer {
                 break;
             case "StartEndNewPositionE":
                 blockEndIputs();
+                break;
+            case "exported":
+                exported();
+                notifier();
                 break;
             default:
                 break;

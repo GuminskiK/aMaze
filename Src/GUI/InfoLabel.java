@@ -94,6 +94,9 @@ public class InfoLabel extends JLabel implements Observer {
             case "EndChanged":
                 endChanged();
                 break;
+            case "exported":
+                this.setText("Solution successfully exported. You can now load another maze ( File -> Load Maze ).");
+                break;
             default:
                 break;
         }

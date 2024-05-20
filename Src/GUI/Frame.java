@@ -179,7 +179,6 @@ public class Frame extends JFrame implements Observer{
         toolPanel.getChooseStartEndPanel().setVisible(true);
     }
 
-
     @Override
     public void update(String message) {
         //System.out.println("Frame: "  + message);
