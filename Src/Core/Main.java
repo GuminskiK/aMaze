@@ -102,7 +102,7 @@ public class Main {
     private static void read() {
 
         file = new File(filePath);
-        fileReader = new FileReader(file);
+        fileReader = new FileReader(file, maze);
 
         if (fileType.equals("txt")) {
 
@@ -111,10 +111,10 @@ public class Main {
 
         } else {
 
-            /* 
+            
             fileReader.readNumberOfRowsColumns();
             x = fileReader.ReadFileBIN();
-            */
+            
         }
 
         maze.setColumns(fileReader.getColumns());
