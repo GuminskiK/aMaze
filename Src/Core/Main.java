@@ -60,16 +60,16 @@ public class Main {
                         read();
                         break;
                     case "wasDrawn":
-                        wasDrawn();
+                        watched.setMessage("wasRead");
                         break;
                     case "analyze":
                         analyze();
                         break;
                     case "shortest":
-                        shortest();
+                        solveShortestPath();
                         break;
                     case "whole":
-                        whole();
+                        solveWholePath();
                         break;
                     case "StartEndNewPositionS":
                         setStartEndNewPosition('S');
@@ -124,10 +124,6 @@ public class Main {
 
         watched.setMessage("toDraw");
 
-    }
-
-    private static void wasDrawn() {
-        watched.setMessage("wasRead");
     }
 
     private static void analyze() {
@@ -196,7 +192,7 @@ public class Main {
 
     }
 
-    private static void shortest() {
+    private static void solveShortestPath() {
 
         mazeSolver = new MazeSolver(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 0);
         mazeSolver.solveMaze();
@@ -207,7 +203,7 @@ public class Main {
         watched.setMessage("solved");
     }
 
-    private static void whole() {
+    private static void solveWholePath() {
 
         mazeSolver = new MazeSolver(graph, mazeAnalyzer.getStart(), mazeAnalyzer.getEnd(), 1);
         mazeSolver.solveMaze();

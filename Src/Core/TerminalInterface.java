@@ -88,7 +88,7 @@ public class TerminalInterface implements Observer {
 
     }
 
-    private void notifier() {
+    private void notifyAllSynchronized() {
 
         synchronized (this) {
             this.notifyAll();
@@ -109,23 +109,7 @@ public class TerminalInterface implements Observer {
         threadInput.start();
     }
 
-    private void gotFile() {
-        isFileLoaded = true;
-    }
-
-    private void wasRead() {
-        if (terminalWasUsed) {
-            watched.setMessage("analyze");
-        }
-    }
-
-    private void analyzed() {
-        if (terminalWasUsed) {
-            watched.setMessage("shortest");
-        }
-    }
-
-    private void solved() {
+    private void afterMazeSolved() {
 
         System.out.println("The maze has been successfully solved");
         if (terminalWasUsed) {
@@ -188,10 +172,6 @@ public class TerminalInterface implements Observer {
         exportThread.start();
     }
 
-    private void exported(){
-        exportable = false;
-    }
-
     private void writeSolutionBlock(int direction, int length) {
         String directionString = "";
         switch (direction) {
@@ -233,7 +213,7 @@ public class TerminalInterface implements Observer {
 
     }
 
-    private void noS(char c) {
+    private void chooseNewStartPosition(char c) {
 
         threadInS = new Thread(() -> {
             while (!isStartCorrectlyChosen) {
@@ -276,7 +256,7 @@ public class TerminalInterface implements Observer {
                     maze.setNewStartPosition(startX, startY);
                     watched.setMessage("StartEndNewPositionS");
                     if (c == 'B') {
-                        noE();
+                        chooseNewEndPosition();
                     }
 
                 } else if (startInputBlock) {
@@ -295,7 +275,7 @@ public class TerminalInterface implements Observer {
 
     }
 
-    private void noE() {
+    private void chooseNewEndPosition() {
 
         threadInE = new Thread(() -> {
             while (!isEndCorrectlyChosen) {
@@ -374,32 +354,36 @@ public class TerminalInterface implements Observer {
                 getFilePath();
                 break;
             case "gotFile":
-                gotFile();
-                notifier();
+                isFileLoaded = true;
+                notifyAllSynchronized();
                 break;
             case "wasRead":
-                wasRead();
+                if (terminalWasUsed) {
+                    watched.setMessage("analyze");
+                }
                 break;
             case "analyzed":
-                analyzed();
+                if (terminalWasUsed) {
+                    watched.setMessage("shortest");
+                }
                 break;
             case "solved":
-                solved();
+                afterMazeSolved();
                 break;
             case "noStartEnd":
-                noS('B');
-                notifier();
+                chooseNewStartPosition('B');
+                notifyAllSynchronized();
                 break;
             case "noStart":
-                noS('S');
-                notifier();
+                chooseNewStartPosition('S');
+                notifyAllSynchronized();
                 break;
             case "noEnd":
-                noE();
-                notifier();
+                chooseNewEndPosition();
+                notifyAllSynchronized();
                 break;
             case "lineScanned":
-                notifier();
+                notifyAllSynchronized();
                 break;
             case "StartEndNewPositionS":
                 blockStartInputs();
@@ -408,8 +392,8 @@ public class TerminalInterface implements Observer {
                 blockEndIputs();
                 break;
             case "exported":
-                exported();
-                notifier();
+                exportable = false;
+                notifyAllSynchronized();
                 break;
             default:
                 break;

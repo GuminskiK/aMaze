@@ -70,7 +70,7 @@ public class Frame extends JFrame implements Observer{
         
     }
 
-    private void getFile(){
+    private void setLoadItemsToGetFile(){
         
         this.menu.setLoadEnabled(true);
         this.menu.setExportEnabled(false);
@@ -91,7 +91,7 @@ public class Frame extends JFrame implements Observer{
 
     }
 
-    private void toDraw(){
+    private void draw(){
 
         getOuterContentPanel().getContentPanel().addPanel(maze.getColumns(), maze.getRows());
         getToolPanel().toolEnable(true, new int[]{0});
@@ -100,23 +100,15 @@ public class Frame extends JFrame implements Observer{
         watched.setMessage("wasDrawn");
     }
 
-    private void wasRead(){
+    private void afterWasRead(){
 
         getMenu().setLoadEnabled(false);
         getToolPanel().toolEnable(false, new int[]{0,1,2,3,4,5});
         getToolPanel().toolEnable(true, new int[]{0});
     }
 
-    private void analyze(){
-        getToolPanel().toolEnable(false, new int[]{0});
-    }
     
-    private void solving(){
-
-        getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
-    }
-
-    private void solved(){
+    private void afterMazeSolved(){
 
         getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
         getMenu().setLoadEnabled(true);
@@ -124,7 +116,7 @@ public class Frame extends JFrame implements Observer{
 
     }
 
-    private void startChanged(){
+    private void afterStartChanged(){
         
         toolPanel.getChooseStartEndPanel().enableStartInputs(false);
 
@@ -135,9 +127,8 @@ public class Frame extends JFrame implements Observer{
         }
     }
 
-    private void endChanged(){
+    private void afterEndChanged(){
 
-        
         toolPanel.getChooseStartEndPanel().enableEndInputs(false);
 
         toolPanel.toolEnable(true, new int[]{2});
@@ -167,18 +158,6 @@ public class Frame extends JFrame implements Observer{
         }
     }
 
-    private void noStartEnd(){
-        toolPanel.getChooseStartEndPanel().setVisible(true);
-    }
-
-    private void noStart(){
-        toolPanel.getChooseStartEndPanel().setVisible(true);
-    }
-
-    private void noEnd(){
-        toolPanel.getChooseStartEndPanel().setVisible(true);
-    }
-
     @Override
     public void update(String message) {
         //System.out.println("Frame: "  + message);
@@ -188,28 +167,28 @@ public class Frame extends JFrame implements Observer{
                 start();
                 break;
             case "getFile":
-                getFile();
+                setLoadItemsToGetFile();
                 break;
             case "reset":
                 reset();
                 break;
             case "toDraw":
-                toDraw();
+                draw();
                 break;
             case "wasRead":
-                wasRead();
+                afterWasRead();
                 break;
             case "analyze":
-                analyze();
+                getToolPanel().toolEnable(false, new int[]{0});
                 break;
             case "shortest":
-                solving();
+                getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
                 break;
             case "whole":
-                solving();
+                getToolPanel().toolEnable(false, new int[]{0,1,2,3,4});
                 break;
             case "solved":
-                solved();
+                afterMazeSolved();
                 break;
             case "StartEndNewPositionS":
                 toolPanel.getChooseStartEndPanel().enableStartInputs(false);
@@ -218,10 +197,10 @@ public class Frame extends JFrame implements Observer{
                 toolPanel.getChooseStartEndPanel().enableEndInputs(false);
                 break;
             case "StartChanged":
-                startChanged();
+                afterStartChanged();
                 break;
             case "EndChanged":
-                endChanged();
+                afterEndChanged();
                 break;
             case "changeStartError":
                 changeStartError();
@@ -230,13 +209,13 @@ public class Frame extends JFrame implements Observer{
                 changeEndError();
                 break;
             case "noStartEnd":
-                noStartEnd();
+                toolPanel.getChooseStartEndPanel().setVisible(true);
                 break;
             case "noStart":
-                noEnd();
+                toolPanel.getChooseStartEndPanel().setVisible(true);
                 break;
             case "noEnd":
-                noStart();
+                toolPanel.getChooseStartEndPanel().setVisible(true);
                 break;
             default:
                 break;
