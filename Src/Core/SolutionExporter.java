@@ -33,7 +33,7 @@ public class SolutionExporter {
 
     private Watched watched;
 
-    SolutionExporter(ArrayList<SolutionBlock> solution, Maze maze, String filename, int lengthMin, Watched watched){
+    SolutionExporter(ArrayList<SolutionBlock> solution, Maze maze, String filename, int lengthMin, Watched watched) {
 
         this.solution = solution;
         this.maze = maze;
@@ -53,102 +53,107 @@ public class SolutionExporter {
 
     }
 
-    public void exportSolution(){
+    public void exportSolution() {
 
-        try (FileOutputStream fos = new FileOutputStream(filename)) {
-            
-            //nagłówek
-            writeIntLE(fos, 0);
-            writeByteLE(fos,  27);
-            writeShortLE(fos, maze.getColumns());
-            writeShortLE(fos, maze.getRows());
-            writeShortLE(fos, maze.getStart()[0] +1);
-            writeShortLE(fos, maze.getStart()[1] +1);
-            writeShortLE(fos, maze.getEnd()[0] + 1);
-            writeShortLE(fos, maze.getEnd()[1] + 1);
-            for (int i = 0; i < 3; i++){
-                writeByteLE(fos,  255);
-                writeByteLE(fos,  0);
-                writeByteLE(fos,  0);
-                writeByteLE(fos,  0);
-            }
-            writeIntLE(fos, 0);
-            writeIntLE(fos, 0);
+        if (lengthMin - 1 > 255) {
+            System.out.println("The solution is too long, cannot export.");
+        } else {
 
-            writeByteLE(fos, 35);
-            writeByteLE(fos, 88);
-            writeByteLE(fos, 32);
+            try (FileOutputStream fos = new FileOutputStream(filename)) {
 
-            //labirynt
-            while(!wholeMazeExported){
-                currentNumberOfChars = -1;
+                // nagłówek
+                writeIntLE(fos, 1381122627);
+                writeByteLE(fos, 27);
+                writeShortLE(fos, maze.getColumns());
+                writeShortLE(fos, maze.getRows());
+                writeShortLE(fos, maze.getStart()[0] + 1);
+                writeShortLE(fos, maze.getStart()[1] + 1);
+                writeShortLE(fos, maze.getEnd()[0] + 1);
+                writeShortLE(fos, maze.getEnd()[1] + 1);
+                for (int i = 0; i < 3; i++) {
+                    writeByteLE(fos, 255);
+                    writeByteLE(fos, 0);
+                    writeByteLE(fos, 0);
+                    writeByteLE(fos, 0);
+                }
+                writeIntLE(fos, 0);
+                writeIntLE(fos, 0);
+
                 writeByteLE(fos, 35);
-                writeByteLE(fos, currentChar);
-                cellsCounter();
-                writeByteLE(fos, currentNumberOfChars);
-                numberOfCodeWords++;
+                writeByteLE(fos, 88);
+                writeByteLE(fos, 32);
+
+                // labirynt
+                while (!wholeMazeExported) {
+                    currentNumberOfChars = -1;
+                    writeByteLE(fos, 35);
+                    writeByteLE(fos, currentChar);
+                    cellsCounter();
+                    writeByteLE(fos, currentNumberOfChars);
+                    numberOfCodeWords++;
+                }
+
+                // rozwiazanie-nagłówek
+                writeIntLE(fos, 0);
+                writeByteLE(fos, lengthMin - 1);
+
+                // rozwiązanie
+                for (SolutionBlock solutionBlock : solution) {
+                    directionIntToChar(solutionBlock.getDirection());
+                    writeByteLE(fos, c);
+                    writeByteLE(fos, solutionBlock.getSteps() - 1);
+                }
+
+                fos.close();
+
+            } catch (IOException e) {
+                System.err.println("IOException: " + e.getMessage());
             }
 
-            //rozwiazanie-nagłówek
-            writeIntLE(fos, 0);
-            writeByteLE(fos,  lengthMin - 1);
+            try (RandomAccessFile raf = new RandomAccessFile(filename, "rw")) {
 
-            //rozwiązanie
-            for ( SolutionBlock solutionBlock: solution){
-                directionIntToChar(solutionBlock.getDirection());
-                writeByteLE(fos, c);
-                writeByteLE(fos, solutionBlock.getSteps() - 1);
+                raf.seek(29);
+                writeIntLE(raf, numberOfCodeWords);
+                raf.seek(33);
+                writeIntLE(raf, numberOfCodeWords * 3);
+
+                raf.close();
+
+            } catch (IOException e) {
+                System.err.println("IOException: " + e.getMessage());
             }
-
-            fos.close();
-
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
         }
 
-        try ( RandomAccessFile raf = new RandomAccessFile(filename, "rw")){
-
-            raf.seek(29);
-            writeIntLE(raf, numberOfCodeWords);
-            raf.seek(33);
-            writeIntLE(raf, numberOfCodeWords * 3);
-
-            raf.close();
-
-        } catch ( IOException e){
-            System.err.println("IOException: " + e.getMessage());
-        }
-        
         watched.setMessage("exported");
     }
 
-    private void cellsCounter(){
+    private void cellsCounter() {
 
-        while( mazeInChar2DArray[currentYPosition][currentXPosition] == currentChar || mazeInChar2DArray[currentXPosition][currentYPosition] == 'P' || mazeInChar2DArray[currentXPosition][currentYPosition] == 'K'){
-            
+        while (mazeInChar2DArray[currentYPosition][currentXPosition] == currentChar) {
+
             currentNumberOfChars++;
             currentXPosition++;
-            if (currentXPosition >= columns){
+            if (currentXPosition >= columns) {
                 currentXPosition = 0;
                 currentYPosition++;
-                if (currentYPosition == rows){
+                if (currentYPosition == rows) {
                     break;
                 }
             }
         }
 
-        if (currentYPosition != rows){
+        if (currentYPosition != rows) {
             currentChar = mazeInChar2DArray[currentYPosition][currentXPosition];
-        } else{
+        } else {
             wholeMazeExported = true;
         }
-        
+
     }
 
-    private void directionIntToChar(int direction){
-        switch (direction) {    
+    private void directionIntToChar(int direction) {
+        switch (direction) {
             case 0:
-                c = 'N'; 
+                c = 'N';
                 break;
             case 1:
                 c = 'E';
@@ -161,36 +166,36 @@ public class SolutionExporter {
                 break;
             default:
                 break;
-            
+
         }
     }
-    //zamiany do little-endian
+
+    // zamiany do little-endian
     private static void writeIntLE(RandomAccessFile raf, int value) throws IOException {
         byte[] bytes = ByteBuffer.allocate(4)
-                                 .order(ByteOrder.LITTLE_ENDIAN)
-                                 .putInt(value)
-                                 .array();
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .putInt(value)
+                .array();
         raf.write(bytes);
     }
 
-
     private static void writeIntLE(FileOutputStream fos, int value) throws IOException {
         byte[] bytes = ByteBuffer.allocate(4)
-                                 .order(ByteOrder.LITTLE_ENDIAN)
-                                 .putInt(value)
-                                 .array();
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .putInt(value)
+                .array();
         fos.write(bytes);
     }
 
     private static void writeShortLE(FileOutputStream fos, int value) throws IOException {
         byte[] bytes = ByteBuffer.allocate(2)
-                                 .order(ByteOrder.LITTLE_ENDIAN)
-                                 .putShort((short)value)
-                                 .array();
+                .order(ByteOrder.LITTLE_ENDIAN)
+                .putShort((short) value)
+                .array();
         fos.write(bytes);
     }
 
     private static void writeByteLE(FileOutputStream fos, int value) throws IOException {
-        fos.write((byte)value);
+        fos.write((byte) value);
     }
 }

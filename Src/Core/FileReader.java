@@ -101,7 +101,7 @@ public class FileReader {
                 dataInputStream.readInt();
             }
 
-            while (dataInputStream.available() >= 1 && currentRows != 513) {
+            while (dataInputStream.available() >= 1 && currentRows != rows) {
                 dataInputStream.readByte(); // separator
                 int value = (int) dataInputStream.readUnsignedByte(); // Wall/path
                 int count = (int) dataInputStream.readUnsignedByte();
@@ -123,6 +123,12 @@ public class FileReader {
                             currentColumns = 0;
                             currentRows++;
                         }
+                    }
+                } else {
+                    currentColumns++;
+                    if (currentColumns == columns) {
+                        currentColumns = 0;
+                        currentRows++;
                     }
                 }
 

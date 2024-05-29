@@ -161,7 +161,7 @@ public class Frame extends JFrame implements Observer{
     @Override
     public void update(String message) {
         //System.out.println("Frame: "  + message);
-
+        //message.perform(this);
         switch(message){
             case "start":
                 start();

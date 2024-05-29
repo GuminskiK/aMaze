@@ -23,13 +23,18 @@ public class MazeAnalyzer {
     private int[] ID;
     private int[] Numbers;
 
-    MazeAnalyzer( ChooseStartEndPanel chooseStartEndPanel, Maze maze, Graph graph){
+    private boolean dontAddNodeConnetcion;
+    private boolean addSpecialNode;
+
+    MazeAnalyzer(ChooseStartEndPanel chooseStartEndPanel, Maze maze, Graph graph) {
 
         this.maze = maze;
         this.graph = graph;
         this.chooseStartEndPanel = chooseStartEndPanel;
         this.start = -2;
         this.end = -2;
+        this.dontAddNodeConnetcion = false;
+        this.addSpecialNode = false;
 
     }
 
@@ -58,7 +63,6 @@ public class MazeAnalyzer {
 
         for (int i = 0; i < maze.getRows() - 3; i++) {
 
-            
             // Przepisanie na wyższe wiersze w x
             System.arraycopy(x[1], 0, x[0], 0, maze.getColumns());
             System.arraycopy(x[2], 0, x[1], 0, maze.getColumns());
@@ -74,7 +78,7 @@ public class MazeAnalyzer {
 
         for (int i = 1; i < maze.getColumns() - 1; i++) {
 
-            if (x[1][i] == ' ') {
+            if (x[1][i] == ' ' || x[1][i] == 'P' || x[1][i] == 'K') {
 
                 top = 0;
                 right = 0;
@@ -87,31 +91,36 @@ public class MazeAnalyzer {
 
                     if (x[0][i] == 'P' || x[0][i] == 'K') {
 
-                        if (x[0][i] == 'P') {
+                        if (currentRows - 1 == 0) {
+                            if (x[0][i] == 'P') {
 
-                            this.start = graph.getCurrentNodesConnectionsNumber();
-                            maze.setStart(i, currentRows - 1);
-                            this.chooseStartEndPanel.changeStartPos(i, currentRows);
+                                this.start = graph.getCurrentNodesConnectionsNumber();
+                                maze.setStart(i, currentRows - 1);
+                                this.chooseStartEndPanel.changeStartPos(i, currentRows);
 
-                        } else {
+                            } else {
 
-                            this.end = graph.getCurrentNodesConnectionsNumber();
+                                this.end = graph.getCurrentNodesConnectionsNumber();
 
-                            maze.setEnd(i, currentRows - 1);
-                            this.chooseStartEndPanel.changeEndPos(i, currentRows);
+                                maze.setEnd(i, currentRows - 1);
+                                this.chooseStartEndPanel.changeEndPos(i, currentRows);
 
+                            }
+
+                            graph.addNodeConnection();
+
+                            Numbers[i] = 0;
+                            ID[i] = graph.getCurrentNodesConnectionsNumber();
+
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, i); // x
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 9, currentRows - 1); // y
+
+                            graph.increaseCurrentNodesConnectionsNumber();
+                            graph.addNodeConnection();
+
+                            dontAddNodeConnetcion = true;
                         }
 
-                        graph.addNodeConnection();
-
-                        Numbers[i] = 0;
-                        ID[i] = graph.getCurrentNodesConnectionsNumber();
-
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, i); // x
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 9, currentRows - 1); // y
-
-                        graph.increaseCurrentNodesConnectionsNumber();
-                        graph.addNodeConnection();
                     }
 
                     top++;
@@ -122,31 +131,34 @@ public class MazeAnalyzer {
                 if (x[1][i - 1] == ' ' || x[1][i - 1] == 'P' || x[1][i - 1] == 'K') {
 
                     if (x[1][i - 1] == 'P' || x[1][i - 1] == 'K') {
+                        if (i - 1 == 0) {
+                            if (x[1][i - 1] == 'P') {
 
-                        if (x[1][i - 1] == 'P') {
+                                this.start = graph.getCurrentNodesConnectionsNumber();
+                                maze.setStart(i - 1, currentRows);
+                                this.chooseStartEndPanel.changeStartPos(i, currentRows);
 
-                            this.start = graph.getCurrentNodesConnectionsNumber();
-                            maze.setStart(i - 1, currentRows);
-                            this.chooseStartEndPanel.changeStartPos(i, currentRows);
+                            } else {
 
-                        } else {
+                                this.end = graph.getCurrentNodesConnectionsNumber();
+                                maze.setEnd(i - 1, currentRows);
+                                this.chooseStartEndPanel.changeEndPos(i, currentRows);
 
-                            this.end = graph.getCurrentNodesConnectionsNumber();
-                            maze.setEnd(i - 1, currentRows);
-                            this.chooseStartEndPanel.changeEndPos(i, currentRows);
+                            }
 
+                            graph.addNodeConnection();
+
+                            Numbers[i - 1] = 0;
+                            ID[i - 1] = graph.getCurrentNodesConnectionsNumber();
+
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, i - 1); // x
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 9, currentRows); // y
+
+                            graph.increaseCurrentNodesConnectionsNumber();
+                            graph.addNodeConnection();
+
+                            dontAddNodeConnetcion = true;
                         }
-
-                        graph.addNodeConnection();
-
-                        Numbers[i - 1] = 0;
-                        ID[i - 1] = graph.getCurrentNodesConnectionsNumber();
-
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, i - 1); // x
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 9, currentRows); // y
-
-                        graph.increaseCurrentNodesConnectionsNumber();
-                        graph.addNodeConnection();
 
                     }
 
@@ -156,36 +168,41 @@ public class MazeAnalyzer {
                 }
                 // dół
                 if (x[2][i] == ' ' || x[2][i] == 'P' || x[2][i] == 'K') {
+                    if (currentRows + 2 == maze.getRows()) {
+                        if (x[2][i] == 'P' || x[2][i] == 'K') {
 
-                    if (x[2][i] == 'P' || x[2][i] == 'K') {
+                            if (x[2][i] == 'P') {
 
-                        if (x[2][i] == 'P') {
+                                this.start = graph.getCurrentNodesConnectionsNumber();
+                                maze.setStart(i, currentRows + 1);
+                                this.chooseStartEndPanel.changeStartPos(i, currentRows);
 
-                            this.start = graph.getCurrentNodesConnectionsNumber();
-                            maze.setStart(i, currentRows + 1);
-                            this.chooseStartEndPanel.changeStartPos(i, currentRows);
+                            } else {
 
-                        } else {
+                                this.end = graph.getCurrentNodesConnectionsNumber();
+                                maze.setEnd(i, currentRows + 1);
+                                this.chooseStartEndPanel.changeEndPos(i, currentRows);
 
-                            this.end = graph.getCurrentNodesConnectionsNumber();
-                            maze.setEnd(i, currentRows + 1);
-                            this.chooseStartEndPanel.changeEndPos(i, currentRows);
+                            }
 
+                            graph.addNodeConnection();
+
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 0,
+                                    graph.getCurrentNodesConnectionsNumber() + 1);
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 1, 1);
+
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, i);
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 9, currentRows + 1);
+
+                            graph.increaseCurrentNodesConnectionsNumber();
+                            graph.addNodeConnection();
+
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 4,
+                                    graph.getCurrentNodesConnectionsNumber() - 1);
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 5, 1);
+
+                            dontAddNodeConnetcion = true;
                         }
-
-                        graph.addNodeConnection();
-
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 0, graph.getCurrentNodesConnectionsNumber() + 1);
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 1, 1);
-
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, i);
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 9, currentRows + 1);
-
-                        graph.increaseCurrentNodesConnectionsNumber();
-                        graph.addNodeConnection();
-
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 4, graph.getCurrentNodesConnectionsNumber() - 1);
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 5, 1);
 
                     }
 
@@ -195,40 +212,46 @@ public class MazeAnalyzer {
                 }
                 // prawo
                 if (x[1][i + 1] == ' ' || x[1][i + 1] == 'P' || x[1][i + 1] == 'K') {
+                    if (i + 2 == maze.getColumns()) {
+                        if (x[1][i + 1] == 'P' || x[1][i + 1] == 'K') {
 
-                    if (x[1][i + 1] == 'P' || x[1][i + 1] == 'K') {
+                            if (x[1][i + 1] == 'P') {
 
-                        if (x[1][i + 1] == 'P') {
+                                this.start = graph.getCurrentNodesConnectionsNumber();
+                                maze.setStart(i + 1, currentRows);
+                                this.chooseStartEndPanel.changeStartPos(i, currentRows);
 
-                            this.start = graph.getCurrentNodesConnectionsNumber();
-                            maze.setStart(i + 1, currentRows);
-                            this.chooseStartEndPanel.changeStartPos(i, currentRows);
+                            } else {
 
-                        } else {
+                                this.end = graph.getCurrentNodesConnectionsNumber();
+                                maze.setEnd(i + 1, currentRows);
+                                this.chooseStartEndPanel.changeEndPos(i, currentRows);
 
-                            this.end = graph.getCurrentNodesConnectionsNumber();
-                            maze.setEnd(i + 1, currentRows);
-                            this.chooseStartEndPanel.changeEndPos(i, currentRows);
+                            }
 
+                            graph.addNodeConnection();
+
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 6,
+                                    graph.getCurrentNodesConnectionsNumber() + 1);
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 7, 1);
+
+                            Numbers[i + 1] = 0;
+
+                            ID[i + 1] = graph.getCurrentNodesConnectionsNumber();
+
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, i + 1);
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 9, currentRows);
+
+                            graph.increaseCurrentNodesConnectionsNumber();
+                            graph.addNodeConnection();
+
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 2,
+                                    graph.getCurrentNodesConnectionsNumber() - 1);
+                            graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 3, 1);
+
+                            dontAddNodeConnetcion = true;
                         }
 
-                        graph.addNodeConnection();
-
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 6, graph.getCurrentNodesConnectionsNumber() + 1);
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 7, 1);
-
-                        Numbers[i + 1] = 0;
-
-                        ID[i + 1] = graph.getCurrentNodesConnectionsNumber();
-
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, i + 1 );
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 9, currentRows);
-
-                        graph.increaseCurrentNodesConnectionsNumber();
-                        graph.addNodeConnection();
-
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 2, graph.getCurrentNodesConnectionsNumber() - 1);
-                        graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 3, 1);
                     }
 
                     right++;
@@ -236,12 +259,31 @@ public class MazeAnalyzer {
 
                 }
 
+                if ( x[1][i] == 'P'){
+                    this.start = graph.getCurrentNodesConnectionsNumber();
+                    maze.setStart(i, currentRows);
+                    this.chooseStartEndPanel.changeStartPos(i, currentRows);
+
+                    this.addSpecialNode = true;
+
+                } else if ( x[1][i] == 'K'){
+                    this.end = graph.getCurrentNodesConnectionsNumber();
+                    maze.setEnd(i, currentRows);
+                    this.chooseStartEndPanel.changeEndPos(i, currentRows);
+
+                    this.addSpecialNode = true;
+                }
+
                 // jeśli node (skręt, zaułek, rozdroże w labiryncie)
-                if (numberOfNeighbouringPaths == 1 || numberOfNeighbouringPaths >= 3 || numberOfNeighbouringPaths == 2 && ((top == 1 || down == 1) && (left == 1 || right == 1))) {
+                if (numberOfNeighbouringPaths == 1 || numberOfNeighbouringPaths >= 3
+                        || numberOfNeighbouringPaths == 2 && ((top == 1 || down == 1) && (left == 1 || right == 1))) {
 
                     link(i);
 
-                } else { // połączenia
+                } else if ( addSpecialNode){
+                    addSpecialNode = false;
+                    link(i);
+                }else { // połączenia
 
                     if (left == 1 && right == 1) {
                         ID[i] = ID[i - 1];
@@ -263,9 +305,12 @@ public class MazeAnalyzer {
 
     private void link(int i) {
 
-        if (start != graph.getCurrentNodesConnectionsNumber() - 1 && end != graph.getCurrentNodesConnectionsNumber() - 1) {
+        if (!dontAddNodeConnetcion) {
             graph.addNodeConnection();
+        } else {
+            dontAddNodeConnetcion = false;
         }
+
         if (top == 1) {
 
             graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 1, Numbers[i] + 1);
@@ -311,18 +356,22 @@ public class MazeAnalyzer {
         int object = 0;
         int z[];
 
-        if (c == 'S' && maze.getStart()[0] != null) {
+        if (c == 'S' && maze.getStart()[0] != null && maze.getCharFromMazeInChar2DArray(custom[0], custom[0]) == 'X') {
             clear(c);
         }
 
-        if (c == 'E' && maze.getEnd()[0] != null) {
+        if (c == 'E' && maze.getEnd()[0] != null  && maze.getCharFromMazeInChar2DArray(custom[0], custom[0]) == 'X') {
             clear(c);
         }
 
-        checkIfEqual(maze.getCharFromMazeInChar2DArray(custom[0], custom[1] - 1), maze.getCharFromMazeInChar2DArray(custom[0] - 1, custom[1]),
-                maze.getCharFromMazeInChar2DArray(custom[0], custom[1] + 1), maze.getCharFromMazeInChar2DArray(custom[0] + 1, custom[1]), ' ');
+        checkIfEqual(maze.getCharFromMazeInChar2DArray(custom[0], custom[1] - 1),
+                maze.getCharFromMazeInChar2DArray(custom[0] - 1, custom[1]),
+                maze.getCharFromMazeInChar2DArray(custom[0], custom[1] + 1),
+                maze.getCharFromMazeInChar2DArray(custom[0] + 1, custom[1]), ' ');
 
-        if (numberOfNeighbouringPaths == 1 || (numberOfNeighbouringPaths == 2 && ((top == 1 || down == 1) && (left == 1 || right == 1))) || numberOfNeighbouringPaths >= 3) { // zaulek
+        if (numberOfNeighbouringPaths == 1
+                || (numberOfNeighbouringPaths == 2 && ((top == 1 || down == 1) && (left == 1 || right == 1)))
+                || numberOfNeighbouringPaths >= 3) { // zaulek
 
             d = searchForNode(custom[0], custom[1]);
             if (c == 'S') {
@@ -332,20 +381,8 @@ public class MazeAnalyzer {
             }
 
         } else {
-
-            if (c == 'S' && start != -2) {
-
-                graph.setNodeConnectionsValue(start, 8, custom[0]);
-                graph.setNodeConnectionsValue(start, 9, custom[1]);
-                object = start;
-            } else if (c == 'E' && end != -2) {
-
-                graph.setNodeConnectionsValue(end, 8, custom[0]);
-                graph.setNodeConnectionsValue(end, 9, custom[1]);
-
-                object = end;
-
-            } else if (c == 'S') {
+            
+            if (c == 'S') {
 
                 graph.addNodeConnection();
                 graph.setNodeConnectionsValue(graph.getCurrentNodesConnectionsNumber(), 8, custom[0] + 1);
@@ -408,7 +445,9 @@ public class MazeAnalyzer {
                     maze.getCharFromMazeInChar2DArray(customSave[0], customSave[1] + 1),
                     maze.getCharFromMazeInChar2DArray(customSave[0] + 1, customSave[1]), ' ');
 
-            if (numberOfNeighbouringPaths == 1 || (numberOfNeighbouringPaths == 2 && ((top == 1 || down == 1) && (left == 1 || right == 1))) || numberOfNeighbouringPaths >= 3) { // zaulek
+            if (numberOfNeighbouringPaths == 1
+                    || (numberOfNeighbouringPaths == 2 && ((top == 1 || down == 1) && (left == 1 || right == 1)))
+                    || numberOfNeighbouringPaths >= 3) { // zaulek
                 x = 1;
                 z[0] = customSave[0];
                 z[1] = customSave[1];
@@ -445,7 +484,7 @@ public class MazeAnalyzer {
         Integer X = x;
         Integer Y = y;
 
-        while ( !(graph.getNodeConnectionsValue(i, 8)).equals(X) || !(graph.getNodeConnectionsValue(i, 9)).equals(Y)) {
+        while (!(graph.getNodeConnectionsValue(i, 8)).equals(X) || !(graph.getNodeConnectionsValue(i, 9)).equals(Y)) {
 
             i++;
         }
@@ -536,11 +575,11 @@ public class MazeAnalyzer {
         }
     }
 
-    public int getStart(){
+    public int getStart() {
         return this.start;
     }
 
-    public int getEnd(){
+    public int getEnd() {
         return this.end;
     }
 }

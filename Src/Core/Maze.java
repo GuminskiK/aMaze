@@ -114,6 +114,10 @@ public class Maze {
     public void changeMazeCellToWall(int row, int column){
         mazeCells[row][column] = new WallCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10  );
     }
+
+    public void changeMazeCellToPath(int row, int column){
+        mazeCells[row][column] = new PathCell(5 + ((column * 10) % maxWidthInPixels), 5 + row * 10  );
+    }
     
     // type czy pick?
     public void pickCustom(int who){

@@ -1,4 +1,5 @@
 package Core;
+
 import java.io.File;
 
 import GUI.Frame;
@@ -45,7 +46,7 @@ public class Main {
 
             @Override
             public void update(String message) {
-                //System.out.println("Main: " + message);
+                // System.out.println("Main: " + message);
                 switch (message) {
                     case "started":
                         watched.setMessage("getFile");
@@ -78,7 +79,8 @@ public class Main {
                         setStartEndNewPosition('E');
                         break;
                     case "StartEndNewPosition":
-                        changeStartEndIntoWall();
+                        changeStartIntoWallPath();
+                        changeEndIntoWallPath();
                         break;
                     case "export":
                         export();
@@ -111,10 +113,9 @@ public class Main {
 
         } else {
 
-            
             fileReader.readNumberOfRowsColumns();
             x = fileReader.ReadFileBIN();
-            
+
         }
 
         maze.setColumns(fileReader.getColumns());
@@ -182,7 +183,8 @@ public class Main {
             }
 
         } else {
-            frame.getOuterContentPanel().getInfoLabel().setText("You can choose solving alghorithm or change position of Start and End");
+            frame.getOuterContentPanel().getInfoLabel()
+                    .setText("You can choose solving alghorithm or change position of Start and End");
             maze.setStartLocated(true);
             maze.setEndLocated(true);
         }
@@ -227,13 +229,11 @@ public class Main {
         }
 
         if (maze.getStartLocated() && c == 'S') {
-            maze.setCharFromMazeInChar2DArray(maze.getStart()[0], maze.getStart()[1], 'P');
-            maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
+            changeStartIntoWallPath();
         }
 
         if (maze.getEndLocated() && c == 'E') {
-            maze.setCharFromMazeInChar2DArray(maze.getEnd()[0], maze.getEnd()[1], 'K');
-            maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
+            changeEndIntoWallPath();
         }
 
         if (ifPath(customObject)) {
@@ -242,6 +242,7 @@ public class Main {
                 maze.setStartLocated(true);
                 maze.setStartChanged(true);
 
+                maze.setCharFromMazeInChar2DArray(customObject[0], customObject[1], 'P');
                 maze.changeMazeCellToStart(customObject[1], customObject[0]);
                 maze.setStart(customObject[0], customObject[1]);
                 frame.getToolPanel().getChooseStartEndPanel().changeStartPos(customObject[0], customObject[1]);
@@ -251,6 +252,7 @@ public class Main {
                 maze.setEndLocated(true);
                 maze.setEndChanged(true);
 
+                maze.setCharFromMazeInChar2DArray(customObject[0], customObject[1], 'K');
                 maze.changeMazeCellToEnd(customObject[1], customObject[0]);
                 maze.setEnd(customObject[0], customObject[1]);
                 frame.getToolPanel().getChooseStartEndPanel().changeEndPos(customObject[0], customObject[1]);
@@ -258,7 +260,6 @@ public class Main {
             }
 
             mazeAnalyzer.newStartEndAnalyzer(customObject, c);
-            maze.setCharFromMazeInChar2DArray(customObject[1], customObject[0], 'X');
 
             frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
 
@@ -274,22 +275,47 @@ public class Main {
         }
     }
 
-    private static void changeStartEndIntoWall() {
+    private static void changeStartIntoWallPath() {
 
-        maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
-        maze.setCharFromMazeInChar2DArray(maze.getStart()[0], maze.getStart()[1], 'X');
-        maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
-        maze.setCharFromMazeInChar2DArray(maze.getEnd()[0], maze.getEnd()[1], 'X');
+        if (maze.getColumns() == maze.getStart()[1] + 1 || maze.getRows() == maze.getStart()[0] + 1 || maze.getStart()[1]== 0 || maze.getStart()[0] == 0) {
+
+            maze.changeMazeCellToWall(maze.getStart()[1], maze.getStart()[0]);
+            maze.setCharFromMazeInChar2DArray(maze.getStart()[0], maze.getStart()[1], 'X');
+
+        } else {
+
+            maze.changeMazeCellToPath(maze.getStart()[1], maze.getStart()[0]);
+            maze.setCharFromMazeInChar2DArray(maze.getStart()[0], maze.getStart()[1], ' ');
+
+        }
 
         frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
         frame.getToolPanel().toolEnable(false, new int[] { 1 });
 
     }
 
+    private static void changeEndIntoWallPath(){
+
+        if (maze.getColumns() == maze.getEnd()[1] + 1 || maze.getRows() == maze.getEnd()[0] + 1 || maze.getEnd()[1] == 0 || maze.getEnd()[0] == 0) {
+
+            maze.changeMazeCellToWall(maze.getEnd()[1], maze.getEnd()[0]);
+            maze.setCharFromMazeInChar2DArray(maze.getEnd()[0], maze.getEnd()[1], 'X');
+
+        } else {
+
+            maze.changeMazeCellToPath(maze.getEnd()[1], maze.getEnd()[0]);
+            maze.setCharFromMazeInChar2DArray(maze.getEnd()[0], maze.getEnd()[1], ' ');
+
+        }
+
+        frame.getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
+        frame.getToolPanel().toolEnable(false, new int[] { 1 });
+    }
+
     public static boolean ifPath(int[] customObject) {
 
         boolean x = false;
-        if (customObject[0] < maze.getColumns() && customObject[1] < maze.getColumns()) {
+        if (customObject[0] < maze.getColumns() && customObject[1] < maze.getRows()) {
             if (maze.getCharFromMazeInChar2DArray(customObject[0], customObject[1]) == ' ') {
                 x = true;
             }
@@ -298,8 +324,9 @@ public class Main {
         return x;
     }
 
-    private static void export(){
-        SolutionExporter solutionExporter = new SolutionExporter(mazeSolver.getSolution(), maze, filePathToExport, mazeSolver.getLengthMin(), watched);
+    private static void export() {
+        SolutionExporter solutionExporter = new SolutionExporter(mazeSolver.getSolution(), maze, filePathToExport,
+                mazeSolver.getLengthMin(), watched);
         solutionExporter.exportSolution();
     }
 
@@ -311,11 +338,11 @@ public class Main {
         filePath = filePath2;
     }
 
-    public static MazeSolver getMazeSolver(){
+    public static MazeSolver getMazeSolver() {
         return mazeSolver;
     }
 
-    public static void setFilePathToExport( String filePath){
+    public static void setFilePathToExport(String filePath) {
         filePathToExport = filePath;
     }
 }
