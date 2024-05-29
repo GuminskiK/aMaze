@@ -120,7 +120,9 @@ public class Frame extends JFrame implements Observer{
         
         toolPanel.getChooseStartEndPanel().enableStartInputs(false);
 
-        toolPanel.toolEnable(true, new int[]{2});
+        if ( maze.getEndLocated()){
+            toolPanel.toolEnable(true, new int[]{2});
+        }
 
         if ( !maze.getEndChanged()){
             toolPanel.getChooseStartEndPanel().enableEndInputs(true);
@@ -131,7 +133,10 @@ public class Frame extends JFrame implements Observer{
 
         toolPanel.getChooseStartEndPanel().enableEndInputs(false);
 
-        toolPanel.toolEnable(true, new int[]{2});
+        if ( maze.getStartLocated()){
+            toolPanel.toolEnable(true, new int[]{2});
+        }
+        
 
         if ( !maze.getStartChanged()){
             toolPanel.getChooseStartEndPanel().enableStartInputs(true);
@@ -161,7 +166,6 @@ public class Frame extends JFrame implements Observer{
     @Override
     public void update(String message) {
         //System.out.println("Frame: "  + message);
-        //message.perform(this);
         switch(message){
             case "start":
                 start();

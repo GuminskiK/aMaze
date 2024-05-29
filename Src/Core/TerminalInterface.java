@@ -33,8 +33,12 @@ public class TerminalInterface implements Observer {
 
     private boolean terminalWasUsed = false;
 
+    private boolean analyzed;
+
     private Maze maze;
     private boolean exportable;
+
+    private boolean solved;
 
     TerminalInterface(Watched watched, Maze maze) {
 
@@ -75,7 +79,7 @@ public class TerminalInterface implements Observer {
                     break;
                 } else {
                     if (isFileLoaded) {
-                        System.out.println("Loading the maze had been succesful");
+                        System.out.println("Loading the maze has been succesful");
                     } else {
                         System.out.println("Something wrong with this filePath. Can you give me a proper one?");
                     }
@@ -109,6 +113,68 @@ public class TerminalInterface implements Observer {
         threadInput.start();
     }
 
+    private void wantToAnalyze() {
+        analyzed = false;
+        System.out.println("Do you want to analyze? If yes type in \"yes\".");
+        Thread modeThread = new Thread(() -> {
+            while (true) {
+
+                try {
+                    synchronized (this) {
+                        wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (scanned.equals("yes") && analyzed != true) {
+                    terminalWasUsed = true;
+                    watched.setMessage("analyze");
+
+                    break;
+                } else {
+
+                    if (analyzed == true) {
+                        break;
+                    }
+                }
+            }
+        });
+
+        modeThread.start();
+    }
+
+    private void wantToSolve() {
+        solved = false;
+        System.out.println("Do you want to solve? If yes type in \"yes\".");
+        Thread modeThread = new Thread(() -> {
+            while (true) {
+
+                try {
+                    synchronized (this) {
+                        wait();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (scanned.equals("yes") && solved != true) {
+                    terminalWasUsed = true;
+                    watched.setMessage("shortest");
+
+                    break;
+                } else {
+
+                    if (solved == true) {
+                        break;
+                    }
+                }
+            }
+        });
+
+        modeThread.start();
+    }
+
     private void afterMazeSolved() {
 
         System.out.println("The maze has been successfully solved");
@@ -129,7 +195,10 @@ public class TerminalInterface implements Observer {
     }
 
     private void export() {
+        isFileLoaded = false;
+        terminalWasUsed = false;
         System.out.println("Do you want to export solution? If yes type \"yes\".");
+        scanned = "";
         Thread exportThread = new Thread(() -> {
             while (true) {
 
@@ -152,20 +221,24 @@ public class TerminalInterface implements Observer {
                         e.printStackTrace();
                     }
 
-                    if (exportable == true){
+                    if (exportable == true) {
                         Main.setFilePathToExport(scanned + ".bin");
                         watched.setMessage("export");
                     }
-            
+
                     break;
                 } else {
                     break;
                 }
             }
 
-            System.out.println("Please give me a filePath to your maze that you would like me to solve.");
-            reset();
-            getFilePath();
+            if (!isFileLoaded) {
+                System.out.println("Please give me a filePath to your maze that you would like me to solve.");
+                reset();
+                getFilePath();
+            } else {
+                System.out.println("Loading the maze has been succesful");
+            }
 
         });
 
@@ -208,6 +281,8 @@ public class TerminalInterface implements Observer {
         startInputBlock = false;
         endInputBlock = false;
         scanned = "";
+        analyzed = false;
+        solved = false;
 
         terminalWasUsed = false;
 
@@ -226,6 +301,24 @@ public class TerminalInterface implements Observer {
                     e.printStackTrace();
                 }
 
+                if (startInputBlock == true) {
+                    if (c == 'B') {
+                        chooseNewEndPosition();
+                    }
+
+                    break;
+                }
+
+                if (endInputBlock == true && !maze.getStartLocated()) {
+                    try {
+                        synchronized (this) {
+                            wait();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 try {
                     if (maze.getStartChanged()) {
                         break;
@@ -241,6 +334,13 @@ public class TerminalInterface implements Observer {
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+
+                if (startInputBlock == true) {
+                    if (c == 'B') {
+                        chooseNewEndPosition();
+                    }
+                    break;
                 }
 
                 try {
@@ -279,13 +379,22 @@ public class TerminalInterface implements Observer {
 
         threadInE = new Thread(() -> {
             while (!isEndCorrectlyChosen) {
+
+                if (endInputBlock == true) {
+                    break;
+                }
                 System.out.println("Please type in coordinates for a new End:");
+
                 try {
                     synchronized (this) {
                         wait();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+
+                if (endInputBlock == true) {
+                    break;
                 }
 
                 try {
@@ -303,6 +412,10 @@ public class TerminalInterface implements Observer {
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+
+                if (endInputBlock == true) {
+                    break;
                 }
 
                 try {
@@ -335,10 +448,12 @@ public class TerminalInterface implements Observer {
 
     private void blockStartInputs() {
         startInputBlock = true;
+        notifyAllSynchronized();
     }
 
     private void blockEndIputs() {
         endInputBlock = true;
+        notifyAllSynchronized();
     }
 
     @Override
@@ -354,20 +469,37 @@ public class TerminalInterface implements Observer {
                 getFilePath();
                 break;
             case "gotFile":
-                isFileLoaded = true;
                 notifyAllSynchronized();
+                isFileLoaded = true;
                 break;
+
             case "wasRead":
+
                 if (terminalWasUsed) {
                     watched.setMessage("analyze");
+                } else {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    wantToAnalyze();
                 }
+
                 break;
+
             case "analyzed":
+                analyzed = true;
+                notifyAllSynchronized();
                 if (terminalWasUsed) {
                     watched.setMessage("shortest");
+                } else {
+                    wantToSolve();
                 }
                 break;
             case "solved":
+                solved = true;
+                notifyAllSynchronized();
                 afterMazeSolved();
                 break;
             case "noStartEnd":
