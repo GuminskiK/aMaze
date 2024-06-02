@@ -73,7 +73,6 @@ public class ChooseStartEndPanel extends JPanel {
         typeStart.addActionListener(
 
                 (e) -> {
-                    System.out.println(this.typeStartOn);
                     if (this.typeStartOn == 0) {
                         
 
@@ -193,12 +192,10 @@ public class ChooseStartEndPanel extends JPanel {
 
                         if (matcher.find()) {
                             firstInt = Integer.parseInt(matcher.group());
-                            System.out.println("First integer: " + firstInt);
                         }
                 
                         if (matcher.find()) {
                             secondInt = Integer.parseInt(matcher.group());
-                            System.out.println("Second integer: " + secondInt);
                         }
                         
                         if( found == 2){
