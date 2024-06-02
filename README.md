@@ -43,7 +43,7 @@ java -jar aMaze.jar
   - Wartość słowa kodowego - 8 bitów
   - Liczba wystąpień (gdzie 0 oznacza jedno wystąpienie)- 8 bitów
 - Sekcja nagłówkowa rozwiązania:
-  Identyfikator sekcji rozwiązania - 32 bity
+  - Identyfikator sekcji rozwiązania - 32 bity
   - Liczba kroków do przejścia (gdzie 0 oznacza jedno wystąpienie) - 8 bitów
 - Krok rozwiązania:
   - Kierunek, w którym należy się poruszać - 8 bitów
