@@ -63,10 +63,10 @@ public class ContentPanel extends JPanel {
         JButton backButton = new JButton("Back");
         JTextArea area = new JTextArea();
 
-        this.helpPanel.setPreferredSize(new Dimension(420, 850));
+        this.helpPanel.setPreferredSize(new Dimension(420, 950));
         help.setText("Help");
         help.setFont( new FontUIResource("Arial", Font.BOLD, 32));
-        area.setPreferredSize(new Dimension(400,750));
+        area.setPreferredSize(new Dimension(400,850));
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
         area.setEditable(false);
@@ -95,6 +95,12 @@ public class ContentPanel extends JPanel {
         "       a) Separator - 8bits \n" +
         "       b) Value of the code word - 8bits \n" +
         "       c) The number of occurences - 8 bits \n" + //
+        "   3. Solutions header section: \n" + 
+        "       a) The ID of the solution section - 32 bits \n" + 
+        "       b) Number of steps to walk - 8 bits \n" + 
+        "   4. Solution step:: \n" + 
+        "       a) The direction in which to move - 8 bits \n" + 
+        "       b) Number of steps to walk - 8 bits \n" + 
         "\n" +
         "How to use app and what is it cappable of? \n" + 
         "\n" +
@@ -108,7 +114,7 @@ public class ContentPanel extends JPanel {
         "You can do it by clicking Pick Start/End and then clicking on the path on the maze or by clicking Type Start/ End typing coordinates in and submiting it in by clicking \"Done\". \n" +
         "\n" +
         "Then you can solve the maze just by selecting one of available solving modes. \n" +
-        "After that you can export solution (File->Export Solution) or load another maze (File -> Load Maze)"
+        "After that you can export solution (File->Export Solution (only available when solution length <= 255 steps)) or load another maze (File -> Load Maze)"
         );
 
         backButton.addActionListener(

@@ -177,12 +177,19 @@ public class TerminalInterface implements Observer {
 
     private void afterMazeSolved() {
 
-        System.out.println("The maze has been successfully solved");
+        System.out.println("The maze has been successfully solved. Solution has "+ Main.getMazeSolver().getLengthMin() + " steps.");
         if (terminalWasUsed) {
             writeSolution(Main.getMazeSolver().getSolution());
         }
         exportable = true;
-        export();
+        if ( Main.getMazeSolver().getLengthMin() <= 255){
+            export();
+        } else {
+            System.out.println("Please give me a filePath to your maze that you would like me to solve.");
+            reset();
+            getFilePath();
+        }
+        
     }
 
     private void writeSolution(ArrayList<SolutionBlock> solution) {

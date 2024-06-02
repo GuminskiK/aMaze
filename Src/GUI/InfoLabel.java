@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import Core.Main;
 import Core.Maze;
 import Core.Observer;
 
@@ -77,7 +78,11 @@ public class InfoLabel extends JLabel implements Observer {
                 this.setText("Searching for the shortest solution to the maze.");
                 break;
             case "solved":
-                this.setText("<html> The solution to the maze has been found. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
+                if (Main.getMazeSolver().getLengthMin() <= 255){
+                    this.setText("<html> The solution to the maze has been found. It has " + Main.getMazeSolver().getLengthMin() + " steps. You can now load another maze ( File -> Load Maze ) or export solution (File-> Export Solution )</html>");
+                } else {
+                    this.setText("<html> The solution to the maze has been found. It has " + Main.getMazeSolver().getLengthMin() + " steps. You can now load another maze ( File -> Load Maze ).</html>");
+                }
                 break;
             case "noStartEnd":
                 this.setText("Choose Start and End");

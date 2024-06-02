@@ -3,6 +3,8 @@ package GUI;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import Core.Main;
 import Core.Maze;
 import Core.Observer;
 import Core.Watched;
@@ -112,7 +114,9 @@ public class Frame extends JFrame implements Observer{
 
         getOuterContentPanel().getContentPanel().getMazePanel().rePaint(maze);
         getMenu().setLoadEnabled(true);
-        getMenu().setExportEnabled(true);
+        if (Main.getMazeSolver().getLengthMin() <= 255) {
+            getMenu().setExportEnabled(true);
+        }
 
     }
 
