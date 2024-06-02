@@ -47,7 +47,7 @@ java -jar aMaze.jar
   - Liczba kroków do przejścia (gdzie 0 oznacza jedno wystąpienie) - 8 bitów
 - Krok rozwiązania:
   - Kierunek, w którym należy się poruszać - 8 bitów
-  - Libza pól do przejścia w tym kierunku (gdzie 0 oznacza jedno wystąpienie) - 8 bitów
+  - Liczba pól do przejścia w tym kierunku (gdzie 0 oznacza jedno wystąpienie) - 8 bitów
 
 ## Jak używać aplikacji?
 
