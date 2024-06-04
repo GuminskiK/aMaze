@@ -2,7 +2,7 @@
 ## Do czego służy?
 
 Nasz program, służy do znalezienia rozwiązania labiryntu, czyli drogi od wejścia
-do labiryntu, aż do wyjścia z niego.
+do labiryntu, aż do wyjścia z niego (przy czym wejście i wyjście z labiryntu są wartościami edytowalnymi).
 
 ## Jak uruchomić?
 
@@ -66,10 +66,10 @@ lub
 ```
 Please type in coordinates for a new End:
 ```
-Podajemy je poprzez wpisanie liczby zatwierdzenie jej za pomocą enter, a następnie wpisanie drugiej liczby i także zatwierdzenie jej za pomocą enter.
-Dopóki nie podamy poprawnych koordynatów (należą do ścieżki labiryntu) to aplikacja będzie ponawiała to pytanie.
+Podajemy je poprzez wpisanie liczby, zatwierdzenie jej za pomocą enter, a następnie wpisanie drugiej liczby i także zatwierdzenie jej za pomocą enter.
+Dopóki nie podamy poprawnych koordynatów (należących do ścieżki labiryntu), aplikacja będzie ponawiała powyższe pytania.
 
-Następnie labirynt zostanie rozwiązany, wypisane zostanie rozwiązanie i zapytani zostaniemy czy chcemy wyeksportować rozwiązanie (jeżeli jest mniejsze niż 255 kroków):
+Następnie labirynt zostanie rozwiązany, wypisane zostanie rozwiązanie i zostaniemy zapytani, czy chcemy wyeksportować rozwiązanie (jeżeli jest mniejsze niż 255 kroków):
 ```
 Do you want to export solution? If yes type "yes".
 ```
@@ -83,15 +83,15 @@ Wpisujemy nazwę i plik jest eksportowany. Program prosi nas o kolejny labirynt 
 Po otworzeniu aplikacji otwiera nam się okno GUI. Należy podążać za instrukcjami, które znajdują się w dolnym pasku. Jeżeli potrzebujemy większej pomocy możemy ją uzyskać poprzez wybranie Help->Help.
 
 Opis:
-Po otwarciu GUI poza pomocą dostępne jest jedynie wczytywanie plików File->Load Maze. Po wczytaniu musimy przeanalizowac labirynt "Analyze maze". Jeżeli niewybrany został Start/End uruchomi sie nam automatycznie panel Choose Start/End i będzie oczekiwał, że wybierzemy nowy Start lub/i End. Możemy tego dokonać za pomocą Pick Start lub Pick End, które po wybraniu umożliwiają nam wybranie poprzez kliknięcie na ścieżkę labiryntu nowego Start/End. Możemy też tego dokonać poprzez wybranie Type Start lub Type End i wpisanie koordynatów nowego Start/End i zatwierdzenie ich za pomocą przycisku Done. Jeżeli nasz labirynt ma Start End, ale chcemy je zmienić to możemy też ręcznie wybrać opcję Choose Start/End. Jeżeli podczas wybierania nie wybierzemy nowego Start/End, a był on wcześniej wybrany to podczas rozwiązywania zostanie użyty właśnie ten stary Start lub End. Następnie możemy rozwiązać labirynt za pomocą trybu shortest (najkrótsza ścieżka) lub whole (przejście po całym labiryncie). Następnie możemy albo załadować nowy labirynt albo wyeksportować rozwiązanie za pomocą File -> Export Solution (jeżeli jest mniejsze niż 255 kroków).
+Po otwarciu GUI poza pomocą dostępne jest jedynie wczytywanie plików File->Load Maze. Po wczytaniu musimy przeanalizowac labirynt "Analyze maze". Jeżeli niewybrany został Start/End uruchomi się nam automatycznie panel "Choose Start/End" i będzie oczekiwał, że wybierzemy nowy Start lub/i End. Możemy tego dokonać za pomocą Pick Start lub Pick End, które po wybraniu umożliwiają nam wskazanie, poprzez kliknięcie na ścieżkę labiryntu, nowego Start/End. Możemy też tego dokonać poprzez wybranie Type Start lub Type End i wpisanie koordynatów nowego Start/End, które należy zatwierdzić za pomocą przycisku "Done". Jeżeli nasz labirynt ma Start i End, ale chcemy je zmienić to możemy też ręcznie wybrać opcję "Choose Start/End". Jeżeli podczas wybierania nie wybierzemy nowego Start/End, a był on wcześniej wybrany to podczas rozwiązywania zostanie użyty właśnie ten "stary" Start lub End. Następnie możemy rozwiązać labirynt za pomocą trybu "shortest" (najkrótsza ścieżka) lub "whole" (przejście po całym labiryncie). Następnie możemy albo załadować nowy labirynt albo wyeksportować rozwiązanie za pomocą "File" -> "Export Solution" (jeżeli jest mniejsze niż 255 kroków).
 
 ### Współpraca terminala i GUI
-GUI i terminal są wpełni synchronizowane. Ponadto co zostało zawarte w opisie korzystania z samego terminala, podczas rozwiązywania w GUI w terminalu (jeżeli uruchomimy program z terminala) pojawią się także pytania:
+GUI i terminal są w pełni zsynchronizowane. Ponadto, co zostało zawarte w opisie korzystania z samego terminala, podczas rozwiązywania w GUI w terminalu (jeżeli uruchomimy program z terminala) pojawią się także pytania:
 ```
 Do you want to analyze? If yes type in "yes".
 Do you want to solve? If yes type in "yes".
 ```
-Pierwsze z nich pyta nas czy chcemy przeanalizować labirynt, a drugie czy chcemy go rozwiązać. Po odpowiedzeniu na którekolwiek z tych pytań "yes" labirynt automatycznie się rozwiąże do końca.
+Pierwsze z nich pyta nas czy chcemy przeanalizować labirynt, a drugie czy chcemy go rozwiązać. Po odpowiedzeniu na którekolwiek z tych pytań "yes", labirynt automatycznie rozwiąże się do końca.
 
 ## Autorzy:
 Praca została wykonana przez Krzysztofa Gumińskiego i Macieja Bankiewicza.
